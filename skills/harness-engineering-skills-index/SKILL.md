@@ -1,16 +1,19 @@
 ---
 name: harness-engineering-skills-index
-description: Index and routing map for the fourteen harness-governed engineering skills bundled in this plugin — nine selected for net-new capability plus five pulled in to close their cross-references. Use when you need to decide which skill to load, when an upstream skill name is referenced but not bundled, or when you need to know how these skills hand work to harness-creator's AGENTS.md and init.sh and to the superpowers / mattpocock counterpart skills. Use it to route, not to execute — the actual procedure always lives in the target skill.
+description: Index and routing map for the fifteen harness-governed engineering skills bundled in this plugin — ten selected for net-new capability plus five pulled in to close their cross-references. Use when you need to decide which skill to load, when an upstream skill name is referenced but not bundled, or when you need to know how these skills hand work to harness-creator's AGENTS.md and init.sh and to the superpowers / mattpocock counterpart skills. Use it to route, not to execute — the actual procedure always lives in the target skill.
 ---
 
 # Harness 工程技能集 · 索引
 
-本插件打包 `addyosmani/agent-skills` 中的 **14 个**技能，分两组，加一个本文件。
+本插件打包 `addyosmani/agent-skills` 中的 **15 个**技能，分两组，加一个本文件。
 本文件**只做索引与路由**，不含任何工作规则；真正要执行的流程始终在被指向的那个技能里。
+
+本包定位是 **`/implement` 阶段的通用补强**：与语言、框架、数据库无关的通用工程能力。
+栈相关技能（LangChain4j、Postgres 专属规则、具体框架调优）**不入本包**，随项目按需安装。
 
 | 组 | 数量 | 收录依据 |
 |---|---|---|
-| **A 组 · 精选** | 9 | 与承接方不重复、不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量 |
+| **A 组 · 精选** | 10 | 与承接方不重复、不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量 |
 | **B 组 · 引用闭包** | 5 | **被 A 组正文直接引用**；不收进来，代理顺着 A 组的指示会去找不存在的技能 |
 
 ---
@@ -20,6 +23,7 @@ description: Index and routing map for the fourteen harness-governed engineering
 | 阶段 | 技能 | 什么时候用 | 典型产出 |
 |---|---|---|---|
 | 全程基线 | `constraint-driven-development` | 质量标准没写下来；代理开始塞 `@ts-ignore`、删测试、降阈值来"变绿" | `CONSTRAINTS.md`（Floor / 有数字强制 / 已测量未强制 / 例外 四段） |
+| 定接口 | `api-and-interface-design` | 设计 REST / GraphQL 端点；划模块边界；定义模块间的类型契约；前后端接口约定 | 稳定的接口契约 + 边界约定（错误语义、版本、演进规则） |
 | 写代码时 | `security-and-hardening` | 处理不可信输入、认证会话、外部集成、依赖审计、个人数据合规 | 威胁建模 + Always Do / Ask First / Never Do 三层边界 |
 | 写代码时 | `performance-optimization` | 有性能指标要求；怀疑性能回归；Core Web Vitals / 加载时间 / N+1 查询 | 测量 → 定位瓶颈 → 修反模式 → 验证并**决定保留或回滚** → 防回归 |
 | 写界面时 | `frontend-ui-engineering` | 做组件、布局、状态；WCAG 无障碍；产出需要"像人做的"而不是 AI 味的界面 | 组件结构 + 设计系统遵从 + WCAG 2.1 AA |
@@ -119,4 +123,4 @@ node scripts/update-upstream.mjs --check    # 只看差异，不写文件
 node scripts/update-upstream.mjs --apply    # 同步上游并镜像到安装目录
 ```
 
-`skills/` 下这 14 个目录与 `references/` 是上游的**逐字节副本**，请不要在本地改写它们——脚本会检测本地漂移并拒绝覆盖。当前锁定的上游 commit 见 `upstream.lock.json`。
+`skills/` 下这 15 个目录与 `references/` 是上游的**逐字节副本**，请不要在本地改写它们——脚本会检测本地漂移并拒绝覆盖。当前锁定的上游 commit 见 `upstream.lock.json`。

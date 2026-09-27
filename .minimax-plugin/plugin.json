@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "name": "harness-engineering-skills",
   "displayName": "Harness 工程技能集",
-  "version": "1.1.0",
-  "description": "harness-creator 治理体系下精选的 9 个工程技能，另收录其正文直接引用的 5 个以闭合引用。技能正文为上游逐字节副本，附 6 份仓库级共享清单与悬空引用映射表，可一键同步 addyosmani/agent-skills 最新版。",
+  "version": "1.2.0",
+  "description": "harness-creator 治理体系下精选的 10 个工程技能（另收录其正文引用的 5 个以闭合引用）。定位为 /implement 阶段的通用补强，栈相关技能不入本包。技能正文为上游逐字节副本，附 6 份仓库级共享清单与悬空引用映射表，可一键同步 addyosmani/agent-skills 最新版。",
   "author": "meisijiya",
   "icon": "icon.jpg",
   "darkIcon": "icon-dark.jpg",
@@ -12,13 +12,15 @@
     "用约束驱动开发给这个项目建一份 CONSTRAINTS.md",
     "把本地 init.sh 里的检查接进 GitHub Actions",
     "审计一下登录接口有没有注入和越权风险",
-    "把这 14 个技能同步到上游最新版"
+    "设计这个订单服务的接口契约与错误码规范",
+    "把这 15 个技能同步到上游最新版"
   ],
   "apps": [],
   "mcpServers": [],
   "skills": [
     "skills/harness-engineering-skills-index/SKILL.md",
     "skills/constraint-driven-development/SKILL.md",
+    "skills/api-and-interface-design/SKILL.md",
     "skills/security-and-hardening/SKILL.md",
     "skills/performance-optimization/SKILL.md",
     "skills/frontend-ui-engineering/SKILL.md",

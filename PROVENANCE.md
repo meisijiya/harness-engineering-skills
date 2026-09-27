@@ -12,7 +12,15 @@
 | 许可 | **MIT**，Copyright (c) 2025 Addy Osmani（全文见本包 `LICENSE`） |
 | 逐文件校验 | 见 `upstream.lock.json` 的 `managed`（每个文件一个 sha256） |
 
-`skills/` 下这 14 个目录与 `references/` 下 6 份共享清单，**均为上游字节级副本，零本地改写**。
+`skills/` 下这 15 个目录与 `references/` 下 6 份共享清单，**均为上游字节级副本，零本地改写**。
+
+## 1b. 本包的定位边界
+
+本插件是 **`/implement` 阶段（执行工单时）的通用工程补强**，与 `harness-creator` 的承接方配合使用。
+
+**收录标准：与语言、框架、数据库无关的通用能力。**
+栈相关技能（LangChain4j、Postgres 专属规则集、具体框架调优）**一律不入本包**，
+随项目按需安装——否则插件会迅速臃肿，且栈相关内容的保质期远短于通用工程纪律。
 
 ## 2. 本包自写（不在上游，同步脚本不接管）
 
@@ -27,7 +35,7 @@
 
 ## 3. 收录分两组，依据不同
 
-### A 组 · 精选 9 个（按三条准则）
+### A 组 · 精选 10 个（按三条准则）
 
 准则来自 `harness-creator` 仓内既有规则：
 1. **不重复承接方已有能力**——重复即争触发时机；
@@ -37,6 +45,14 @@
 `security-and-hardening`、`performance-optimization`、`frontend-ui-engineering`、
 `browser-testing-with-devtools`、`ci-cd-and-automation`、`observability-and-instrumentation`、
 `shipping-and-launch`、`deprecation-and-migration`、`constraint-driven-development`
+
+**复议补录 1 个**：`api-and-interface-design`
+
+它原本被判为「部分邻接，可复议」（邻接承接方的领域建模 / 接口边界）。复议通过的理由：
+本包定位是 `/implement` 阶段的通用补强，而**接口契约是原 9 个完全空白的一域**——
+14 个技能里没有任何一个做 REST / GraphQL 端点设计、模块边界或模块间类型契约。
+成本为零（同一上游仓，改一行清单），且实测**不产生任何新增悬空引用**
+（它只引用 `deprecation-and-migration`，已在包内）、不需要新增共享清单。
 
 ### B 组 · 引用闭包 5 个（**不按**上述准则）
 
@@ -53,13 +69,13 @@ A 组 9 个的正文共 11 处引用指向这 5 个（`debugging-and-error-recov
 
 ## 4. 引用闭包只收一跳
 
-A 组 9 个的**传递**引用闭包经实测为 **22 / 25**：
+A 组 10 个的**传递**引用闭包经实测为 **22 / 25**：
 
 | 跳数 | 新增 | 累计 |
 |---|---|---|
-| 第 1 跳 | +5（B 组） | 14 |
-| 第 2 跳 | +6 `doubt-driven-development`、`git-workflow-and-versioning`、`idea-refine`、`planning-and-task-breakdown`、`source-driven-development`、`spec-driven-development` | 20 |
-| 第 3 跳 | +2 `api-and-interface-design`、`context-engineering` | 22 |
+| 第 1 跳 | +5（B 组） | 15 |
+| 第 2 跳 | +6 `doubt-driven-development`、`git-workflow-and-versioning`、`idea-refine`、`planning-and-task-breakdown`、`source-driven-development`、`spec-driven-development` | 21 |
+| 第 3 跳 | +1 `context-engineering` | 22 |
 
 收满等于基本搬平整仓，且会带入 `context-engineering`——它争 harness-creator 的 instructions 子系统，
 且与 harness-creator 自带的 `references/context-engineering-pattern.md` **同名不同域**，是已登记的雷。
@@ -75,15 +91,19 @@ A 组 9 个的**传递**引用闭包经实测为 **22 / 25**：
 
 因此**本包不承诺上游引用闭包完整**，这是有意识的取舍，不是遗漏。
 
-## 5. 未收录的上游技能（11 / 25）
+## 5. 未收录的上游技能（10 / 25）
 
 - **完全重叠**（承接方已覆盖）：`idea-refine`、`spec-driven-development`、`planning-and-task-breakdown`、
   `incremental-implementation`※、`test-driven-development`※、`debugging-and-error-recovery`※、
   `code-review-and-quality`※、`source-driven-development`、`git-workflow-and-versioning`、
   `documentation-and-adrs`（※ = 已作为 B 组收录，功能上仍以承接方为主）
-- **部分邻接，可复议**：`api-and-interface-design`、`code-simplification`、`doubt-driven-development`
+- **部分邻接，可复议**：`code-simplification`、`doubt-driven-development`
 - **抢 harness-creator 领地**：`context-engineering`（争 instructions 子系统 + 同名不同域）、
   `using-agent-skills`（第二套路由）
+
+**刻意留在项目层的领域**（生态有货但绑栈，按第 1b 节的边界不入本包）：
+`llm-application-dev` 七件套（技术层通用、但与 LangChain 生态绑定更划算）、`supabase-postgres-best-practices`（Postgres 专属）、
+各类语言绑定的开发插件。
 
 **未纳入本包的上游资产**：9 个 slash command（`commands/*.toml`）与 4 个 subagent（`agents/*.md`）。
 它们不在 `skills/` 目录下，MiniMax 本地插件格式也不支持这两种能力；需要时从上游取用。

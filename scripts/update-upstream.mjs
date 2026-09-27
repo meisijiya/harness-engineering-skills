@@ -37,8 +37,11 @@ const DEFAULT_REF = 'main';
 /**
  * 采纳的技能目录（与 SKILL.md 名称一致），分两组：
  *
- * A 组「精选 9 个」——按三条准则选出：与 harness-creator 承接方不重复、
+ * A 组「精选 10 个」——按三条准则选出：与 harness-creator 承接方不重复、
  *   不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量。
+ *   其中 `api-and-interface-design` 是后补的复议项（原判为「部分邻接，可复议」）：
+ *   本插件定位为 /implement 阶段的通用补强，而接口契约是原 9 个完全空白的一域，
+ *   零成本（同一上游仓）且不产生任何新增悬空引用。
  *
  * B 组「引用闭包 5 个」——不按上述准则选（它们与承接方有重叠），而是**被 A 组正文
  *   直接引用**：不收进来，代理顺着 A 组的指示会去找一个不存在的技能。
@@ -55,6 +58,7 @@ const SKILLS = [
   'shipping-and-launch',
   'deprecation-and-migration',
   'constraint-driven-development',
+  'api-and-interface-design',
   // B 组：被 A 组引用的 5 个（引用闭包）
   'debugging-and-error-recovery',
   'code-review-and-quality',

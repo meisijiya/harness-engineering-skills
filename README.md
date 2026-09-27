@@ -1,13 +1,17 @@
 # Harness 工程技能集（harness-engineering-skills）
 
-从 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) 里挑出的 **14 个**工程技能，
+从 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) 里挑出的 **15 个**工程技能，
 打包成一个 MiniMax 本地插件，放在 `harness-creator` 治理体系（`AGENTS.md` + `init.sh`）之下用。
 
-- 14 个技能正文 = 上游**逐字节副本**，本地零改写
+**定位：`/implement` 阶段（执行工单时）的通用工程补强**，与 harness-creator 的承接方配合使用。
+收录标准是**与语言、框架、数据库无关的通用能力**；栈相关技能（LangChain4j、Postgres 专属规则集、
+具体框架调优）一律不入本包，随项目按需安装——否则插件会迅速臃肿，且栈相关内容的保质期远短于通用工程纪律。
+
+- 15 个技能正文 = 上游**逐字节副本**，本地零改写
 - 补齐上游单装会丢的 6 份仓库级共享清单
 - 一条命令跟上游最新版
 
-> **本仓库是公开参考副本**：完整包都在本仓——14 个上游技能正文（逐字节副本）、6 份仓库级共享清单、
+> **本仓库是公开参考副本**：完整包都在本仓——15 个上游技能正文（逐字节副本）、6 份仓库级共享清单、
 > 同步脚本、锁文件、文档与图标。仓库根目录即包本体；安装到 MiniMax Code 的那份由
 > `scripts/update-upstream.mjs --install` 镜像生成，不单独维护。
 
@@ -15,7 +19,7 @@
 
 技能分两组，**收录依据不同**：
 
-### A 组 · 精选 9 个
+### A 组 · 精选 10 个
 
 按三条准则选出：与 harness-creator 承接方不重复、不侵入 instructions/verification/scope 三子系统、
 工程阶段真实净增量。
@@ -23,6 +27,7 @@
 | 技能 | 阶段 | 一句话 |
 |---|---|---|
 | `constraint-driven-development` | 全程基线 | 把质量标准写成带数字的 `CONSTRAINTS.md`，盯 diff 里被悄悄降标的地方 |
+| `api-and-interface-design` | 定接口 | REST / GraphQL 端点设计、模块边界、模块间类型契约（原 9 个里完全空白的一域，v1.2.0 复议补录） |
 | `security-and-hardening` | 写代码 | 威胁建模 + Always Do / Ask First / Never Do 三层边界 |
 | `performance-optimization` | 写代码 | 先测量再优化；验证后还要**决定保留或回滚** |
 | `frontend-ui-engineering` | 写界面 | 生产级、无障碍、响应式，且不像 AI 生成的 |
@@ -106,4 +111,4 @@ node scripts/update-upstream.mjs --check     # 漂移 + 上游差异，应为「
 
 - `browser-testing-with-devtools` 依赖 **chrome-devtools MCP server**，本包不内置该 MCP。
 - 上游为 **MIT (c) 2025 Addy Osmani**，本包保留原许可与声明，见 `LICENSE` 与 `PROVENANCE.md`。
-- 请不要在本地改写 `skills/` 下那 14 个目录和 `references/`——它们是上游副本，改了就失去一键更新。
+- 请不要在本地改写 `skills/` 下那 15 个目录和 `references/`——它们是上游副本，改了就失去一键更新。
