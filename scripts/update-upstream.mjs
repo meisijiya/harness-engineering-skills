@@ -144,6 +144,12 @@ async function sha256File(file) {
   return { sha256: createHash('sha256').update(buf).digest('hex'), bytes: buf.length };
 }
 
+/** 把 CRLF 归一为 LF 后的 sha256。用于识别「内容没改、只是换行符被转了」。 */
+async function sha256EolNormalized(file) {
+  const text = (await fs.readFile(file)).toString('utf8').replace(/\r\n/g, '\n');
+  return createHash('sha256').update(Buffer.from(text, 'utf8')).digest('hex');
+}
+
 const toPosix = (p) => p.split(path.sep).join('/');
 
 /** 每个受管分组：上游路径 → 本包路径（目录或单文件都支持）。 */
@@ -261,13 +267,17 @@ async function writeLock(sha, ref, managedMap) {
 async function detectDrift(lock) {
   const drifted = [];
   const missing = [];
+  const eolOnly = [];
   for (const [rel, meta] of Object.entries(lock.managed ?? {})) {
     const abs = path.join(PKG_ROOT, ...rel.split('/'));
     if (!(await exists(abs))) { missing.push(rel); continue; }
     const cur = await sha256File(abs);
-    if (cur.sha256 !== meta.sha256) drifted.push({ rel, from: meta.sha256.slice(0, 12), to: cur.sha256.slice(0, 12) });
+    if (cur.sha256 === meta.sha256) continue;
+    // 内容一致、只是换行符被转：不是本地改内容，不该拦住同步
+    if ((await sha256EolNormalized(abs)) === meta.sha256) { eolOnly.push(rel); continue; }
+    drifted.push({ rel, from: meta.sha256.slice(0, 12), to: cur.sha256.slice(0, 12) });
   }
-  return { drifted, missing };
+  return { drifted, missing, eolOnly };
 }
 
 // ---------------------------------------------------------------- 差异与镜像
@@ -282,8 +292,9 @@ async function planChanges(srcRoot) {
     const up = await sha256File(u.upstreamAbs);
     let status;
     if (!cur) status = 'NEW';
-    else if (cur.sha256 !== up.sha256) status = 'UPDATE';
-    else status = 'SAME';
+    else if (cur.sha256 === up.sha256) status = 'SAME';
+    else if ((await sha256EolNormalized(u.localAbs)) === (await sha256EolNormalized(u.upstreamAbs))) status = 'EOL';
+    else status = 'UPDATE';
     rows.push({ ...u, status, upstream: up });
   }
 
@@ -305,12 +316,13 @@ async function planChanges(srcRoot) {
 function printRows(rows) {
   const pad = Math.max(...rows.map((r) => r.rel.length), 12);
   for (const r of rows.sort((a, b) => (a.rel < b.rel ? -1 : 1))) {
-    const mark = { NEW: '+', UPDATE: '~', REMOVE: '-', SAME: ' ' }[r.status];
-    const detail = r.status === 'UPDATE' ? `  ${r.rel}  ${r.upstream.bytes} B`
-      : r.status === 'NEW' ? `  ${r.rel}  ${r.upstream.bytes} B  (新增)`
-      : r.status === 'REMOVE' ? `  ${r.rel}  (上游已删除)`
+    const mark = { NEW: '+', UPDATE: '~', REMOVE: '-', EOL: '~', SAME: ' ' }[r.status];
+    const detail = r.status === 'NEW' ? `${r.upstream.bytes} B  (新增)`
+      : r.status === 'UPDATE' ? `${r.upstream.bytes} B`
+      : r.status === 'EOL' ? '仅换行符差异，将按上游 LF 修复'
+      : r.status === 'REMOVE' ? '(上游已删除)'
       : '';
-    say(`${mark} ${r.rel.padEnd(pad)}${detail}`);
+    say(`${mark} ${r.rel.padEnd(pad)}  ${detail}`);
   }
 }
 
@@ -405,10 +417,14 @@ async function main() {
     say('');
     say(`  合计 ${rows.length} 个受管文件：${rows.filter((r) => r.status === 'SAME').length} 未变、` +
       `${rows.filter((r) => r.status === 'UPDATE').length} 变更、${rows.filter((r) => r.status === 'NEW').length} 新增、` +
-      `${rows.filter((r) => r.status === 'REMOVE').length} 上游已删除`);
+      `${rows.filter((r) => r.status === 'EOL').length} 仅换行符差异、${rows.filter((r) => r.status === 'REMOVE').length} 上游已删除`);
 
     if (lock) {
-      const { drifted, missing } = await detectDrift(lock);
+      const { drifted, missing, eolOnly } = await detectDrift(lock);
+      if (eolOnly.length) {
+        say(`  ℹ ${eolOnly.length} 处仅换行符差异（内容未改，多为 CRLF↔LF），不视为本地改动；`);
+        say('    --apply 会按上游 LF 覆盖修复，仓库已用 .gitattributes 固定 LF 避免复发。');
+      }
       if (drifted.length || missing.length) {
         warn('');
         warn(`⚠ 本地漂移 ${drifted.length + missing.length} 处（本地改过 vendored 文件，会在同步时被覆盖）：`);

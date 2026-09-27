@@ -1,0 +1,10 @@
+# vendored 文件必须保持上游的 LF。
+# 本仓库用 upstream.lock.json 按字节算 sha256，若工作区被 core.autocrlf 转成 CRLF，
+# 漂移检测会把「换行符差异」误报成「本地改内容」。这里显式覆盖全局 autocrlf 设置。
+* text=auto eol=lf
+
+# 二进制资源不参与换行符转换
+*.jpg binary
+*.png binary
+*.jpeg binary
+*.webp binary
