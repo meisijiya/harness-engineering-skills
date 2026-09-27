@@ -1,0 +1,7 @@
+# 一次性脚手架与本地临时物，不入版本库
+.scratch/
+node_modules/
+
+# 系统与编辑器产物
+Thumbs.db
+.DS_Store

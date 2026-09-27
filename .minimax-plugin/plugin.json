@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "name": "harness-engineering-skills",
+  "displayName": "Harness 工程技能集",
+  "version": "1.0.0",
+  "description": "harness-creator 治理体系下精选的 9 个工程技能：约束驱动开发、安全加固、性能优化、前端工程、浏览器验证、CI/CD、可观测性、发布、弃用迁移。技能正文为上游逐字节副本，附带 5 份仓库级共享清单，可一键同步 addyosmani/agent-skills 最新版。",
+  "author": "meisijiya",
+  "icon": "icon.jpg",
+  "darkIcon": "icon-dark.jpg",
+  "category": "Code",
+  "exampleQueries": [
+    "用约束驱动开发给这个项目建一份 CONSTRAINTS.md",
+    "把本地 init.sh 里的检查接进 GitHub Actions",
+    "审计一下登录接口有没有注入和越权风险",
+    "把这 9 个技能同步到上游最新版"
+  ],
+  "apps": [],
+  "mcpServers": [],
+  "skills": [
+    "skills/harness-engineering-skills-index/SKILL.md",
+    "skills/constraint-driven-development/SKILL.md",
+    "skills/security-and-hardening/SKILL.md",
+    "skills/performance-optimization/SKILL.md",
+    "skills/frontend-ui-engineering/SKILL.md",
+    "skills/browser-testing-with-devtools/SKILL.md",
+    "skills/ci-cd-and-automation/SKILL.md",
+    "skills/observability-and-instrumentation/SKILL.md",
+    "skills/shipping-and-launch/SKILL.md",
+    "skills/deprecation-and-migration/SKILL.md"
+  ],
+  "hooks": []
+}
