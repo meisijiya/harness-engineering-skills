@@ -34,8 +34,18 @@ const REPO = 'addyosmani/agent-skills';
 const REPO_URL = `https://github.com/${REPO}`;
 const DEFAULT_REF = 'main';
 
-/** 采纳的 9 个技能目录（与 SKILL.md 名称一致）。 */
+/**
+ * 采纳的技能目录（与 SKILL.md 名称一致），分两组：
+ *
+ * A 组「精选 9 个」——按三条准则选出：与 harness-creator 承接方不重复、
+ *   不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量。
+ *
+ * B 组「引用闭包 5 个」——不按上述准则选（它们与承接方有重叠），而是**被 A 组正文
+ *   直接引用**：不收进来，代理顺着 A 组的指示会去找一个不存在的技能。
+ *   当前锁定的上游快照里共 11 处引用指向这 5 个。
+ */
 const SKILLS = [
+  // A 组：精选 9 个
   'security-and-hardening',
   'performance-optimization',
   'frontend-ui-engineering',
@@ -45,15 +55,22 @@ const SKILLS = [
   'shipping-and-launch',
   'deprecation-and-migration',
   'constraint-driven-development',
+  // B 组：被 A 组引用的 5 个（引用闭包）
+  'debugging-and-error-recovery',
+  'code-review-and-quality',
+  'test-driven-development',
+  'interview-me',
+  'incremental-implementation',
 ];
 
-/** 这 9 个技能正文以 ../../references/x.md 引用的仓库级共享清单，按 skill 单装会丢。 */
+/** 技能正文以 ../../references/x.md 引用的仓库级共享清单，按 skill 单装会丢。 */
 const SHARED_REFS = [
   'security-checklist.md',
   'performance-checklist.md',
   'accessibility-checklist.md',
   'observability-checklist.md',
   'definition-of-done.md',
+  'testing-patterns.md',
 ];
 
 /** 仓库根文件，需要一起带走的。 */

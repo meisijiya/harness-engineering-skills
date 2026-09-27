@@ -1,17 +1,24 @@
 # Harness 工程技能集（harness-engineering-skills）
 
-从 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) 里挑出的 **9 个**工程技能，
+从 [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) 里挑出的 **14 个**工程技能，
 打包成一个 MiniMax 本地插件，放在 `harness-creator` 治理体系（`AGENTS.md` + `init.sh`）之下用。
 
-- 9 个技能正文 = 上游**逐字节副本**，本地零改写
-- 补齐上游单装会丢的 5 份仓库级共享清单
+- 14 个技能正文 = 上游**逐字节副本**，本地零改写
+- 补齐上游单装会丢的 6 份仓库级共享清单
 - 一条命令跟上游最新版
 
-> **本仓库是公开参考副本**：完整包都在本仓——9 个上游技能正文（逐字节副本）、5 份仓库级共享清单、
+> **本仓库是公开参考副本**：完整包都在本仓——14 个上游技能正文（逐字节副本）、6 份仓库级共享清单、
 > 同步脚本、锁文件、文档与图标。仓库根目录即包本体；安装到 MiniMax Code 的那份由
 > `scripts/update-upstream.mjs --install` 镜像生成，不单独维护。
 
 ## 里面有什么
+
+技能分两组，**收录依据不同**：
+
+### A 组 · 精选 9 个
+
+按三条准则选出：与 harness-creator 承接方不重复、不侵入 instructions/verification/scope 三子系统、
+工程阶段真实净增量。
 
 | 技能 | 阶段 | 一句话 |
 |---|---|---|
@@ -25,8 +32,28 @@
 | `shipping-and-launch` | 上线动作 | 可逆、可观察、增量地发布；错误预算闸门 |
 | `deprecation-and-migration` | 生命周期 | 代码是负债；不停机改列（expand/contract）与绞杀者模式 |
 
-外加一个自写的纯索引：`harness-engineering-skills-index`——只回答"什么时候用哪一个"，
-以及这 9 个与 harness-creator 的 `AGENTS.md` / `init.sh` 如何分工，**不含任何工作规则**。
+### B 组 · 引用闭包 5 个
+
+**不满足**上述准则（与承接方有功能重叠），收它们只为让 A 组正文里的引用有着落——
+A 组 9 个共 11 处引用指向这 5 个，不收进来代理会去找不存在的技能。
+
+`debugging-and-error-recovery`、`code-review-and-quality`、`test-driven-development`、
+`interview-me`、`incremental-implementation`
+
+**优先级：承接方优先，B 组兜底。** 这 5 个与 superpowers / mattpocock 家族重叠，
+流程主导权仍在承接方（按 harness-creator 的引导词场合判别），B 组只在承接方不在场时启用。
+
+### 索引与映射
+
+自写纯索引 `harness-engineering-skills-index`（**不含任何工作规则**）负责三件事：
+
+1. A 组路由表：什么时候用哪一个；
+2. 承接方优先级表；
+3. **悬空引用映射表**——B 组自身还引用 6 个未收录的上游技能。传递闭包实测是 22/25，
+   收满等于搬平整仓且会带入与 harness-creator 冲突的 `context-engineering`，因此**只收一跳**，
+   二跳引用按性质（真流程缺口 / 交接落点 / 仅对照说明）解析到实际承接方。
+
+细节与实测数据见 `PROVENANCE.md`。
 
 ## 装在哪
 
@@ -79,4 +106,4 @@ node scripts/update-upstream.mjs --check     # 漂移 + 上游差异，应为「
 
 - `browser-testing-with-devtools` 依赖 **chrome-devtools MCP server**，本包不内置该 MCP。
 - 上游为 **MIT (c) 2025 Addy Osmani**，本包保留原许可与声明，见 `LICENSE` 与 `PROVENANCE.md`。
-- 请不要在本地改写 `skills/` 下那 9 个目录和 `references/`——它们是上游副本，改了就失去一键更新。
+- 请不要在本地改写 `skills/` 下那 14 个目录和 `references/`——它们是上游副本，改了就失去一键更新。
