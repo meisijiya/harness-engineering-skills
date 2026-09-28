@@ -189,7 +189,8 @@ B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继�
 | `references/definition-of-done.md` | `shipping-and-launch`、`incremental-implementation` |
 | `references/testing-patterns.md` | `test-driven-development` |
 
-上表由 `.scratch/darwin/check-ref-table.mjs` 逐行对账 `skills/*/SKILL.md` 的实际引用生成，改表后请重跑。
+上表由 `scripts/check-ref-table.mjs` 逐行对账各技能正文的实际引用生成。**改这张表或动 `references/` 之后，
+先跑 `node scripts/check-ref-table.mjs`**，不一致就别提交。
 
 **更新到上游最新版：**
 

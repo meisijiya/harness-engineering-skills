@@ -1,7 +1,7 @@
 {
   "plugin": "harness-engineering-skills",
   "lockFormat": 2,
-  "syncedAt": "2026-09-28T02:28:29.367Z",
+  "syncedAt": "2026-09-28T04:39:12.897Z",
   "policy": "vendored 文件零本地改写；未出现在任何源的 managed 中的路径由本包自行维护，同步脚本不接管。",
   "sources": {
     "agent-skills": {
@@ -10,7 +10,7 @@
       "license": "MIT (Copyright (c) 2025 Addy Osmani)",
       "upstreamRef": "main",
       "commit": "2686b620fc1fed2e8f60c704839c766b8594c6b6",
-      "syncedAt": "2026-09-28T02:28:26.153Z",
+      "syncedAt": "2026-09-28T04:39:12.892Z",
       "archiveMembers": {
         "required": [
           "skills",
@@ -156,7 +156,7 @@
       "license": "MIT (Copyright (c) 2025 Jesse Vincent)",
       "upstreamRef": "main",
       "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
-      "syncedAt": "2026-09-28T02:28:29.327Z",
+      "syncedAt": "2026-09-28T04:39:12.897Z",
       "archiveMembers": {
         "required": [
           "skills",
@@ -215,6 +215,7 @@
     "README.md",
     "PROVENANCE.md",
     "scripts/update-upstream.mjs",
+    "scripts/check-ref-table.mjs",
     "skills/harness-engineering-skills-index/SKILL.md"
   ]
 }

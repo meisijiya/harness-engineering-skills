@@ -123,6 +123,7 @@ const UNMANAGED = [
   'README.md',
   'PROVENANCE.md',
   'scripts/update-upstream.mjs',
+  'scripts/check-ref-table.mjs',
   'skills/harness-engineering-skills-index/SKILL.md',
 ];
 

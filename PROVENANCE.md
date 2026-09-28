@@ -63,7 +63,8 @@
 | `LICENSE` | 双源许可说明（见 1c） |
 | `upstream.lock.json` | 两个上游的 commit + 逐文件 sha256 锁 |
 | `scripts/update-upstream.mjs` | 双上游同步 / 安装镜像脚本 |
-| `skills/harness-engineering-skills-index/SKILL.md` | 纯索引：分组、路由、承接方优先级、悬空引用映射、宿主适配 |
+| `scripts/check-ref-table.mjs` | 对账索引附录 C 的「共享清单被谁引用」表与各技能正文实际引用是否一致 |
+| `skills/harness-engineering-skills-index/SKILL.md` | 纯索引：任务维度路由、执行方式闸门、反例黑名单、失败兜底、宿主适配、悬空引用映射 |
 | `README.md` / `PROVENANCE.md` | 本文件与使用说明 |
 
 ## 3. 收录分三组，依据各不相同
@@ -253,3 +254,8 @@ superpowers 这条线**没有这个缺口**：它的技能不引用仓库级 `re
   锁格式为 2（per-source），旧的单源锁跑一次 `--apply` 即重建。
 - 只同步单个上游用 `--only <id>`；`--ref` 对所有选中的上游生效。
 - 同步后请复核 `PROVENANCE.md` 第 1 节的 commit 与 `upstream.lock.json` 的 `sources.<id>.commit` 是否一致。
+- **动 `references/` 或索引里那张「被谁引用」表之后，跑 `node scripts/check-ref-table.mjs`。**
+  那张表写成对照形式之后就从描述变成了断言，读者会照它增删清单——它历史上漏列过 3 处真实引用
+  （`code-review-and-quality` 引 `security-` / `performance-checklist.md`、
+  `incremental-implementation` 引 `definition-of-done.md`），跨 3 个版本都没人发现，
+  直到被 3 个独立 judge 同时指出。**改表靠肉眼看是发现不了的，必须脚本对账。**
