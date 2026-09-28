@@ -21,7 +21,20 @@
 
 ## 1b. 本包的定位边界
 
-本插件是 **`/implement` 阶段（执行工单时）的通用补强**，与 `harness-creator` 的承接方配合使用。
+本插件是 **`mattpocock-skills` 在 `harness-creator` 治理下的能力补强**：
+补上它没有的**通用工程能力**，不接管它的流程主导权。
+
+机器口径（按本机实际安装的两个插件目录实测，非上游 README）：
+
+| 比对项 | 结果 |
+|---|---|
+| 本包 vendored 技能 | 20 |
+| 本机 mattpocock-skills 技能 | 25 |
+| **两者同名重叠** | **0** |
+| 本机 superpowers 技能 | 14，与本包同名 6 个（C 组 5 + B 组 `test-driven-development`） |
+
+「补强」不是修辞：这 20 个技能在 mattpocock 侧一个都没有对应项，不存在抢触发时机的问题。
+需求对齐、规格、拆单、实现、测试、发起评审的主导权仍在 mattpocock，本包不引入第二套流程入口。
 
 **收录标准：与语言、框架、数据库无关的通用能力。**
 栈相关技能（LangChain4j、Postgres 专属规则集、具体框架调优）**一律不入本包**，
@@ -69,7 +82,7 @@
 **复议补录 1 个**：`api-and-interface-design`
 
 它原本被判为「部分邻接，可复议」（邻接承接方的领域建模 / 接口边界）。复议通过的理由：
-本包定位是 `/implement` 阶段的通用补强，而**接口契约是原 9 个完全空白的一域**——
+本包定位是**通用工程补强**，而**接口契约是原 9 个完全空白的一域**——
 14 个技能里没有任何一个做 REST / GraphQL 端点设计、模块边界或模块间类型契约。
 成本为零（同一上游仓，改一行清单），且实测**不产生任何新增悬空引用**
 （它只引用 `deprecation-and-migration`，已在包内）、不需要新增共享清单。
@@ -84,21 +97,27 @@
 （`debugging-and-error-recovery` 3 处、`code-review-and-quality` 3 处、`test-driven-development` 2 处、
 `interview-me` 2 处、`incremental-implementation` 1 处）。
 
-代价是明确的：这 5 个与承接方（superpowers / mattpocock）功能重叠，会重新引入触发时机竞争。
+代价是明确的：这 5 个与承接方 `mattpocock-skills` 功能重叠，会重新引入触发时机竞争。
 `harness-engineering-skills-index` 因此写明**承接方优先、B 组兜底**。
 
-### C 组 · 承接空缺 5 个（obra/superpowers，按「谁还没第二落点」选）
+### C 组 · 承接空缺 5 个（obra/superpowers，按「mattpocock 侧有没有」选）
 
 `receiving-code-review`、`verification-before-completion`、`finishing-a-development-branch`、
 `using-git-worktrees`、`dispatching-parallel-agents`
 
-**背景**：本机装有 superpowers 插件（14 个技能）。逐项核对 superpowers 与 mattpocock 的能力表后，
-剔除掉已被 mattpocock 完整覆盖的部分，**只剩 4 项 + 1 个半项没有第二个具名落点**——即上列 5 个
-（`dispatching-parallel-agents` 原判为「半项：无独立 skill，但委派确实无对应能力」，
-收进本包后它成为**具名**落点）。
+**背景**：承接方是 `mattpocock-skills`。按本机**实际安装**的 mattpocock-skills 25 个技能逐个核对，
+上面 5 个**全部没有对应项**（不是靠上游 README 推断，是读本地插件目录得出的）：
+
+| C 组技能 | 本机 mattpocock-skills 有同名技能？ | 本机 superpowers 有同名技能？ |
+|---|---|---|
+| `receiving-code-review` | 否 | 是 |
+| `verification-before-completion` | 否 | 是 |
+| `finishing-a-development-branch` | 否 | 是 |
+| `using-git-worktrees` | 否 | 是 |
+| `dispatching-parallel-agents` | 否 | 是 |
 
 **收敛而非救火**：superpowers 插件**当前仍装着**，收这 5 个不是为了让它们不至于消失，
-而是让 `/implement` 的执行纪律有一处**确定的归属**——否则同一能力有两处候选，触发时机随上下文漂移。
+而是让这 5 项能力有一处**确定的归属**——否则同一能力在两个插件里都有，触发时机随上下文漂移。
 索引因此写明：**同名并存时以本包为准**，superpowers 那份视为同源副本。
 
 **成本核算（实测）**：这 5 个是天然自洽的一组——
@@ -113,6 +132,23 @@
 
 **与 B 组的区别**：B 组是「A 组引用了它所以不得不收」，能力上承接方已有；C 组是「承接方真的没有」，
 收录本身即是能力落地。
+
+### 隔离与委派：为什么闸门只能写在索引里
+
+`using-git-worktrees` 与 `dispatching-parallel-agents` 这两项**会影响整个 ticket 的执行方式**
+（建不建工作区、派几个子代理、谁独占哪些文件），因此不能由代理按技能默认值自作主张。
+要求是：**命中时先与用户商定，再进技能正文。**
+
+这个要求**不能写进那两份技能正文**——vendored 零改写是「一键覆盖更新」的前提。
+所以它落在自写的索引 `harness-engineering-skills-index` 第 3 节「执行方式闸门」，
+并被索引第 7 节（前置条件）、第 8 节（唯一的约束性内容）和 README 的 C 组提示三处互相指向。
+
+上游侧的现状（决定了闸门要写多细）：
+
+- `using-git-worktrees` **自带**一次同意询问（Step 0 问「要不要隔离工作区」），
+  但它不涉及 ticket 级别的并行决策；索引补的是**路由层**的闸门，不是重复上游那一次。
+- `dispatching-parallel-agents` **完全没有**征求同意的环节——它直接教「在同一响应里发三个派发」。
+  这是闸门真正要补的洞：未获用户确认前，最多派只读调查（`explore`），不派写入类子代理（`worker`）。
 
 ## 4. 引用闭包只收一跳
 

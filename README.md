@@ -4,11 +4,14 @@
 放在 `harness-creator` 治理体系（`AGENTS.md` + `init.sh`）之下用。
 
 - **[addyosmani/agent-skills](https://github.com/addyosmani/agent-skills)** —— 15 个（10 精选 + 5 引用闭包）+ 6 份仓库级共享清单
-- **[obra/superpowers](https://github.com/obra/superpowers)** —— 5 个（补 superpowers 下线后无人承接的执行纪律）
+- **[obra/superpowers](https://github.com/obra/superpowers)** —— 5 个（补 mattpocock 侧的空缺）
 
-**定位：`/implement` 阶段（执行工单时）的通用补强**，与 harness-creator 的承接方配合使用。
-收录标准是**与语言、框架、数据库无关的通用能力**；栈相关技能（LangChain4j、Postgres 专属规则集、
-具体框架调优）一律不入本包，随项目按需安装——否则插件会迅速臃肿，且栈相关内容的保质期远短于通用工程纪律。
+**定位：补强 `mattpocock-skills` 在 `harness-creator` 治理下的能力。**
+补的是它没有的**通用工程能力**（与语言、框架、数据库无关）——本包 20 个技能与本机
+mattpocock-skills 的 25 个**零同名重叠**，这是「补强」的机器口径。
+需求对齐、规格、拆单、实现、测试、发起评审的主导权仍在 mattpocock，本包不引入第二套流程入口。
+栈相关技能（LangChain4j、Postgres 专属规则集、具体框架调优）一律不入本包，随项目按需安装——
+否则插件会迅速臃肿，且栈相关内容的保质期远短于通用工程纪律。
 
 - 20 个技能正文 = 两个上游的**逐字节副本**，本地零改写
 - 补齐上游单装会丢的 6 份仓库级共享清单
@@ -48,14 +51,15 @@
 `debugging-and-error-recovery`、`code-review-and-quality`、`test-driven-development`、
 `interview-me`、`incremental-implementation`
 
-**优先级：承接方优先，B 组兜底。** 这 5 个与 superpowers / mattpocock 家族重叠，
-流程主导权仍在承接方（按 harness-creator 的引导词场合判别），B 组只在承接方不在场时启用。
+**优先级：承接方优先，B 组兜底。** 这 5 个与 `mattpocock-skills` 家族重叠，
+流程主导权仍在承接方（`diagnosing-bugs` / `tdd` / `code-review` / `implement` / `grilling`），
+B 组只在承接方不在场时启用。
 
-### C 组 · 收敛自 superpowers 的 5 个（v1.3.0 新增）
+### C 组 · 承接空缺 5 个（superpowers，v1.3.0 新增）
 
-本机 superpowers 插件仍装着，但逐项核对它与 mattpocock 的能力表后发现，**只有这 5 项没有第二个具名落点**。
-把这 5 项收敛到本包，是为了让 `/implement` 的执行纪律有一处**确定的归属**——
-否则同一能力有两处候选，触发时机随上下文漂移。**同名并存时以本包为准。**
+这 5 项在 mattpocock 侧**没有具名对应**——按本机已装的 mattpocock-skills 25 个技能逐个核对确认。
+本机 superpowers 插件仍装着，收这 5 个不是救火，而是让这 5 项能力有**确定的归属**，
+避免同一能力两处候选、触发时机随上下文漂移。**同名并存时以本包为准。**
 
 | 技能 | 阶段 | 一句话 |
 |---|---|---|
@@ -69,14 +73,20 @@
 上游按 Claude Code 写的 3 处宿主相关表述（`Subagent (general-purpose)` 派发、原生 worktree 工具、
 "Superpowers created this worktree"）在本机的落点写在索引的**宿主适配映射**里，正文一字未改。
 
+> ⚠️ **执行方式先与用户商定。** 隔离（`using-git-worktrees`）与并行委派（`dispatching-parallel-agents`）
+> **不自动触发**：命中时先把选项摆给用户、达成一致再进技能正文。一个 ticket 的 implement 用什么方式推进
+> 是用户的决定，不是这两个技能的默认值——具体问什么见索引第 3 节的**执行方式闸门**。
+
 ### 索引与映射
 
-自写纯索引 `harness-engineering-skills-index`（**不含任何工作规则**）负责四件事：
+自写纯索引 `harness-engineering-skills-index`（只做索引与路由）负责五件事：
 
-1. A 组路由表：什么时候用哪一个；
-2. B 组承接方优先级表；
-3. **C 组路由表 + 宿主适配映射**——上游 3 处 Claude Code 特定表述在本机的对应工具；
-4. **悬空引用映射表**——B 组自身还引用 6 个未收录的上游技能。传递闭包实测是 22/25，
+1. **定位段**：承接方是 `mattpocock-skills`，本包只补强、不接管流程主导权；
+2. A 组路由表：什么时候用哪一个；
+3. B 组承接方优先级表；
+4. **C 组路由表 + 宿主适配映射 + 执行方式闸门**——上游 3 处 Claude Code 特定表述在本机的对应工具，
+   以及隔离 / 委派在动手前要先与用户商定什么；
+5. **悬空引用映射表**——B 组自身还引用 6 个未收录的上游技能。传递闭包实测是 22/25，
    收满等于搬平整仓且会带入与 harness-creator 冲突的 `context-engineering`，因此**只收一跳**，
    二跳引用按性质（真流程缺口 / 交接落点 / 仅对照说明）解析到实际承接方。
 
@@ -95,6 +105,8 @@
 2. 不知道该用哪个 → 读 `skills/harness-engineering-skills-index/SKILL.md`。
 3. 与 harness-creator 的落地顺序：`constraint-driven-development` 先定 `CONSTRAINTS.md` 与那一行指令 →
    `ci-cd-and-automation` 把同类检查接进 `init.sh` / CI → 其余按当前项目实际面启用。
+4. 要推进一个 ticket：需求对齐 / 拆单走 mattpocock（`grilling` / `to-tickets`），
+   实现阶段的**隔离与委派方式先问用户**（见上面 C 组的提示）。
 
 > 边界一句话：**验证入口始终是 `init.sh`**，`CONSTRAINTS.md` 只回答"标准是什么"。
 

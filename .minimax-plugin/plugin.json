@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "name": "harness-engineering-skills",
   "displayName": "Harness 工程技能集",
-  "version": "1.3.0",
-  "description": "harness-creator 治理体系下精选的 20 个通用工程技能，分三组：addyosmani/agent-skills 的 10 个精选 + 5 个引用闭包，obra/superpowers 的 5 个承接空缺（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）。定位为 /implement 阶段的通用补强，栈相关技能不入本包。技能正文为两个上游的逐字节副本，附 6 份仓库级共享清单与悬空引用映射表，可一键同步双上游最新版。",
+  "version": "1.3.1",
+  "description": "mattpocock-skills 在 harness-creator 治理下的能力补强包：20 个通用工程技能与承接方零同名重叠。addyosmani/agent-skills 10 个精选 + 5 个引用闭包，obra/superpowers 5 个补 mattpocock 侧的空缺（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）。只补强不接管流程主导权；工作树隔离与并行委派命中时先与用户商定执行方式。技能正文为两个上游的逐字节副本，可一键同步双上游最新版。",
   "author": "meisijiya",
   "icon": "icon.jpg",
   "darkIcon": "icon-dark.jpg",
@@ -15,6 +15,7 @@
     "设计这个订单服务的接口契约与错误码规范",
     "工单执行到收尾了，走一遍分支收尾的合并/PR/保留决策",
     "收到的评审意见里有两条我不认同，怎么处置",
+    "这个 ticket 要开 worktree 隔离还是原地做，顺便问下要不要并行委派",
     "把这 20 个技能同步到两个上游的最新版"
   ],
   "apps": [],

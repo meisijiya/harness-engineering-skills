@@ -9,7 +9,7 @@
  *
  * 本脚本管两个上游，配方只差仓库地址与清单：
  *   - addyosmani/agent-skills：15 个技能（A 组 10 + B 组 5）+ 6 份仓库级共享清单
- *   - obra/superpowers：5 个技能（C 组，补 superpowers 下线后无人承接的能力），无共享清单
+ *   - obra/superpowers：5 个技能（C 组，补 mattpocock-skills 侧的空缺），无共享清单
  *
  * 用法：
  *   node scripts/update-upstream.mjs --check     看各上游有没有更新 + 本地有没有被改脏
@@ -40,18 +40,18 @@ const DEFAULT_INSTALL_DIR = path.join(os.homedir(), '.minimax', 'plugins', PLUGI
  * 上游配方。`skills` 目录名与该技能 SKILL.md 的 name 一致。
  *
  * ── agent-skills ─────────────────────────────────────────────────────────
- * A 组「精选 10 个」——按三条准则选出：与 harness-creator 承接方不重复、
+ * A 组「精选 10 个」——按三条准则选出：与承接方（mattpocock-skills）不重复、
  *   不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量。
  *   其中 `api-and-interface-design` 是后补的复议项（原判为「部分邻接，可复议」）：
- *   本插件定位为 /implement 阶段的通用补强，而接口契约是原 9 个完全空白的一域，
+ *   本插件定位为通用工程补强，而接口契约是原 9 个完全空白的一域，
  *   零成本（同一上游仓）且不产生任何新增悬空引用。
  * B 组「引用闭包 5 个」——不按上述准则选（它们与承接方有重叠），而是**被 A 组正文
  *   直接引用**：不收进来，代理顺着 A 组的指示会去找一个不存在的技能。
  *   当前锁定的上游快照里共 11 处引用指向这 5 个。
  *
  * ── superpowers ──────────────────────────────────────────────────────────
- * C 组「承接空缺 5 个」——本机 superpowers 插件下线后，这 5 项能力在
- *   harness-creator 的承接方里没有具名落点，收进来补 /implement 的执行纪律。
+ * C 组「承接空缺 5 个」——按本机实际安装的 mattpocock-skills 逐个核对，这 5 项
+ *   在承接方侧没有对应技能，收进来补齐；superpowers 是内容来源，mattpocock 才是承接方。
  *   它们的正文不引用任何其它技能、不引用仓库级 references、无同目录附属文件，
  *   因此是一组天然自洽的收编（闭包 5/5，不产生悬空面）。
  */

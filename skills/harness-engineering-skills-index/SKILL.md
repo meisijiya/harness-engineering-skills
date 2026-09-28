@@ -1,21 +1,31 @@
 ---
 name: harness-engineering-skills-index
-description: Index and routing map for the twenty harness-governed engineering skills bundled in this plugin — ten selected for net-new capability, five pulled in to close their cross-references, and five gap-fillers from superpowers covering review-feedback handling, verification-before-completion, branch finish, worktree isolation and parallel delegation. Use when you need to decide which skill to load, when an upstream skill name is referenced but not bundled, when you need to know how these skills hand work to harness-creator's AGENTS.md and init.sh and to the superpowers / mattpocock counterpart skills, or when you need the host-tool mapping for the superpowers-sourced skills. Use it to route, not to execute — the actual procedure always lives in the target skill.
+description: Index and routing map for the twenty harness-governed engineering skills bundled in this plugin — they are pure reinforcement for the mattpocock-skills counterpart under harness-creator, not a second workflow layer. Ten come from addyosmani/agent-skills as net-new capability, five close those ten's cross-references, and five from obra/superpowers fill gaps that have no mattpocock counterpart. Use when you need to decide which skill to load, when an upstream skill name is referenced but not bundled, when you need to know how these skills hand work to harness-creator's AGENTS.md and init.sh, or when the worktree-isolation and parallel-delegation skills are about to run — those two require settling the execution mode with the user first. Use it to route, not to execute — the actual procedure always lives in the target skill.
 ---
 
 # Harness 工程技能集 · 索引
 
 本插件从**两个上游**打包 **20 个**技能，分三组，加本文件。
-本文件**只做索引与路由**，不含任何工作规则；真正要执行的流程始终在被指向的那个技能里。
+本文件**只做索引与路由**；真正要执行的流程始终在被指向的那个技能里。
+唯一的例外是第 3 节的**执行方式闸门**（隔离与委派先与用户商定）——见第 8 节。
 
-本包定位是 **`/implement` 阶段的通用补强**：与语言、框架、数据库无关的通用工程能力。
+## 0. 定位：补强，不是第二层工作流
+
+**承接方是 `mattpocock-skills`。** 本包在 `harness-creator` 治理下做两件事：
+
+1. **补强**——补上 mattpocock 家族没有的**通用工程能力**（与语言、框架、数据库无关）。
+   本包 20 个技能与本机 mattpocock-skills 的 25 个**零同名重叠**，这是「补强」二字的机器口径。
+2. **不接管**——需求对齐、规格、拆单、实现、测试、**发起**代码审查的主导权仍在 mattpocock
+   （`grilling` / `to-spec` / `to-tickets` / `implement` / `tdd` / `code-review` …）。
+   本包不引入第二套流程入口，只在被指向时提供那一段工程能力。
+
 栈相关技能（LangChain4j、Postgres 专属规则、具体框架调优）**不入本包**，随项目按需安装。
 
 | 组 | 数量 | 来源 | 收录依据 |
 |---|---|---|---|
 | **A 组 · 精选** | 10 | addyosmani/agent-skills | 与承接方不重复、不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量 |
 | **B 组 · 引用闭包** | 5 | addyosmani/agent-skills | **被 A 组正文直接引用**；不收进来，代理顺着 A 组的指示会去找不存在的技能 |
-| **C 组 · 承接空缺** | 5 | obra/superpowers | 本机 superpowers 下线后，这 5 项在承接方里没有具名落点；正文自洽（零悬空引用） |
+| **C 组 · 承接空缺** | 5 | obra/superpowers | 这 5 项在 mattpocock 侧**没有具名对应**（本机已装 25 个技能，逐个核对确认）；正文自洽，零悬空引用 |
 
 ---
 
@@ -48,19 +58,19 @@ description: Index and routing map for the twenty harness-governed engineering s
 
 ### 优先级：承接方优先
 
-B 组与承接方功能重叠时，**流程主导权仍在承接方**。需求对齐、规格、拆单、实现、测试、**发起**评审，
-按 harness-creator 的「引导词场合判别」走 superpowers 或 mattpocock；B 组是**兜底**：承接方不在场、
-或不具备对应能力时才用它。
+B 组与承接方功能重叠时，**流程主导权仍在 `mattpocock-skills`**。需求对齐、规格、拆单、实现、测试、
+**发起**评审，一律走 mattpocock 对应技能；B 组是**兜底**：mattpocock 不在场、或不具备对应能力时才用它。
 
-**分支收尾、完成前验证、评审意见处置、并行委派、工作树隔离这五项已例外**——它们由 C 组直接承接（见第 3 节）。
+**分支收尾、完成前验证、评审意见处置、并行委派、工作树隔离这五项已例外**——mattpocock 侧无对应，
+由 C 组直接承接（见第 3 节）。
 
-| B 组技能 | 承接方对应能力 |
+| B 组技能 | 承接方（mattpocock-skills）对应能力 |
 |---|---|
-| `debugging-and-error-recovery` | superpowers `systematic-debugging` / mattpocock `diagnosing-bugs` |
-| `code-review-and-quality` | mattpocock `code-review`（**发起**审查）；**收到意见之后**的处置见 C 组 `receiving-code-review` |
-| `test-driven-development` | superpowers `test-driven-development` / mattpocock `tdd`（两者均未收录进本包） |
-| `incremental-implementation` | mattpocock `implement` |
-| `interview-me` | mattpocock `grilling` / `grill-me` |
+| `debugging-and-error-recovery` | `diagnosing-bugs` |
+| `code-review-and-quality` | `code-review`（**发起**审查）；**收到意见之后**的处置见 C 组 `receiving-code-review` |
+| `test-driven-development` | `tdd` |
+| `incremental-implementation` | `implement` |
+| `interview-me` | `grilling` / `grill-me` |
 
 ## 3. C 组：把 superpowers 的 5 项能力收敛到本包
 
@@ -84,13 +94,41 @@ B 组与承接方功能重叠时，**流程主导权仍在承接方**。需求�
 - `code-review`（mattpocock）负责**发起**独立审查；`receiving-code-review` 负责**收到意见之后**怎么核实与处置。两者前后接力，不重叠。
 - `verification-before-completion` 是**通用铁律**（任何完成声明都要有新鲜证据）；它不替代具体领域的验证入口，后者仍然是 `init.sh` / CI（见第 5 节）。
 
+### 执行方式闸门：隔离与委派，先和用户商定
+
+C 组的 `using-git-worktrees` 与 `dispatching-parallel-agents` **不自动触发**。
+命中它们时，先把下面的选项摆给用户、达成一致，**再**进入技能正文。
+一个 ticket 的 implement 用什么方式推进，是用户的决定，不是这两个技能的默认值。
+
+**关于隔离（`using-git-worktrees`）——先问清三件事**
+
+| 选项 | 什么时候选它 |
+|---|---|
+| 原地做（当前分支） | 单点小改，或本仓已有明确的分支隔离约定 |
+| 新开功能分支，仍在当前工作区 | 只需要分支边界，不打算多线并行 |
+| 建独立 worktree | 本批工单要多线并行，或当前工作区有未提交改动、会被这批工单波及 |
+
+再确认：worktree 目录位置（`.worktrees/` 优先于 `worktrees/`）、分支名、基线测试由谁跑。
+技能正文 Step 0 本身也会问一次「要不要隔离工作区」——**两处都问过之后才动手**，
+不要跳过这一层直接进 Step 1 建工作区。
+
+**关于委派（`dispatching-parallel-agents`）——先问清四件事**
+
+1. 这批工单 / 故障**是否真的互不依赖**？共享状态、写同一批文件、或需要全局理解的，一律不并行。
+2. 切成几条并行线，每条负责哪个问题域。
+3. 每条线的**写入范围**（哪些文件归它独占）。范围重叠不是并行，是并行写冲突。
+4. 检查点怎么设：子代理返回后由谁复验、满足什么条件才允许合并回主线。
+
+上游的 `dispatching-parallel-agents` 只讲「怎么并行派」，**没有任何征求同意的环节**——本节补的就是这一层。
+未拿到用户确认前，最多派只读调查（`explore`），**不派写入类子代理（`worker`）**。
+
 ### 宿主适配映射（必读）
 
 这 3 处是上游按 Claude Code 写的，本机形态不同。技能正文一字未改，落点按下表：
 
 | 上游原文 | 本机落点 | 说明 |
 |---|---|---|
-| `dispatching-parallel-agents` 里的 `Subagent (general-purpose): "…"` 派发写法 | 委派调用 + `agent_name` | 本机内置 `mavis` / `worker` / `explore` / `verifier`。按工单派**写入类**子任务用 `worker`（需独占文件），只读调查用 `explore`；**同一响应里发出多个委派调用即为并行**，逐个发就是串行。 |
+| `dispatching-parallel-agents` 里的 `Subagent (general-purpose): "…"` 派发写法 | 委派调用 + `agent_name` | 本机内置 `mavis` / `worker` / `explore` / `verifier`。按工单派**写入类**子任务用 `worker`（需独占文件），只读调查用 `explore`；**同一响应里发出多个委派调用即为并行**，逐个发就是串行。**派之前先过上面的执行方式闸门。** |
 | `using-git-worktrees` Step 1a 的"原生 worktree 工具"（`EnterWorktree` / `/worktree` / `--worktree`） | 本机无此工具 → 直接落到 Step 1b | 本机没有原生 worktree 命令，按 1b 的 `git worktree add` 走即可。Step 0 的隔离检测、Step 2 的依赖安装、Step 3 的基线验证照旧。 |
 | `finishing-a-development-branch` Step 6 的 "Superpowers created this worktree — we own cleanup" | 判据是路径前缀，不是归属 | 该步骤的**实际判断条件**是工作树落在 `.worktrees/` 或 `worktrees/` 之下就归我们清理，否则留给宿主。正文里的 "Superpowers" 只是原作者对自己行为的称呼，照判据执行即可。 |
 
@@ -128,8 +166,8 @@ harness-creator 的产物是 `AGENTS.md`（指令）与 `init.sh`（验证入口
    C 组的 `verification-before-completion` 同理：它要求"证据先行"，但**跑哪条命令**仍由项目自己的 `init.sh` / CI 决定。
 
 3. **本索引不新增分流键。**
-   需求对齐、规格、拆单、实现、测试、发起代码审查仍按 harness-creator 原有的承接方规则走；
-   本插件只覆盖上表里的**工程阶段**能力。
+   需求对齐、规格、拆单、实现、测试、发起代码审查仍按 harness-creator 原有的承接方规则走
+   （承接方是 `mattpocock-skills`）；本插件只覆盖上表里的**工程阶段**能力。
 
 ## 6. 共享清单在哪
 
@@ -150,14 +188,17 @@ harness-creator 的产物是 `AGENTS.md`（指令）与 `init.sh`（验证入口
 ## 7. 前置条件
 
 - `browser-testing-with-devtools` 需要 **chrome-devtools MCP server**。没有它，这个技能不可用；本包不内置该 MCP。
-- C 组 `dispatching-parallel-agents` 的并行依赖本机的子代理委派能力；`using-git-worktrees` 没有可用的原生 worktree 工具（两者落点见第 3 节适配表）。
+- C 组 `dispatching-parallel-agents` 的并行依赖本机的子代理委派能力；`using-git-worktrees` 没有可用的原生 worktree 工具（两者落点见第 3 节）。
+- **执行方式先与用户商定**：要用隔离或并行委派推进一个 ticket，按第 3 节的闸门先问再动。
 
 ## 8. 本索引不做什么
 
 - 不代任何技能下结论，也不替 `harness-creator` 决定何时触发 harness 产物。
-- 不引入第二套路由：上表只是"哪个技能管哪一段"的对照表，不是新的分流规则。
+- 不引入第二套流程入口：上表只是"哪个技能管哪一段"的对照表，不是新的分流规则。
 - 不重复上游正文；被指向后直接读那个技能的 `SKILL.md`。
 - **不承诺上游引用闭包完整**：B 组的二跳引用按第 4 节的表解析，不是靠收更多技能解决的。
+- **本索引唯一的约束性内容是第 3 节的执行方式闸门**（命中隔离 / 委派前先与用户商定）。
+  其余全部是对照与映射——如果哪天闸门也想去掉，得先有人接手那两条技能的去向。
 
 ## 9. 更新到上游最新版
 
