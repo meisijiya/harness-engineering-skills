@@ -1,6 +1,12 @@
+# LICENSE
+
+`harness-engineering-skills` 是**一份精选再分发包**，内容分两部分，各自适用下列许可。
+
+## 一、本包自写部分
+
 MIT License
 
-Copyright (c) 2025 Addy Osmani
+Copyright (c) 2026 meisijiya
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +25,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+适用范围（也登记在 `upstream.lock.json` 的 `unmanaged` 里）：
+
+- `.minimax-plugin/plugin.json`（MiniMax 本地插件清单）
+- `icon.jpg` / `icon-dark.jpg`（本包专用图标）
+- `README.md` / `PROVENANCE.md`
+- `scripts/update-upstream.mjs`
+- `skills/harness-engineering-skills-index/SKILL.md`（纯索引）
+- 本文件
+
+## 二、vendored 上游副本
+
+`skills/` 下的 20 个技能目录、`references/` 下的 6 份共享清单，以及 `licenses/` 下的两份许可全文，
+都是第三方仓库的**逐字节副本，零本地改写**，各自保留上游的原许可。**这些内容不适用上面第一节的
+许可声明。**
+
+| 上游 | 许可 | 收录内容 | 许可全文 |
+|---|---|---|---|
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT, Copyright (c) 2025 Addy Osmani | 15 个技能 + 6 份仓库级共享清单 | `licenses/agent-skills-LICENSE` |
+| [obra/superpowers](https://github.com/obra/superpowers) | MIT, Copyright (c) 2025 Jesse Vincent | 5 个技能 | `licenses/superpowers-LICENSE` |
+
+逐文件归属以上游为准，机器可读版本见 `upstream.lock.json` 的 `sources.<id>.managed`
+（每个文件一个 sha256）；`sources.<id>.commit` 锁定各上游的具体版本。
+两份上游许可全文均随包分发。选型依据与逐项收录理由见 `PROVENANCE.md`。

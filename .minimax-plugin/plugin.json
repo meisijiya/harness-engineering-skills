@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "name": "harness-engineering-skills",
   "displayName": "Harness 工程技能集",
-  "version": "1.2.0",
-  "description": "harness-creator 治理体系下精选的 10 个工程技能（另收录其正文引用的 5 个以闭合引用）。定位为 /implement 阶段的通用补强，栈相关技能不入本包。技能正文为上游逐字节副本，附 6 份仓库级共享清单与悬空引用映射表，可一键同步 addyosmani/agent-skills 最新版。",
+  "version": "1.3.0",
+  "description": "harness-creator 治理体系下精选的 20 个通用工程技能，分三组：addyosmani/agent-skills 的 10 个精选 + 5 个引用闭包，obra/superpowers 的 5 个承接空缺（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）。定位为 /implement 阶段的通用补强，栈相关技能不入本包。技能正文为两个上游的逐字节副本，附 6 份仓库级共享清单与悬空引用映射表，可一键同步双上游最新版。",
   "author": "meisijiya",
   "icon": "icon.jpg",
   "darkIcon": "icon-dark.jpg",
@@ -13,7 +13,9 @@
     "把本地 init.sh 里的检查接进 GitHub Actions",
     "审计一下登录接口有没有注入和越权风险",
     "设计这个订单服务的接口契约与错误码规范",
-    "把这 15 个技能同步到上游最新版"
+    "工单执行到收尾了，走一遍分支收尾的合并/PR/保留决策",
+    "收到的评审意见里有两条我不认同，怎么处置",
+    "把这 20 个技能同步到两个上游的最新版"
   ],
   "apps": [],
   "mcpServers": [],
@@ -33,7 +35,12 @@
     "skills/code-review-and-quality/SKILL.md",
     "skills/test-driven-development/SKILL.md",
     "skills/interview-me/SKILL.md",
-    "skills/incremental-implementation/SKILL.md"
+    "skills/incremental-implementation/SKILL.md",
+    "skills/dispatching-parallel-agents/SKILL.md",
+    "skills/using-git-worktrees/SKILL.md",
+    "skills/finishing-a-development-branch/SKILL.md",
+    "skills/verification-before-completion/SKILL.md",
+    "skills/receiving-code-review/SKILL.md"
   ],
   "hooks": []
 }

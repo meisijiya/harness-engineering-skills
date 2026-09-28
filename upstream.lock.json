@@ -1,114 +1,216 @@
 {
   "plugin": "harness-engineering-skills",
-  "repo": "addyosmani/agent-skills",
-  "repoUrl": "https://github.com/addyosmani/agent-skills",
-  "license": "MIT (Copyright (c) 2025 Addy Osmani)",
-  "upstreamRef": "main",
-  "commit": "2686b620fc1fed2e8f60c704839c766b8594c6b6",
-  "syncedAt": "2026-09-27T16:47:20.601Z",
-  "policy": "vendored 文件零本地改写；未出现在 managed 中的路径由本包自行维护，同步脚本不接管。",
-  "managed": {
-    "LICENSE": {
-      "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7",
-      "bytes": 1068
+  "lockFormat": 2,
+  "syncedAt": "2026-09-28T02:28:29.367Z",
+  "policy": "vendored 文件零本地改写；未出现在任何源的 managed 中的路径由本包自行维护，同步脚本不接管。",
+  "sources": {
+    "agent-skills": {
+      "repo": "addyosmani/agent-skills",
+      "repoUrl": "https://github.com/addyosmani/agent-skills",
+      "license": "MIT (Copyright (c) 2025 Addy Osmani)",
+      "upstreamRef": "main",
+      "commit": "2686b620fc1fed2e8f60c704839c766b8594c6b6",
+      "syncedAt": "2026-09-28T02:28:26.153Z",
+      "archiveMembers": {
+        "required": [
+          "skills",
+          "LICENSE"
+        ],
+        "optional": [
+          "references"
+        ]
+      },
+      "skills": [
+        "security-and-hardening",
+        "performance-optimization",
+        "frontend-ui-engineering",
+        "browser-testing-with-devtools",
+        "ci-cd-and-automation",
+        "observability-and-instrumentation",
+        "shipping-and-launch",
+        "deprecation-and-migration",
+        "constraint-driven-development",
+        "api-and-interface-design",
+        "debugging-and-error-recovery",
+        "code-review-and-quality",
+        "test-driven-development",
+        "interview-me",
+        "incremental-implementation"
+      ],
+      "sharedRefs": [
+        "security-checklist.md",
+        "performance-checklist.md",
+        "accessibility-checklist.md",
+        "observability-checklist.md",
+        "definition-of-done.md",
+        "testing-patterns.md"
+      ],
+      "rootFiles": [
+        {
+          "upstream": "LICENSE",
+          "local": "licenses/agent-skills-LICENSE"
+        }
+      ],
+      "managed": {
+        "licenses/agent-skills-LICENSE": {
+          "sha256": "6f202f8bd568cd730dbb2b0d1f8e243bc74c2fa1f64dbce9b2c7ea08bd5c9fd7",
+          "bytes": 1068
+        },
+        "references/accessibility-checklist.md": {
+          "sha256": "61c759d94d52296231f5f310b92b401f56c44e4430dc3cc95ebac5d7b1d5ffac",
+          "bytes": 5206
+        },
+        "references/definition-of-done.md": {
+          "sha256": "d1c75d2ae65d2c7a9cd01f93fa8de63e00e75f2fe5d08be224d576157054dcee",
+          "bytes": 3798
+        },
+        "references/observability-checklist.md": {
+          "sha256": "25fcd0e854596a5ab6f11b002050d245bf78f5ae0fcbd1df699b89451ae0e1e8",
+          "bytes": 5129
+        },
+        "references/performance-checklist.md": {
+          "sha256": "40f564d1e62341e277c01ba42c42d95264b9ef3b8e5a23249dc6e121a7e70067",
+          "bytes": 13139
+        },
+        "references/security-checklist.md": {
+          "sha256": "37774056502fe8970dcd2fd27dca5fa31f2a55232649fc3056c89c3af7d62755",
+          "bytes": 14360
+        },
+        "references/testing-patterns.md": {
+          "sha256": "f0bf05acd0edcadc27297ad5b74f104c8103ccfedba1a05cd6d6ae4af8364c56",
+          "bytes": 7460
+        },
+        "skills/api-and-interface-design/SKILL.md": {
+          "sha256": "5dafd0c44a3aabf11cae5bcb34f6fcc24dfa5c01ba6e0d3176bce997f4d68bc8",
+          "bytes": 14884
+        },
+        "skills/browser-testing-with-devtools/SKILL.md": {
+          "sha256": "4e3aacd6a380cd25bc6c2d67fdd1c926a9b22535b8a62109ecd33cefd909e3d9",
+          "bytes": 14539
+        },
+        "skills/ci-cd-and-automation/SKILL.md": {
+          "sha256": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
+          "bytes": 11332
+        },
+        "skills/code-review-and-quality/SKILL.md": {
+          "sha256": "d4ec6843e78a8ab2049185d7c2742e2f1e343143c6c915eb5b4f9a3a00a44f94",
+          "bytes": 20643
+        },
+        "skills/constraint-driven-development/SKILL.md": {
+          "sha256": "06479d4305f286d23cfb99f5dc85695896785269664e1f6a8d800e3b71e70c10",
+          "bytes": 21008
+        },
+        "skills/constraint-driven-development/references/floor-guard.md": {
+          "sha256": "a512e64ecdfa0e367b2996051a043887f2aed4389a9c803a71480eb7d30b3926",
+          "bytes": 9951
+        },
+        "skills/debugging-and-error-recovery/SKILL.md": {
+          "sha256": "21f3960f5d7ae2cc95c40896545004dbbcbbd752ea65fc2d53962554d4174220",
+          "bytes": 10913
+        },
+        "skills/deprecation-and-migration/SKILL.md": {
+          "sha256": "6a624f942e09c69863a4219b9bd5d56975026b67b0c70bc83385ffd2120b6142",
+          "bytes": 12642
+        },
+        "skills/frontend-ui-engineering/SKILL.md": {
+          "sha256": "549044e9bd8d7fe993ce8e5c0d2b0f5465650676dc15805329973f936179eb1e",
+          "bytes": 11712
+        },
+        "skills/incremental-implementation/SKILL.md": {
+          "sha256": "df66536610071727feae1ca95f3c391c248ad828041750ccd3699cce763aa00b",
+          "bytes": 9629
+        },
+        "skills/interview-me/SKILL.md": {
+          "sha256": "ace4b675999bb504593d572e0f73f3d7e803ad6fddf318445598c82c11939db2",
+          "bytes": 15080
+        },
+        "skills/observability-and-instrumentation/SKILL.md": {
+          "sha256": "e7fcb0820306d46268de9594d676ad98e35040858926c412b7000faa52a61f87",
+          "bytes": 13948
+        },
+        "skills/performance-optimization/SKILL.md": {
+          "sha256": "00694d0c69bbde674d0e39de24052d90afea32d9fef9553eaee21a50a7e9b8cf",
+          "bytes": 21717
+        },
+        "skills/security-and-hardening/SKILL.md": {
+          "sha256": "2e3fc60eed5aba97fe416f3f3c9317fdb014a682925ec70a733c3ff99e4b9858",
+          "bytes": 17559
+        },
+        "skills/security-and-hardening/references/hardening-patterns.md": {
+          "sha256": "d8ba58cad151aeca4804e48fc768240af0dd6b0ecddd07fbf24a1562140ba97a",
+          "bytes": 13036
+        },
+        "skills/shipping-and-launch/SKILL.md": {
+          "sha256": "af610cf4892db7eab2e91c899e33feba90e1000bac4528b2f8dde930816ac125",
+          "bytes": 11404
+        },
+        "skills/test-driven-development/SKILL.md": {
+          "sha256": "7c0c6ac057c19d7f8be65d9f49c3a638703b868f4625c78b70da5439d5d74fca",
+          "bytes": 16517
+        }
+      }
     },
-    "references/accessibility-checklist.md": {
-      "sha256": "61c759d94d52296231f5f310b92b401f56c44e4430dc3cc95ebac5d7b1d5ffac",
-      "bytes": 5206
-    },
-    "references/definition-of-done.md": {
-      "sha256": "d1c75d2ae65d2c7a9cd01f93fa8de63e00e75f2fe5d08be224d576157054dcee",
-      "bytes": 3798
-    },
-    "references/observability-checklist.md": {
-      "sha256": "25fcd0e854596a5ab6f11b002050d245bf78f5ae0fcbd1df699b89451ae0e1e8",
-      "bytes": 5129
-    },
-    "references/performance-checklist.md": {
-      "sha256": "40f564d1e62341e277c01ba42c42d95264b9ef3b8e5a23249dc6e121a7e70067",
-      "bytes": 13139
-    },
-    "references/security-checklist.md": {
-      "sha256": "37774056502fe8970dcd2fd27dca5fa31f2a55232649fc3056c89c3af7d62755",
-      "bytes": 14360
-    },
-    "references/testing-patterns.md": {
-      "sha256": "f0bf05acd0edcadc27297ad5b74f104c8103ccfedba1a05cd6d6ae4af8364c56",
-      "bytes": 7460
-    },
-    "skills/api-and-interface-design/SKILL.md": {
-      "sha256": "5dafd0c44a3aabf11cae5bcb34f6fcc24dfa5c01ba6e0d3176bce997f4d68bc8",
-      "bytes": 14884
-    },
-    "skills/browser-testing-with-devtools/SKILL.md": {
-      "sha256": "4e3aacd6a380cd25bc6c2d67fdd1c926a9b22535b8a62109ecd33cefd909e3d9",
-      "bytes": 14539
-    },
-    "skills/ci-cd-and-automation/SKILL.md": {
-      "sha256": "a6ed8ed56456b01ff8314c44eefc69897d9905ae4e06bb2b7036286efb79b5f0",
-      "bytes": 11332
-    },
-    "skills/code-review-and-quality/SKILL.md": {
-      "sha256": "d4ec6843e78a8ab2049185d7c2742e2f1e343143c6c915eb5b4f9a3a00a44f94",
-      "bytes": 20643
-    },
-    "skills/constraint-driven-development/SKILL.md": {
-      "sha256": "06479d4305f286d23cfb99f5dc85695896785269664e1f6a8d800e3b71e70c10",
-      "bytes": 21008
-    },
-    "skills/constraint-driven-development/references/floor-guard.md": {
-      "sha256": "a512e64ecdfa0e367b2996051a043887f2aed4389a9c803a71480eb7d30b3926",
-      "bytes": 9951
-    },
-    "skills/debugging-and-error-recovery/SKILL.md": {
-      "sha256": "21f3960f5d7ae2cc95c40896545004dbbcbbd752ea65fc2d53962554d4174220",
-      "bytes": 10913
-    },
-    "skills/deprecation-and-migration/SKILL.md": {
-      "sha256": "6a624f942e09c69863a4219b9bd5d56975026b67b0c70bc83385ffd2120b6142",
-      "bytes": 12642
-    },
-    "skills/frontend-ui-engineering/SKILL.md": {
-      "sha256": "549044e9bd8d7fe993ce8e5c0d2b0f5465650676dc15805329973f936179eb1e",
-      "bytes": 11712
-    },
-    "skills/incremental-implementation/SKILL.md": {
-      "sha256": "df66536610071727feae1ca95f3c391c248ad828041750ccd3699cce763aa00b",
-      "bytes": 9629
-    },
-    "skills/interview-me/SKILL.md": {
-      "sha256": "ace4b675999bb504593d572e0f73f3d7e803ad6fddf318445598c82c11939db2",
-      "bytes": 15080
-    },
-    "skills/observability-and-instrumentation/SKILL.md": {
-      "sha256": "e7fcb0820306d46268de9594d676ad98e35040858926c412b7000faa52a61f87",
-      "bytes": 13948
-    },
-    "skills/performance-optimization/SKILL.md": {
-      "sha256": "00694d0c69bbde674d0e39de24052d90afea32d9fef9553eaee21a50a7e9b8cf",
-      "bytes": 21717
-    },
-    "skills/security-and-hardening/SKILL.md": {
-      "sha256": "2e3fc60eed5aba97fe416f3f3c9317fdb014a682925ec70a733c3ff99e4b9858",
-      "bytes": 17559
-    },
-    "skills/security-and-hardening/references/hardening-patterns.md": {
-      "sha256": "d8ba58cad151aeca4804e48fc768240af0dd6b0ecddd07fbf24a1562140ba97a",
-      "bytes": 13036
-    },
-    "skills/shipping-and-launch/SKILL.md": {
-      "sha256": "af610cf4892db7eab2e91c899e33feba90e1000bac4528b2f8dde930816ac125",
-      "bytes": 11404
-    },
-    "skills/test-driven-development/SKILL.md": {
-      "sha256": "7c0c6ac057c19d7f8be65d9f49c3a638703b868f4625c78b70da5439d5d74fca",
-      "bytes": 16517
+    "superpowers": {
+      "repo": "obra/superpowers",
+      "repoUrl": "https://github.com/obra/superpowers",
+      "license": "MIT (Copyright (c) 2025 Jesse Vincent)",
+      "upstreamRef": "main",
+      "commit": "8ca22dba9a94f28898bbce59f2537ff4d87c747d",
+      "syncedAt": "2026-09-28T02:28:29.327Z",
+      "archiveMembers": {
+        "required": [
+          "skills",
+          "LICENSE"
+        ],
+        "optional": []
+      },
+      "skills": [
+        "receiving-code-review",
+        "verification-before-completion",
+        "finishing-a-development-branch",
+        "using-git-worktrees",
+        "dispatching-parallel-agents"
+      ],
+      "sharedRefs": [],
+      "rootFiles": [
+        {
+          "upstream": "LICENSE",
+          "local": "licenses/superpowers-LICENSE"
+        }
+      ],
+      "managed": {
+        "licenses/superpowers-LICENSE": {
+          "sha256": "a37e0e9697144819e1d965176ac4ae5bc3fa02d11e7812036bbcadf6dafe2400",
+          "bytes": 1070
+        },
+        "skills/dispatching-parallel-agents/SKILL.md": {
+          "sha256": "1968923066f3b707eb01d1992cdf4c42284c3855f70253b9cd5000ff45fca13c",
+          "bytes": 6078
+        },
+        "skills/finishing-a-development-branch/SKILL.md": {
+          "sha256": "8db5a922b242dd4e1bf824cb91c13b3e8d8e8a86d6ceaf7f0774eb9cce909d65",
+          "bytes": 7781
+        },
+        "skills/receiving-code-review/SKILL.md": {
+          "sha256": "091df1629510af1b92fc4abd6f96732ebedb4cb2c0f3457e8f2740b0504a2438",
+          "bytes": 6203
+        },
+        "skills/using-git-worktrees/SKILL.md": {
+          "sha256": "8cfb86f121269e8f7f12361e6795c4f6738828340e28964c9229d365666c9edd",
+          "bytes": 6813
+        },
+        "skills/verification-before-completion/SKILL.md": {
+          "sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+          "bytes": 3646
+        }
+      }
     }
   },
   "unmanaged": [
     ".minimax-plugin/plugin.json",
     "icon.jpg",
     "icon-dark.jpg",
+    "LICENSE",
     "upstream.lock.json",
     "README.md",
     "PROVENANCE.md",
