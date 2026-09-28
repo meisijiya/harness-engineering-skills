@@ -1,6 +1,6 @@
 ---
 name: using-harness-engineering-skills
-description: Use before acting on code — establishes how to find and invoke this package's 20 skills, and requires consulting the routing table first when implementing a ticket (notably with /implement loaded) or when the work needs an engineering capability this package covers. 动手改代码前先过路由表：命中哪一行就点名最贴近当前动作的那一个，「1% 可能相关」就得调；表里没有的行直接说不归本包，别拿近似技能顶替；工作树隔离与并行委派前必须先与用户商定执行方式。Route only; the procedure always lives in the target skill.
+description: Use before acting on code — establishes how to find and invoke this package's 20 skills, and requires consulting the routing table first when implementing a ticket (notably with /implement loaded) or when the work needs an engineering capability this package covers, including before answering clarifying questions. 动手改代码前先过路由表：命中哪一行就点名最贴近当前动作的那一个，「1% 可能相关」就得调，含在回答澄清提问之前；表里没有的行直接说不归本包，别拿近似技能顶替；工作树隔离与并行委派前必须先与用户商定执行方式。Route only; the procedure always lives in the target skill.
 ---
 
 <SUBAGENT-STOP>
@@ -38,7 +38,7 @@ description: Use before acting on code — establishes how to find and invoke th
 或不在工单里、但手上的活需要本包覆盖的工程能力。本入口只管**这一步该调哪个技能**。
 
 **本包只覆盖通用工程能力**：接口契约、质量基线、可信输入、性能、界面、浏览器取证、CI、遥测、
-发布、迁移、完成前验证、分支收尾、隔离与并行委派。
+发布、迁移、根因排查、完成前验证、分支收尾、隔离与并行委派。
 **拆单、需求对齐、实现主流程、发起独立审查不在这里。**
 
 **表里没有匹配行怎么办**：说清楚不归本包，别拿包里的近似技能顶替——
@@ -63,15 +63,16 @@ description: Use before acting on code — establishes how to find and invoke th
 | 「这技能小题大做」 | 简单的事变复杂，正是它拦下来的。 |
 
 > 开头的强制姿态与本节的红旗表，结构对齐 `obra/superpowers` 的 `using-superpowers`（MIT）。
-> 那个技能**没有**被 vendored（它是无条件强令，与本包「工单阶段内强令、阶段外让位」的定位冲突），
-> 所以这里只借鉴结构、逐条改写成上面的作用域版本——**不随 `--apply` 自动更新**，上游改了要人工比对。
+> 那个技能**没有**被 vendored——它是无条件强令（任何场合都要先查技能），与本包「按能力触发、
+> 只在动手改代码前」的定位不合，vendored 进来会与别的流程入口抢触发时机。
+> 所以这里只借鉴结构、逐条改写成上面的能力触发版本——**不随 `--apply` 自动更新**，上游改了要人工比对。
 
 ---
 
 ## 1. 我正在做什么 → 点名哪个
 
-> 典型用法是「用 implement skill 执行某工单，同时把这个插件也用上」。implement 负责推进节奏，
-> 本包在它的流程缝隙里补工程能力。**只点名与当前这一件事真实相关的，不要把表念一遍。**
+> 典型场景是「正在 `/implement` 推进的工单里，动手改代码前先翻这张表」。
+> **只点名与当前这一件事真实相关的那一行，不要把表念一遍。**
 
 | 我正在做什么 | 点名 | 症状词与要点 |
 |---|---|---|
@@ -89,7 +90,7 @@ description: Use before acting on code — establishes how to find and invoke th
 | 准备发布、回滚策略 | `shipping-and-launch` | 症状：要预发布清单、特性开关 / 分阶段 / 错误预算闸门 / 回滚。要可逆、可观察、增量 |
 | 删旧系统、改库表列、清僵尸代码 | `deprecation-and-migration` | 线上不停机改列走 expand/contract，旧接口走绞杀者模式 |
 | 测试还红着、根因不明 | `debugging-and-error-recovery` | 排查口径：先定位一个根因，别一次派多个代理 |
-| 要**发起**一次独立审查 | — 不归本包 | 发起审查不属本包；本包只管「收到意见之后怎么处置」 |
+| 要**发起**一次独立审查 | — 不归本包 | 发起审查不属本包——那要另找一个独立审查者 |
 | **收到**评审意见、准备动手改之前 | `receiving-code-review` | 上面管「发起」，这条管「收到之后怎么核实与处置」 |
 | 要说出「做完了 / 通过了 / 能合了」 | `verification-before-completion` | 没有本次跑出来的命令 + 完整输出 + 退出码，就不能说 |
 | 实现完成，要决定怎么并回去 | `finishing-a-development-branch` | 合并 / 提 PR / 保留三选一，收尾走它 |
@@ -130,10 +131,10 @@ description: Use before acting on code — establishes how to find and invoke th
 
 1. **把 20 个技能当清单倒给用户。** 命中多行时**只点最窄的那一行**——判据是「哪一行最贴近当前这个动作」，
    其余一句带过（「其余不归本包 / 暂不适用」），不要逐行解释。
-   **这条就是第 0 节「1% 就点」的操作化**：「1%」管**别漏**，本条管**别全点**——
+   **这条就是开头强令里「1% 就点」的操作化**：「1%」管**别漏**，本条管**别全点**——
    漏了是掉能力，全点了是掉判断力，两个都算错，但漏更贵。
-2. **拿本包的 B 组去干「发起类」的活。** 本包只覆盖工程环节：契约、质量基线、安全、性能、界面、
-   浏览器取证、CI、遥测、发布、迁移、完成前验证、分支收尾。**拆单、需求对齐、实现主流程、
+2. **拿本包当万能钥匙，什么活都用它顶上。** 本包只覆盖工程环节：契约、质量基线、安全、性能、界面、
+   浏览器取证、CI、遥测、发布、迁移、根因排查、完成前验证、分支收尾。**拆单、需求对齐、实现主流程、
    发起独立审查不在这里**——遇到这类活直接说不归本包，别拿 B 组顶上（各组被谁引用、
    何时才真的需要用，见附录 A）。
 3. **闸门没过就派写入类子代理，或直接建 worktree。**
@@ -183,7 +184,7 @@ description: Use before acting on code — establishes how to find and invoke th
 
 | 组 | 数量 | 来源 | 收录依据 |
 |---|---|---|---|
-| **A 组 · 精选** | 10 | addyosmani/agent-skills | 与其他工程纪律重叠度低、不侵入 instructions/verification/scope 三子系统、工程阶段真实净增量 |
+| **A 组 · 精选** | 10 | addyosmani/agent-skills | 不侵入 instructions/verification/scope 三子系统、在工程阶段是真实净增量、不与任何单一流程入口重复 |
 | **B 组 · 引用闭包** | 5 | addyosmani/agent-skills | **被 A 组正文直接引用**；不收进来，代理顺着 A 组的指示会去找不存在的技能 |
 | **C 组 · 收尾与协作** | 5 | obra/superpowers | 补上前两组没有的**收尾类与协作类**能力（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）；正文自洽，零悬空引用 |
 
@@ -192,7 +193,7 @@ B 组被谁引用、什么时候才真的需要用：
 | 技能 | 被谁引用 | 何时真的需要用它 |
 |---|---|---|
 | `debugging-and-error-recovery` | `ci-cd-and-automation`、`observability-and-instrumentation`、`security-and-hardening` 共 3 处路由 | 第 1 节「根因不明」那行直接指向它；也常被 A 组三处路由兜底调用 |
-| `code-review-and-quality` | `constraint-driven-development`（路由 + See Also） | 需要自己走一次多轴审查时（发起独立审查不属本包，被要求自查时用它） |
+| `code-review-and-quality` | `constraint-driven-development`（路由 + See Also） | 项目要求你**自查**改动时。注意与「发起独立审查」区分：那要另找一个独立审查者，不归本包 |
 | `test-driven-development` | `constraint-driven-development`（See Also） | 这次要动测试、而别处没有 TDD 纪律时 |
 | `incremental-implementation` | `deprecation-and-migration`（迁移每步的垂直切片指引） | 做分步迁移；或一个改动太大、不知道从哪一刀切下去时 |
 | `interview-me` | `constraint-driven-development`（直接借用其一次一问的提问纪律） | 探测项目现状、需求还很糊时 |

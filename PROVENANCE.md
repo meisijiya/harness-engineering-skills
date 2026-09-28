@@ -53,7 +53,7 @@
 - 逐文件归属的机器可读版本是 `upstream.lock.json` 的 `sources.<id>.managed`。
 - **一处非逐字节的衍生**：入口技能的「强制姿态 + 自欺红旗」结构对齐 `obra/superpowers` 的
   `using-superpowers`（同 MIT，本包已随附其许可全文）。那个技能**没有**被 vendored——它是无条件强令
-  （「任何时候、技能检查先于一切」），与本包「**工单执行阶段内**强令、阶段外让位」的定位冲突，
+  （「任何时候、技能检查先于一切」），与本包「**按能力触发、只在动手改代码前**」的定位不合，
   vendored 进来会与承接方正面争夺触发时机。因此只借鉴结构，逐条改写为作用域版本。
   **代价**：它不随 `--apply` 自动更新，上游改了 `using-superpowers` 不会传导到本包，需人工比对。
 
@@ -69,7 +69,7 @@
 | `upstream.lock.json` | 两个上游的 commit + 逐文件 sha256 锁 |
 | `scripts/update-upstream.mjs` | 双上游同步 / 安装镜像脚本 |
 | `scripts/check-ref-table.mjs` | 对账索引附录 C 的「共享清单被谁引用」表与各技能正文实际引用是否一致 |
-| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含作用域限定的强制姿态、优先级与「闸门高于强令」、任务维度路由、执行方式闸门、反例黑名单、失败兜底、宿主适配、悬空引用映射（衍生说明见 1c） |
+| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含能力触发的强制姿态与「闸门高于强令」、任务维度路由、执行方式闸门、反例黑名单、三列两段失败兜底、宿主适配、悬空引用映射（衍生说明见 1c）。**正文不引用任何其他插件的技能名** |
 | `README.md` / `PROVENANCE.md` | 本文件与使用说明 |
 
 ## 3. 收录分三组，依据各不相同
@@ -104,7 +104,7 @@
 `interview-me` 2 处、`incremental-implementation` 1 处）。
 
 代价是明确的：这 5 个与承接方 `mattpocock-skills` 功能重叠，会重新引入触发时机竞争。
-`using-harness-engineering-skills` 因此写明**承接方优先、B 组兜底**。
+`using-harness-engineering-skills` 因此在正文里**只声明本包覆盖哪些工程能力**，不裁定其他插件的技能名。
 
 ### C 组 · 承接空缺 5 个（obra/superpowers，按「mattpocock 侧有没有」选）
 
