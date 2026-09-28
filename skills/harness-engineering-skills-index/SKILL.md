@@ -23,8 +23,8 @@ description: Routing map for the 20 engineering skills in this plugin — pure r
 
 | 我正在做什么 | 点名 | 症状词与要点 |
 |---|---|---|
-| 开工前，决定**在哪儿干** | 🔴 `using-git-worktrees` | **先问用户**（第 2 节）；技能正文 Step 0 也会问一次，**两处都问过才动手**。本机无原生 worktree 工具，确认后直接走 Step 1b（第 5 节） |
-| 同时推多个互不依赖的活 | 🔴 `dispatching-parallel-agents` | **先问用户**（第 2 节）。没确认前只派只读调查。派发写法与角色见第 5 节 |
+| 开工前，决定**在哪儿干** | 🔴 `using-git-worktrees` | **先问用户**（第 2 节）。本机无原生 worktree 工具，落点见第 5 节 |
+| 同时推多个互不依赖的活 | 🔴 `dispatching-parallel-agents` | **先问用户**（第 2 节）。没确认前只派只读调查；角色见第 5 节 |
 | 把工单切小、定实现顺序 | — 不归本包 | mattpocock `to-tickets` / `implement` |
 | 定接口契约、划模块边界 | `api-and-interface-design` | 症状：REST / GraphQL 端点、前后端接口约定、模块间类型契约。契约先于实现，订单/支付这类金额敏感的先定 |
 | 定质量基线，防中途静默降标 | `constraint-driven-development` | 症状：代理塞 `@ts-ignore`、删测试、降阈值来「变绿」。产出 `CONSTRAINTS.md`，并往指令文件追加一行（附录 C） |
@@ -50,7 +50,7 @@ description: Routing map for the 20 engineering skills in this plugin — pure r
 
 > **这两项不自动触发。** 命中时先把选项摆给用户、拿到答复再进技能正文。
 > 一个 ticket 用什么方式推进是用户的决定，不是这两个技能的默认值。
-> 技能正文里如果也有一次询问（`using-git-worktrees` Step 0 会问一次），**两处都问过之后才动手**。
+> 若用户此前已表明偏好，**按偏好走、不重复追问**；否则索引这道闸门与技能正文自身的询问都要过。
 
 ### 🔴 隔离：先问三件事
 
@@ -77,10 +77,10 @@ description: Routing map for the 20 engineering skills in this plugin — pure r
 ## 3. 🛑 反例黑名单：这么用会出错
 
 1. **把 20 个技能当清单倒给用户。** 只点名与当前这一件事真实相关的；用不上的要**主动说明为什么不适用**。
-2. **用 B 组技能抢承接方的活。** 成对映射：`test-driven-development` ← `tdd`；
+2. **用 B 组技能抢承接方的活。** 成对映射：`test-driven-development` ← mattpocock `tdd`；
    `incremental-implementation` ← `implement`；`code-review-and-quality` ← `code-review`；
    `debugging-and-error-recovery` ← `diagnosing-bugs`；`interview-me` ← `grilling`。
-   **承接方在场时 B 组只兜底。**
+   **承接方在场时 B 组只兜底**（各组被谁引用、何时才真的需要用，见附录 A）。
 3. **闸门没过就派写入类子代理，或直接建 worktree。**
 4. **把 `CONSTRAINTS.md` 当验证入口。** 它只回答「标准是什么」，跑什么仍然是 `init.sh` / CI。
 5. **没跑验证就宣布完成**，或者采信子代理的「已修好」而不自己看 diff。
@@ -176,7 +176,8 @@ B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继�
 
 **共享清单**：技能正文用 `../../references/x.md` 引用包根的仓库级共享清单，上游按单 skill 安装**不会**带上，
 所以本插件把它们放在 `references/`。路径与包结构一致，因此**技能正文一个字都没改**——
-这正是能一键覆盖式跟上游更新的原因。**这些是给技能正文用的，人不必手动去读。**
+这正是能一键覆盖式跟上游更新的原因。这些清单是给技能正文用的，日常不需要人手动去读；
+**但改动 `references/` 之前要按下面这张表核对引用方**，漏列会让人裁掉仍在用的清单。
 
 | 文件 | 被谁引用 |
 |---|---|
@@ -187,7 +188,7 @@ B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继�
 | `references/definition-of-done.md` | `shipping-and-launch`、`incremental-implementation` |
 | `references/testing-patterns.md` | `test-driven-development` |
 
-新增/删减 `references/` 里的文件前，先按这张表核对——**漏列会让人照着裁掉仍在用的清单**。
+上表由 `.scratch/darwin/check-ref-table.mjs` 逐行对账 `skills/*/SKILL.md` 的实际引用生成，改表后请重跑。
 
 **更新到上游最新版：**
 
