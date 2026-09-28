@@ -21,24 +21,24 @@ description: Routing map for the 20 engineering skills in this plugin — pure r
 > 典型用法是「用 implement skill 执行某工单，同时把这个插件也用上」。implement 负责推进节奏，
 > 本包在它的流程缝隙里补工程能力。**只点名与当前这一件事真实相关的，不要把表念一遍。**
 
-| 我正在做什么 | 点名 | 说明 |
+| 我正在做什么 | 点名 | 症状词与要点 |
 |---|---|---|
-| 开工前，决定**在哪儿干** | 🔴 `using-git-worktrees` | **先问用户**，见第 2 节。单点小改通常原地做就够 |
-| 同时推多个互不依赖的活 | 🔴 `dispatching-parallel-agents` | **先问用户**，见第 2 节。没确认前只派只读调查 |
-| 把工单切小、定实现顺序 | — 不归本包 | 走 mattpocock `to-tickets` / `implement` |
+| 开工前，决定**在哪儿干** | 🔴 `using-git-worktrees` | **先问用户**（第 2 节）。本机无原生 worktree 工具，直接走技能 Step 1b（第 5 节） |
+| 同时推多个互不依赖的活 | 🔴 `dispatching-parallel-agents` | **先问用户**（第 2 节）。没确认前只派只读调查 |
+| 把工单切小、定实现顺序 | — 不归本包 | mattpocock `to-tickets` / `implement` |
 | 定接口契约、划模块边界 | `api-and-interface-design` | 契约先于实现。订单/支付这类金额敏感的先定这个 |
-| 定质量基线，防中途静默降标 | `constraint-driven-development` | 产出 `CONSTRAINTS.md`；会往指令文件追加一行，见附录 C |
-| 处理不可信输入、认证、个人数据 | `security-and-hardening` | 客户端传来的东西一律当不可信：key、token、上传文件名 |
-| 有**可测量**的性能问题 | `performance-optimization` | 没有测量数据就别叫它，那属于提前优化 |
-| 写界面、组件、状态 | `frontend-ui-engineering` | 含 WCAG 无障碍 |
-| 需要真实浏览器证据 | `browser-testing-with-devtools` | **需要 chrome-devtools MCP**，没配就不可用，见第 4 节 |
-| 把质量门禁自动化、接 CI | `ci-cd-and-automation` | 检查应当接进 `init.sh` / CI，不要另立一套命令 |
-| 加日志 / 指标 / 追踪 / 告警 | `observability-and-instrumentation` | 特性要带遥测一起上线 |
-| 准备发布、回滚策略 | `shipping-and-launch` | 可逆、可观察、增量 |
-| 删旧系统、改库表列、清僵尸代码 | `deprecation-and-migration` | 线上不停机改列走 expand/contract |
+| 定质量基线，防中途静默降标 | `constraint-driven-development` | 症状：代理塞 `@ts-ignore`、删测试、降阈值来"变绿"。产出 `CONSTRAINTS.md` |
+| 处理不可信输入、认证、个人数据 | `security-and-hardening` | 症状：依赖审计、个人数据合规、key/token/上传文件名这类客户端可伪造的东西 |
+| 有**可测量**的性能问题 | `performance-optimization` | 症状：Core Web Vitals、加载时间变长、N+1 查询。没有测量数据别叫它，那属于提前优化 |
+| 写界面、组件、状态 | `frontend-ui-engineering` | 含 WCAG 2.1 AA 无障碍 |
+| 需要真实浏览器证据 | `browser-testing-with-devtools` | 症状：DOM、控制台报错、网络请求、性能 trace、视觉核对。**需 chrome-devtools MCP**，没配就不可用（第 4 节） |
+| 把质量门禁自动化、接 CI | `ci-cd-and-automation` | 症状：GitHub Actions、测试运行器、部署策略。检查应当接进 `init.sh` / CI |
+| 加日志 / 指标 / 追踪 / 告警 | `observability-and-instrumentation` | 特性要带遥测一起上线，告警带 runbook |
+| 准备发布、回滚策略 | `shipping-and-launch` | 症状：特性开关 / 分阶段 / 错误预算闸门 / 回滚。要可逆、可观察、增量 |
+| 删旧系统、改库表列、清僵尸代码 | `deprecation-and-migration` | 线上不停机改列走 expand/contract，旧接口走绞杀者模式 |
 | 测试还红着、根因不明 | `debugging-and-error-recovery` | 排查口径；mattpocock `diagnosing-bugs` 是主力，B 组兜底 |
-| 要**发起**一次独立审查 | — 不归本包 | 走 mattpocock `code-review` |
-| **收到**评审意见、准备动手改之前 | `receiving-code-review` | 与上面那条接力，不重叠。见第 3 节第 2 条 |
+| 要**发起**一次独立审查 | — 不归本包 | mattpocock `code-review` |
+| **收到**评审意见、准备动手改之前 | `receiving-code-review` | 上面管「发起」，这条管「收到之后怎么核实与处置」 |
 | 要说出「做完了 / 通过了 / 能合了」 | `verification-before-completion` | 没有本次跑出来的命令 + 完整输出 + 退出码，就不能说 |
 | 实现完成，要决定怎么并回去 | `finishing-a-development-branch` | 合并 / 提 PR / 保留三选一，收尾走它 |
 | 调查陌生代码、只读取证 | — 不归本包 | 用宿主的只读调查子代理，不占本包技能 |
@@ -95,7 +95,7 @@ description: Routing map for the 20 engineering skills in this plugin — pure r
 
 | 症状 | 怎么办 |
 |---|---|
-| mattpocock 技能加载不到 / 没装 | 走对应 B 组兜底；B 组也没有就**明说缺什么**，不要用近义技能顶替 |
+| mattpocock 技能加载不到 / 没装 | 走对应 B 组兜底，映射见**附录 A**；B 组也没有就**明说缺什么**，不要用近义技能顶替 |
 | `browser-testing-with-devtools` 没有 chrome-devtools MCP | 该技能不可用。说明原因，退回由用户自己开浏览器取证，或跳过这个维度并讲清代价 |
 | 用户在闸门里选了不建 worktree | 尊重选择，在当前工作区做。**不要反复劝**，只在发现实际冲突时提一次 |
 | 子代理返回后发现根因互相重合 | 立即停掉剩余并发，改单点修复——那本来就不是三个独立问题 |
@@ -174,9 +174,17 @@ B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继�
 3. **本索引不新增分流键。** 实现主流程归 mattpocock，本包只覆盖工程阶段能力。
 
 **共享清单**：技能正文用 `../../references/x.md` 引用包根的仓库级共享清单，上游按单 skill 安装**不会**带上，
-所以本插件把它们放在 `references/`（`security-` / `performance-` / `accessibility-` / `observability-`checklist.md、
-`definition-of-done.md`、`testing-patterns.md`）。路径与包结构一致，因此**技能正文一个字都没改**——
+所以本插件把它们放在 `references/`。路径与包结构一致，因此**技能正文一个字都没改**——
 这正是能一键覆盖式跟上游更新的原因。**这些是给技能正文用的，人不必手动去读。**
+
+| 文件 | 被谁引用 |
+|---|---|
+| `references/security-checklist.md` | `security-and-hardening`、`shipping-and-launch` |
+| `references/performance-checklist.md` | `performance-optimization`、`shipping-and-launch` |
+| `references/accessibility-checklist.md` | `frontend-ui-engineering`、`shipping-and-launch` |
+| `references/observability-checklist.md` | `observability-and-instrumentation` |
+| `references/definition-of-done.md` | `shipping-and-launch` |
+| `references/testing-patterns.md` | `test-driven-development` |
 
 **更新到上游最新版：**
 
