@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * check-ref-table.mjs — 逐行对账 `skills/harness-engineering-skills-index/SKILL.md` 附录 C 的
+ * check-ref-table.mjs — 逐行对账 `skills/using-harness-engineering-skills/SKILL.md` 附录 C 的
  * 「共享清单被谁引用」表，与各技能 SKILL.md 正文里的**实际引用**是否一致。
  *
  * 为什么需要它：那张表一旦写成「文件名 → 引用方」的对照形式，就从描述升级为断言——
@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 
 const PKG_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SKILLS_DIR = path.join(PKG_ROOT, 'skills');
-const INDEX_FILE = path.join(SKILLS_DIR, 'harness-engineering-skills-index', 'SKILL.md');
+const INDEX_FILE = path.join(SKILLS_DIR, 'using-harness-engineering-skills', 'SKILL.md');
 const REF_DIR = path.join(PKG_ROOT, 'references');
 
 /** 表里应当出现的共享清单。顺序即文档里的顺序。 */
@@ -52,7 +52,7 @@ const extraOnDisk = onDisk.filter((f) => !REFS.includes(f));
 const dirs = fs.readdirSync(SKILLS_DIR, { withFileTypes: true })
   .filter((e) => e.isDirectory())
   .map((e) => e.name)
-  .filter((n) => n !== 'harness-engineering-skills-index');
+  .filter((n) => n !== 'using-harness-engineering-skills');
 
 const indexText = fs.readFileSync(INDEX_FILE, 'utf8');
 let bad = missingOnDisk.length + extraOnDisk.length;

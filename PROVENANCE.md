@@ -51,6 +51,11 @@
   的 MIT；第二节列出两个上游的归属与许可全文路径。根目录**不**放单一上游的许可全文——
   那样读起来像是覆盖全包，实际只覆盖一部分，属于归属误读。
 - 逐文件归属的机器可读版本是 `upstream.lock.json` 的 `sources.<id>.managed`。
+- **一处非逐字节的衍生**：入口技能的「强制姿态 + 自欺红旗」结构对齐 `obra/superpowers` 的
+  `using-superpowers`（同 MIT，本包已随附其许可全文）。那个技能**没有**被 vendored——它是无条件强令
+  （「任何时候、技能检查先于一切」），与本包「**工单执行阶段内**强令、阶段外让位」的定位冲突，
+  vendored 进来会与承接方正面争夺触发时机。因此只借鉴结构，逐条改写为作用域版本。
+  **代价**：它不随 `--apply` 自动更新，上游改了 `using-superpowers` 不会传导到本包，需人工比对。
 
 ## 2. 本包自写（不在上游，同步脚本不接管）
 
@@ -64,7 +69,7 @@
 | `upstream.lock.json` | 两个上游的 commit + 逐文件 sha256 锁 |
 | `scripts/update-upstream.mjs` | 双上游同步 / 安装镜像脚本 |
 | `scripts/check-ref-table.mjs` | 对账索引附录 C 的「共享清单被谁引用」表与各技能正文实际引用是否一致 |
-| `skills/harness-engineering-skills-index/SKILL.md` | 纯索引：任务维度路由、执行方式闸门、反例黑名单、失败兜底、宿主适配、悬空引用映射 |
+| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含作用域限定的强制姿态、优先级与「闸门高于强令」、任务维度路由、执行方式闸门、反例黑名单、失败兜底、宿主适配、悬空引用映射（衍生说明见 1c） |
 | `README.md` / `PROVENANCE.md` | 本文件与使用说明 |
 
 ## 3. 收录分三组，依据各不相同
@@ -99,7 +104,7 @@
 `interview-me` 2 处、`incremental-implementation` 1 处）。
 
 代价是明确的：这 5 个与承接方 `mattpocock-skills` 功能重叠，会重新引入触发时机竞争。
-`harness-engineering-skills-index` 因此写明**承接方优先、B 组兜底**。
+`using-harness-engineering-skills` 因此写明**承接方优先、B 组兜底**。
 
 ### C 组 · 承接空缺 5 个（obra/superpowers，按「mattpocock 侧有没有」选）
 
@@ -141,7 +146,7 @@
 要求是：**命中时先与用户商定，再进技能正文。**
 
 这个要求**不能写进那两份技能正文**——vendored 零改写是「一键覆盖更新」的前提。
-所以它落在自写的索引 `harness-engineering-skills-index` 第 2 节「🔴 CHECKPOINT · 执行方式闸门」，
+所以它落在自写的索引 `using-harness-engineering-skills` 第 2 节「🔴 CHECKPOINT · 执行方式闸门」，
 并被索引第 1 节路由表的两个 🔴 标记、附录 C 的自述，以及 README 的 C 组提示多处互相指向。
 
 上游侧的现状（决定了闸门要写多细）：
@@ -164,7 +169,7 @@ A / B 组（addyosmani 这条线）的**传递**引用闭包经实测为 **22 / 
 收满等于基本搬平整仓，且会带入 `context-engineering`——它争 harness-creator 的 instructions 子系统，
 且与 harness-creator 自带的 `references/context-engineering-pattern.md` **同名不同域**，是已登记的雷。
 
-**决定：只收一跳。** 第 2 跳的 6 处引用改由 `harness-engineering-skills-index` 的
+**决定：只收一跳。** 第 2 跳的 6 处引用改由 `using-harness-engineering-skills` 的
 「悬空引用映射表」解析到实际承接方，并按性质区分：
 
 - **真流程缺口 2 处**（缺了会动作落空）：`interview-me:129` 用 `spec-driven-development` 起草规格
@@ -259,3 +264,9 @@ superpowers 这条线**没有这个缺口**：它的技能不引用仓库级 `re
   （`code-review-and-quality` 引 `security-` / `performance-checklist.md`、
   `incremental-implementation` 引 `definition-of-done.md`），跨 3 个版本都没人发现，
   直到被 3 个独立 judge 同时指出。**改表靠肉眼看是发现不了的，必须脚本对账。**
+- **给技能改名后跑一次 `--install` 并确认没有空目录残留。** 镜像只逐个删文件、不删目录，
+  改名或上游删技能都会在安装目录留下同名空壳——文件列表对得上、目录树却不同构。
+  （v1.5.0 已补：清理文件后按深度倒序 `rmdir` 变空的目录，非空的一律保留。）
+- 入口技能名是 `using-harness-engineering-skills`，对齐 `obra/superpowers` 的 `using-superpowers`
+  这条上游约定。**它是本包唯一有约束性的自写文件**（第 0 节强制姿态、第 2 节闸门两处），
+  改动它等于改动插件的行为，改完至少重跑 `check-ref-table.mjs` 与 `--check`。

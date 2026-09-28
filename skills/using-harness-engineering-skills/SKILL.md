@@ -1,18 +1,71 @@
 ---
-name: harness-engineering-skills-index
-description: Routing map for the 20 engineering skills in this plugin — pure reinforcement for mattpocock-skills under harness-creator, not a second workflow layer. 路由表：告诉我「我正在做的事」该点名哪个技能、以及哪些必须先问用户。Use when deciding which skill to load, when an upstream skill name is referenced but not bundled, or before worktree isolation and parallel delegation — those two require settling the execution mode with the user first. 工作树隔离与并行委派前先问用户，不要自己决定。Route only; the procedure always lives in the target skill.
+name: using-harness-engineering-skills
+description: Use while executing a ticket — notably inside the implement loop — establishes how to find and invoke this package's 20 skills, and requires consulting the routing table before every action, including before answering clarifying questions. 执行工单时（典型如 /implement 推进中）动手前先过路由表：「1% 可能相关」就得点名，命中「不归本包」则把主导权交回承接方 mattpocock-skills；工作树隔离与并行委派前必须先与用户商定执行方式。Route only; the procedure always lives in the target skill.
 ---
 
-# Harness 工程技能集 · 索引
+<SUBAGENT-STOP>
+若你被派去执行某个**具体任务**（有明确的文件范围或验收条件），忽略本入口。
+你的指令已经把点名定好了，再过一遍路由表只会让你改道。
+</SUBAGENT-STOP>
 
-## 怎么用这份索引（30 秒）
+<EXTREMELY-IMPORTANT>
+**执行工单的过程中**（典型如 `/implement` 推进中），本包 20 个技能只要有 **1% 可能相关**，
+就必须点名它再动手——包括在回答澄清提问之前。
 
-1. 翻到**第 1 节**「我正在做什么」，找到对得上的那一行，只点名那一行的技能；
-2. 命中 **🔴 闸门** → **停下来把选项摆给用户**，拿到答复再往下走；
-3. 点完名就读那个技能的 `SKILL.md`。本文件只负责指路，不代替它执行。
+反过来，第 1 节表里标「不归本包」那几行**必须让位**：当场把控制权交回承接方，不要介入。
 
-本包 20 个技能与承接方 `mattpocock-skills` 的 25 个**零同名重叠**——补的是它没有的通用工程能力，
-不接管它的流程主导权。需求对齐、规格、拆单、**实现主流程**、测试、发起评审，仍然是 mattpocock 的事。
+工单之外（闲聊、纯查询、没打算动代码的事）本入口不生效，别拿它去打断用户。
+
+这不是建议。「先看一眼代码」「就这点小事」正是自欺的全部形态，见第 0 节末尾的红旗表。
+</EXTREMELY-IMPORTANT>
+
+# Harness 工程技能集 · 入口
+
+> 开头的强制姿态管「**要不要调**」；第 1 节管「**调哪个**」；第 3 节管「**用错会怎样**」。三件事分开，别混。
+
+## 怎么用这份入口（30 秒）
+
+1. 确认自己**正在执行某个工单**（第 0 节的作用域）；不在就别翻本文件；
+2. 翻到**第 1 节**「我正在做什么」，找到对得上的那一行，只点名那一行的技能；
+3. 命中 **🔴 闸门** → **停下来把选项摆给用户**，拿到答复再往下走；
+4. 点完名就读那个技能的 `SKILL.md`。本文件只负责指路，不代替它执行。
+
+标「**不归本包**」那几行请当真：那是让位给承接方，不是「用近似技能顶替」（见第 3 节第 6 条）。
+
+---
+
+## 0. 作用域与优先级
+
+**作用域 = 执行工单的过程中。** 典型场景是「用 `implement` skill 推进某工单，同时把本插件也带上」：
+`implement` 决定**节奏与主流程**，本包在它的流程缝隙里补工程能力。**工单之外不生效。**
+
+在这个作用域内，本包与 `mattpocock-skills` **零同名重叠**，但**角色**会重叠——两边都能对同一个工程环节说话。先定谁先：
+
+| 环节 | 谁先 |
+|---|---|
+| 需求对齐、拆单、**实现主流程**、发起独立审查（第 1 节标「不归本包」那 3 行） | mattpocock 先跑，本入口**让位并闭嘴** |
+| 接口契约、质量基线、可信输入、性能、界面、浏览器取证、CI、遥测、发布、迁移、根因排查 | **本包先点名**，再动手 |
+| 同一个环节两边都有名 | 按第 3 节第 2 条的成对映射：承接方在场时 B 组只兜底 |
+
+### 🔴 闸门高于本节强令
+
+强令管的是「**要不要调**」，不是「可以不等同意就调」。命中 `using-git-worktrees` 或
+`dispatching-parallel-agents` 两行时，**第 2 节的闸门优先**：先问用户、拿到答复，再进技能正文。
+
+### 🛑 红旗：这些念头一冒出来，就是你在找理由不调
+
+| 念头 | 实情 |
+|---|---|
+| 「我先看一眼代码」 | 技能会告诉你**怎么看**。先过路由表。 |
+| 「我得先问清楚才能决定」 | 点名发生在澄清提问**之前**。 |
+| 「就这点小事，用不着技能」 | 小事常常正好在 `verification-before-completion` 的射程里。 |
+| 「这个技能我知道，直接做一样」 | 知道 ≠ 调用。技能正文随上游更新，你的记忆是旧版。 |
+| 「调技能绕远」 | 绕远的是硬编。没调技能的做法，出错时回溯不到依据。 |
+| 「这技能小题大做」 | 简单的事变复杂，正是它拦下来的。 |
+
+> 开头的强制姿态与本节的红旗表，结构对齐 `obra/superpowers` 的 `using-superpowers`（MIT）。
+> 那个技能**没有**被 vendored（它是无条件强令，与本包「工单阶段内强令、阶段外让位」的定位冲突），
+> 所以这里只借鉴结构、逐条改写成上面的作用域版本——**不随 `--apply` 自动更新**，上游改了要人工比对。
 
 ---
 
@@ -50,7 +103,7 @@ description: Routing map for the 20 engineering skills in this plugin — pure r
 
 > **这两项不自动触发。** 命中时先把选项摆给用户、拿到答复再进技能正文。
 > 一个 ticket 用什么方式推进是用户的决定，不是这两个技能的默认值。
-> 若用户此前已表明偏好，**按偏好走、不重复追问**；否则索引这道闸门与技能正文自身的询问都要过。
+> 若用户此前已表明偏好，**按偏好走、不重复追问**；否则本入口这道闸门与技能正文自身的询问都要过。
 
 ### 🔴 隔离：先问三件事
 
@@ -173,7 +226,7 @@ B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继�
    这一行落在指令子系统里，会占用 `AGENTS.md` 的字节/行数/工作规则预算——追加后要回查预算是否仍合规。
 2. **验证入口始终是 `init.sh`，不是 `CONSTRAINTS.md`。**
    `verification-before-completion` 同理：它要求「证据先行」，但**跑哪条命令**仍由项目自己的 `init.sh` / CI 决定。
-3. **本索引不新增分流键。** 实现主流程归 mattpocock，本包只覆盖工程阶段能力。
+3. **本入口不新增分流键。** 实现主流程归 mattpocock，本包只覆盖工程阶段能力。
 
 **共享清单**：技能正文用 `../../references/x.md` 引用包根的仓库级共享清单，上游按单 skill 安装**不会**带上，
 所以本插件把它们放在 `references/`。路径与包结构一致，因此**技能正文一个字都没改**——
@@ -203,5 +256,6 @@ node scripts/update-upstream.mjs --apply --only superpowers   # 只同步一个�
 `skills/` 下这 20 个目录、`references/`、`licenses/` 下两份许可全文，都是两个上游的**逐字节副本**。
 各上游的锁定 commit 与逐文件 sha256 见 `upstream.lock.json` 的 `sources.<id>`。
 
-**本索引不做什么**：不代任何技能下结论；不引入第二套流程入口；不重复上游正文；
-**唯一的约束性内容是第 2 节的执行方式闸门**，其余全是对照与映射。
+**本入口不做什么**：不代任何技能下结论；不引入第二套流程入口；不重复上游正文；
+**约束性内容只有两处**——第 0 节的**强制姿态与优先级**、第 2 节的**执行方式闸门**，
+其余全是对照与映射。工单之外本文件不生效。

@@ -124,7 +124,7 @@ const UNMANAGED = [
   'PROVENANCE.md',
   'scripts/update-upstream.mjs',
   'scripts/check-ref-table.mjs',
-  'skills/harness-engineering-skills-index/SKILL.md',
+  'skills/using-harness-engineering-skills/SKILL.md',
 ];
 
 // 复制到安装目录时跳过的开发期文件
@@ -465,6 +465,25 @@ function isInside(parent, child) {
   return rel !== '' && !rel.startsWith('..') && !path.isAbsolute(rel);
 }
 
+/**
+ * 收集 root 下所有子目录，按路径长度降序——深的在前。
+ * 只用于清理「删完文件后变空的目录」，长度倒序近似深度倒序，足够把嵌套空壳逐层删净。
+ */
+async function collectDirs(root) {
+  const out = [];
+  async function walk(dir) {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    for (const e of entries) {
+      if (!e.isDirectory()) continue;
+      const p = path.join(dir, e.name);
+      out.push(p);
+      await walk(p);
+    }
+  }
+  await walk(root);
+  return out.sort((a, b) => b.length - a.length);
+}
+
 async function mirrorToInstall(installDir) {
   // 包本体与安装目录互相嵌套都会自毁：安装目录=包本体时，下面会先清空包本体再从空目录复制 0 个文件；
   // 安装目录在包本体之内时 collectPackageFiles 会递归进自己。
@@ -490,6 +509,15 @@ async function mirrorToInstall(installDir) {
     const current = await collectPackageFiles(installDir);
     say(`  清理旧安装内容 ${current.length} 个文件…`);
     for (const rel of current) await fs.rm(path.join(installDir, ...rel.split('/')), { force: true });
+    // 上游删技能、或本地给技能改过名时，旧目录会留下一个空壳。rmdir 只能删空目录，
+    // 仍非空的会报 ENOTEMPTY——那正是我们要的行为，不用 --force 硬删。
+    for (const dir of await collectDirs(installDir)) {
+      try {
+        await fs.rmdir(dir);
+      } catch (e) {
+        if (e.code !== 'ENOTEMPTY' && e.code !== 'ENOENT' && e.code !== 'EEXIST') throw e;
+      }
+    }
   }
   await fs.mkdir(installDir, { recursive: true });
   const files = await collectPackageFiles(PKG_ROOT);
