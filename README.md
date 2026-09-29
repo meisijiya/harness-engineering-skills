@@ -102,9 +102,73 @@ mattpocock-skills 的 25 个**零同名重叠**，这是「补强」的机器口
 
 两者由脚本保持一致；**日常只改包本体，然后重装**。
 
+### 三个 manifest 各自管谁
+
+同一份 21 个技能要同时被三个生态认领，所以根目录有三个互不重叠的 manifest，**各管一个生态**：
+
+| 文件 | 生态 | 作用 |
+|---|---|---|
+| `.minimax-plugin/plugin.json` | MiniMax Code | 插件列表与图标；显式列出 21 条 `skills/.../SKILL.md` |
+| `.claude-plugin/plugin.json` | Claude Code | 同样的技能清单，供 Claude Code 按 `skills` 字段发现 |
+| `plugin.json`（根） | omp / oh-my-pi | 声明 Agent Plugins 1.0.0 标准，omp 的 agent-plugins provider 据此接管 `skills/` |
+| `package.json` | omp / npm | omp 本地安装的硬前置；`omp` 字段是 omp 原生插件标记 |
+
+后两个是 2026-09-29 为 omp 安装适配新增的。**技能正文一个字没动**，`git diff -- skills/` 为空。
+
+### 装到 omp
+
+> **本插件不会自动装进 omp，以下命令需要你手动执行一次。**
+> 仓库里没有任何脚本会替你跑 `omp install`——它写的是你机器的全局状态
+> （`C:\Users\22923\.omp\plugins\`），属于必须由你决定的动作。
+
+**安装**（在 PowerShell 里执行）：
+
+```powershell
+cd D:\26code\agent-skills
+omp install .
+```
+
+**验证**（应看到 `plugin:harness-engineering-skills` 为 ✔，不是 ⚠）：
+
+```powershell
+omp plugin doctor
+omp plugin list
+```
+
+**确认 21 个技能真的被加载**（PowerShell，不依赖 agent 凭据）：
+
+```powershell
+bun .scratch/verify-final.mjs
+```
+
+**回退**：
+
+```powershell
+omp plugin uninstall harness-engineering-skills
+```
+
+已装上的话是 **link（目录联接）而非拷贝**，所以改完包本体的代码或技能，omp 下次启动即可见，
+不必重装。`omp install .` 建的是联接，所以重复执行是安全的。
+
+两条实测出来的硬约束，缺一个都装不上：
+
+1. **必须有 `package.json`**。`omp install .` 走 npm 语义，缺它直接报
+   `package.json not found`，而 `--dry-run` 不会告诉你——它照样打印 `Would link .`。
+2. **`package.json` 必须有 `omp` 字段**。没有它，`omp plugin doctor` 会报
+   `No omp/pi manifest (not an omp plugin)`，且**插件会被静默跳过**：
+   `getEnabledPlugins()` 直接 `continue`，21 个技能一个都不加载，doctor 只给 warning 不给 error。
+
+装好后 omp 按 Agent Plugins 1.0.0 从 `skills/` 的**直接子目录**收集技能（不读任何
+清单文件），所以技能目录名必须与 frontmatter 的 `name` 完全一致，且 frontmatter 只能用
+`name`/`description`/`license`/`allowed-tools`/`metadata`/`compatibility` 六个字段——多一个键
+该技能就被跳过。现状 21/21 全部通过（用 omp 自己的 provider 验的，不是复刻逻辑）。
+
 ## 首次使用
 
-1. 确认插件已被识别：MiniMax Code 的本地插件列表里应出现 `harness-engineering-skills`。
+1. 确认插件已被识别：
+   - **MiniMax Code**：本地插件列表里应出现 `harness-engineering-skills`。
+   - **omp**：`omp plugin doctor` 应显示 `plugin:harness-engineering-skills` 为 ✔
+     （未装则需先手动跑一次 `omp install .`，见上面「装到 omp」）。
 2. 不知道该用哪个 → 读 `skills/using-harness-engineering-skills/SKILL.md`。
 3. 与 harness-creator 的落地顺序：`constraint-driven-development` 先定 `CONSTRAINTS.md` 与那一行指令 →
    `ci-cd-and-automation` 把同类检查接进 `init.sh` / CI → 其余按当前项目实际面启用。
@@ -142,11 +206,30 @@ node scripts/update-upstream.mjs --check --only superpowers   # 只看一个上�
 ## 自检
 
 ```bash
+./init.sh                                    # 门禁主入口（已内置 node 解释器回退）
 node --check scripts/update-upstream.mjs      # 语法
 node --check scripts/check-ref-table.mjs      # 语法
 node scripts/check-ref-table.mjs             # 索引附录 C 的「被谁引用」表 vs 各技能正文实际引用
 node scripts/update-upstream.mjs --check     # 漂移 + 上游差异，应为「已是最新 / 漂移 0 处」
 ```
+
+三份 manifest 与相对引用的一致性目前靠一次性脚本验证（`node .scratch/...`，不进版本库）：
+
+- 两份技能清单的技能集合、版本号、磁盘目录三者对账；
+- 复刻 omp 的 Agent Plugins 1.0.0 校验规则，预测 21 个技能是否会被接受；
+- 技能正文里 `../../references/...` 这类相对引用逐条 resolve 到真实文件。
+
+**动过任一 manifest 或技能目录结构后重跑这三项。** 长期看这是门禁的候选（并入 `init.sh`），
+但当前按"最小必要改动"只做验证、不进门禁。
+
+> ✅ **`init.sh` 已能在本机直接跑通（2026-09-29 修）。** 之前 exit 127 的原因是这机器的
+> `bash` 是 WSL2 的（`/mnt/c` 挂载），而 node 只装在 Windows 侧（`C:\nvm4w\nodejs`），
+> WSL 的 PATH 里没有，`node` 一调用就 `command not found` 并被 `set -e` 打死。
+> 现在 `init.sh` 先解析解释器再跑检查，顺序是：环境变量 `NODE` → PATH 上的 `node` →
+> 常见 Windows 安装位置（`/mnt/c` 与 `/c` 两种挂载都试）→ 都没有才 exit 127 并说明怎么办。
+> 三种情况都实测过：PATH 里有 node、空 PATH + 位置回退、`NODE=` 覆盖、全部落空时报错。
+>
+> 想指定解释器：`NODE=/path/to/node ./init.sh`。
 
 `check-ref-table.mjs` 是**改 `references/` 或动那张引用表之后必跑**的：那张表一旦写成对照形式
 就成了断言，漏列会让下一个人裁掉仍在用的清单。它历史上确实漏过 3 处，跨 3 个版本都没人发现。

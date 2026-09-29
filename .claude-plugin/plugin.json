@@ -1,0 +1,44 @@
+{
+  "name": "harness-engineering-skills",
+  "version": "1.5.2",
+  "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill. Covers TDD, code review, security hardening, performance work, API and interface design, CI/CD, observability, shipping, worktree isolation, parallel dispatch, and completion verification. Skill bodies are byte-identical to upstream, so both can be resynced to the latest release.",
+  "author": {
+    "name": "meisijiya"
+  },
+  "homepage": "https://github.com/meisijiya/harness-engineering-skills",
+  "repository": "https://github.com/meisijiya/harness-engineering-skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "engineering",
+    "tdd",
+    "code-review",
+    "security",
+    "performance",
+    "testing",
+    "workflow"
+  ],
+  "skills": [
+    "./skills/using-harness-engineering-skills",
+    "./skills/constraint-driven-development",
+    "./skills/api-and-interface-design",
+    "./skills/security-and-hardening",
+    "./skills/performance-optimization",
+    "./skills/frontend-ui-engineering",
+    "./skills/browser-testing-with-devtools",
+    "./skills/ci-cd-and-automation",
+    "./skills/observability-and-instrumentation",
+    "./skills/shipping-and-launch",
+    "./skills/deprecation-and-migration",
+    "./skills/debugging-and-error-recovery",
+    "./skills/code-review-and-quality",
+    "./skills/test-driven-development",
+    "./skills/interview-me",
+    "./skills/incremental-implementation",
+    "./skills/dispatching-parallel-agents",
+    "./skills/using-git-worktrees",
+    "./skills/finishing-a-development-branch",
+    "./skills/verification-before-completion",
+    "./skills/receiving-code-review"
+  ]
+}

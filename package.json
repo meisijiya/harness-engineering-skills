@@ -1,0 +1,31 @@
+{
+  "name": "harness-engineering-skills",
+  "version": "1.5.2",
+  "private": true,
+  "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill. Distributes as a MiniMax Code plugin and as an omp / Claude Code plugin.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meisijiya/harness-engineering-skills.git"
+  },
+  "keywords": [
+    "skills",
+    "engineering",
+    "tdd",
+    "code-review",
+    "security",
+    "performance",
+    "testing",
+    "workflow"
+  ],
+  "omp": {
+    "name": "harness-engineering-skills",
+    "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill."
+  },
+  "scripts": {
+    "check": "node scripts/check-ref-table.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

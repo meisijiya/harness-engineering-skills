@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "harness-engineering-skills",
+  "version": "1.5.2",
+  "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill.",
+  "author": {
+    "name": "meisijiya"
+  },
+  "homepage": "https://github.com/meisijiya/harness-engineering-skills",
+  "repository": "https://github.com/meisijiya/harness-engineering-skills",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "engineering",
+    "tdd",
+    "code-review",
+    "security",
+    "performance",
+    "testing"
+  ]
+}
