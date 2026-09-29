@@ -1,0 +1,7 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-09-29	0b823a4	using-harness-engineering-skills	-	-	baseline	8	三场景带入口/不带入口各一名代理推演；不是实际技能调用；baseline可见catalog描述，有污染风险	dry_run
+2026-09-29	working-tree	using-harness-engineering-skills	-	3-0 better	keep	workflow	三名独立judge同次比较HEAD与工作树，均better/clear；三例路由推演PASS，不作端到端有效性声明	paired
+2026-09-29	working-tree	using-harness-engineering-skills	-	PASS	verification	consistency	末轮纠正文案后独立Verifier复核PASS；Git Bash ./init.sh exit 0，引用表6/6；git diff --check通过	static
+2026-09-29	working-tree	using-harness-engineering-skills	-	PASS	verification	vendored	update-upstream.mjs --check：2上游、30受管文件、0变化、0漂移；末轮本地SHA256复核30/30	static
+2026-09-29	working-tree	using-harness-engineering-skills	-	PASS	installed	package	v1.5.2已通过标准--install同步；21技能声明、图标签名与前置信息检查通过；4个修改文件安装版与源码hash一致	static
+2026-09-29	working-tree	using-harness-engineering-skills	-	UNVERIFIED	limitation	runtime	未验证Desktop自动扫描状态、implement自动加载率、业务端到端效果；评估发生于提交前工作树，不改上游implement	static
