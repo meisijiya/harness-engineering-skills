@@ -85,6 +85,10 @@ echo "=== node scripts/check-ref-table.mjs ==="
 "$NODE" scripts/check-ref-table.mjs
 RAN=1
 
+echo "=== node scripts/check-package.mjs ==="
+"$NODE" scripts/check-package.mjs
+RAN=$((RAN + 1))
+
 if [ "$RAN" -eq 0 ]; then
   echo ""
   echo "ERROR: nothing in this harness verified anything — every check was skipped."

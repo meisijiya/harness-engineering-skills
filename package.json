@@ -1,8 +1,8 @@
 {
   "name": "harness-engineering-skills",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "private": true,
-  "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill. Distributes as a MiniMax Code plugin and as an omp / Claude Code plugin.",
+  "description": "22 general engineering skills: 20 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Distributes as a MiniMax Code plugin and as an omp / Claude Code plugin.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,10 +20,10 @@
   ],
   "omp": {
     "name": "harness-engineering-skills",
-    "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill."
+    "description": "22 general engineering skills: 20 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code."
   },
   "scripts": {
-    "check": "node scripts/check-ref-table.mjs"
+    "check": "node scripts/check-ref-table.mjs && node scripts/check-package.mjs"
   },
   "engines": {
     "node": ">=18"

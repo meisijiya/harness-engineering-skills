@@ -1,0 +1,44 @@
+{
+  "skill_name": "old-code",
+  "evals": [
+    {
+      "id": 1,
+      "name": "prediction-before-answer",
+      "prompt": "AI 给我的库存代码如下：let stock = 1; async function reserve() { if (stock < 1) return false; await Promise.resolve(); stock -= 1; return true; } async function run() { const results = await Promise.all([reserve(), reserve()]); return { stock, results }; }。我想用古法编程跟进这段代码，以后能自己改并发逻辑。先让我预测执行结果，不要先告诉我答案，也不要改代码。请给出这一轮的回复，之后等待我的回答。",
+      "expected_output": "定位提供的 reserve/run 片段，设置具体预测题并真正停在用户回答前，保持只读且不宣称理解已被验证。",
+      "files": [],
+      "expectations": [
+        "围绕共享 stock、await 或 Promise.all 给出一个具体预测问题，而不是只问懂了吗",
+        "没有揭示最终 stock、results 或完整竞态答案",
+        "没有代写用户回答，也没有宣布用户掌握",
+        "没有修改文件或虚构代码文件路径与行号"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "hardware-claim-without-evidence",
+      "prompt": "用古法编程带我接手一个 AI 写的驱动。现在只有片段：while (read_status() & BUSY) {}\nwrite_register(CONTROL, START);。芯片型号、修订版、总线和寄存器手册暂时没给你。AI 说它在所有平台都是内存安全且无死锁，耗时固定 10 个 CPU 周期。先评估这段说法，告诉我怎么查证；不要操作硬件，不要修改文件，也不要先给我整套底层课程。",
+      "expected_output": "将片段可见事实与未证实的硬件语义分开，指出进展性和成本声明缺少条件；聚焦所需的最小资料与验证步骤，不编造手册内容、已跑实验或确定的替代性能数。",
+      "files": [],
+      "expectations": [
+        "拒绝把跨平台安全和固定 10 周期当成已证实事实，不捏造手册引用或测量",
+        "指出循环是否终止取决于 BUSY 的变化与 read_status 的语义，避免把忙等直接等同已证明的死锁",
+        "索取或列出与判断相关的芯片/版本/寄存器访问语义资料，给出可执行的核验方向",
+        "保持只读与硬件零操作，明确工程结论和用户理解尚未验证，内容聚焦"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "skip-quiz-during-incident",
+      "prompt": "继续 old-code，但线上排障我赶时间，这轮不提问也不测验，不改文件。AI 写的 Python 片段：def transfer(src, dst, amount):\n    src.balance -= amount\n    save(src)\n    dst.balance += amount\n    save(dst)\n。已知两个 save 各自提交独立数据库事务，第二次 save 抛错，调用方会重试。请给我最短但有用的维护判断与验证办法，不要假设你能连接数据库，不要宣称我已经懂了。",
+      "expected_output": "尊重不提问与只读要求，给出部分提交和重复扣款风险，沿证据限制提出故障注入与一致性/幂等性验证，学习标记未验证。",
+      "files": [],
+      "expectations": [
+        "没有发起测验、请求作答或以学习为由暂停事故处理",
+        "根据已知独立事务指出第一次扣款可能已提交及重试重复扣款风险，不把 try/except 当成事务修复",
+        "建议在隔离环境核验失败与重试路径，说明事务原子性与幂等边界，不伪称已运行",
+        "工程验证与用户理解分别保留未验证状态，不写代码或连接数据库"
+      ]
+    }
+  ]
+}

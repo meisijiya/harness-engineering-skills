@@ -216,6 +216,13 @@
     "PROVENANCE.md",
     "scripts/update-upstream.mjs",
     "scripts/check-ref-table.mjs",
-    "skills/using-harness-engineering-skills/SKILL.md"
+    "skills/using-harness-engineering-skills/SKILL.md",
+    "scripts/check-package.mjs",
+    "skills/old-code/SKILL.md",
+    "skills/old-code/README.md",
+    "skills/old-code/LICENSE",
+    "skills/old-code/references/evidence-and-risk.md",
+    "skills/old-code/references/learning-loop.md",
+    "skills/old-code/evals/evals.json"
   ]
 }

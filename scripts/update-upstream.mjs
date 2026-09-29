@@ -4,7 +4,7 @@
  *
  * 设计前提：vendored 文件一律不做本地改写。addyosmani 那边技能正文里的
  * `../../references/x.md` 恰好等于本包的 `references/`，所以「零改写 + 纯镜像」成立，
- * 更新就只是覆盖文件，不存在合并冲突。唯一例外是本包自写的索引 skill 与文档，
+ * 更新就只是覆盖文件，不存在合并冲突。本包自写的入口、old-code 与维护文件不参与上游同步，
  * 已在 lock 的 unmanaged 中登记。
  *
  * 本脚本管两个上游，配方只差仓库地址与清单：
@@ -125,6 +125,13 @@ const UNMANAGED = [
   'scripts/update-upstream.mjs',
   'scripts/check-ref-table.mjs',
   'skills/using-harness-engineering-skills/SKILL.md',
+  'scripts/check-package.mjs',
+  'skills/old-code/SKILL.md',
+  'skills/old-code/README.md',
+  'skills/old-code/LICENSE',
+  'skills/old-code/references/evidence-and-risk.md',
+  'skills/old-code/references/learning-loop.md',
+  'skills/old-code/evals/evals.json',
 ];
 
 // 复制到安装目录时跳过的开发期文件

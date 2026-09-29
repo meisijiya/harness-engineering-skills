@@ -1,6 +1,6 @@
 # AGENTS.md
 
-把两个上游的通用工程技能逐字节 vendored 成一个 MiniMax 本地插件包，用上游锁文件 + 同步脚本 + 引用对账脚本维持 vendored 零改写不变式。
+维护通用工程技能插件：两个上游的 vendored 内容保持零改写；入口与 old-code 由本包独立维护。维护归属见 upstream.lock.json，验证统一走 ./init.sh。
 
 - 档位：非工程 — 本仓库不设工程承接方；状态与交接不由本文件定义，也不由本技能代建。
 
@@ -13,6 +13,7 @@
 
 必需检查：
 - `node scripts/check-ref-table.mjs`
+- `node scripts/check-package.mjs`
 
 ## 启动工作流
 

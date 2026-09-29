@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "name": "harness-engineering-skills",
   "displayName": "Harness 工程技能集",
-  "version": "1.5.2",
-  "description": "mattpocock-skills 在 harness-creator 治理下的能力补强包：20 个通用工程技能。addyosmani/agent-skills 10 个精选 + 5 个引用闭包，obra/superpowers 5 个收尾与协作类（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）。只补强不接管流程主导权。入口技能 using-harness-engineering-skills（命名对齐 obra/superpowers 的 using-superpowers）在相关工程动作前按能力路由，覆盖 ticket 执行与非 ticket 任务，也含只读审计、性能测量和完成前验证；当前动作完成后返回主流程，动作切换时重新路由；本包不覆盖时使用其他适用能力继续；工作树隔离与并行委派沿用已确认的执行方式，未确认时先商定。入口正文不引用任何其他插件的技能名。技能正文为两个上游的逐字节副本，可一键同步双上游最新版。",
+  "version": "1.6.0",
+  "description": "通用工程能力补强包：20 个来自 addyosmani/agent-skills 与 obra/superpowers 的逐字节技能副本，加本地维护的能力路由入口与 old-code，共 22 个技能。覆盖接口、安全、性能、测试、交付与协作；old-code 通过源码推演、证据核验和用户迁移练习帮助开发者跟进 AI 代码，保持独立维护能力。只补强，不接管主流程。工作树隔离与并行委派沿用已确认方式，未确认时先商定。只有 vendored 内容参与双上游同步，old-code 独立维护。",
   "author": "meisijiya",
   "icon": "icon.jpg",
   "darkIcon": "icon-dark.jpg",
@@ -17,12 +17,14 @@
     "工单执行到收尾了，走一遍分支收尾的合并/PR/保留决策",
     "收到的评审意见里有两条我不认同，怎么处置",
     "这个 ticket 要开 worktree 隔离还是原地做，顺便问下要不要并行委派",
-    "把这 20 个技能同步到两个上游的最新版"
+    "把这 20 个技能同步到两个上游的最新版",
+    "用 old-code 带我跟进 AI 写的库存逻辑，让我先预测，再用证据核验"
   ],
   "apps": [],
   "mcpServers": [],
   "skills": [
     "skills/using-harness-engineering-skills/SKILL.md",
+    "skills/old-code/SKILL.md",
     "skills/constraint-driven-development/SKILL.md",
     "skills/api-and-interface-design/SKILL.md",
     "skills/security-and-hardening/SKILL.md",

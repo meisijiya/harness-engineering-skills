@@ -1,7 +1,7 @@
 {
   "name": "harness-engineering-skills",
-  "version": "1.5.2",
-  "description": "21 general engineering skills for AI coding agents, vendored verbatim from addyosmani/agent-skills and obra/superpowers and complemented by a capability-routing entry skill. Covers TDD, code review, security hardening, performance work, API and interface design, CI/CD, observability, shipping, worktree isolation, parallel dispatch, and completion verification. Skill bodies are byte-identical to upstream, so both can be resynced to the latest release.",
+  "version": "1.6.0",
+  "description": "22 general engineering skills: 20 vendored verbatim from addyosmani/agent-skills and obra/superpowers, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Only vendored content participates in upstream synchronization.",
   "author": {
     "name": "meisijiya"
   },
@@ -20,6 +20,7 @@
   ],
   "skills": [
     "./skills/using-harness-engineering-skills",
+    "./skills/old-code",
     "./skills/constraint-driven-development",
     "./skills/api-and-interface-design",
     "./skills/security-and-hardening",
