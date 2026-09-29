@@ -32,7 +32,9 @@ SOFTWARE.
 - `icon.jpg` / `icon-dark.jpg`（本包专用图标）
 - `README.md` / `PROVENANCE.md`
 - `scripts/update-upstream.mjs`
-- `skills/using-harness-engineering-skills/SKILL.md`（纯索引）
+- `skills/using-harness-engineering-skills/SKILL.md`（入口）
+- `skills/old-code/`（独立编写的代码理解与维护技能；理念来源与边界见其 README）
+- `scripts/check-package.mjs`（本包一致性门禁）
 - 本文件
 
 ## 二、vendored 上游副本

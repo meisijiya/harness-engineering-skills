@@ -1,13 +1,14 @@
 # harness-engineering-skills
 
 给 AI 编码代理用的**通用工程技能集**：从两个上游开源仓库精选 20 个与语言、框架、数据库无关的工程技能，
-逐字节 vendored 进本包，再加 1 个自写的入口技能做能力路由。打包成一个插件，同时供
+逐字节 vendored 进本包，再加本地维护的入口技能与 `old-code`，共 22 个技能。打包成一个插件，同时供
 MiniMax Code、omp、Claude Code 三个生态使用。
 
 | 构成 | 数量 | 说明 |
 |---|---|---|
 | vendored 技能 | 20 | 上游正文逐字节副本，本地零改写，可一条命令同步回上游最新版 |
 | 自写入口技能 | 1 | `using-harness-engineering-skills`，只做路由与闸门，不代替任何技能执行 |
+| 独立维护技能 | 1 | `old-code`，围绕真实代码做推演、核验与学习，帮助用户保持独立维护能力 |
 | 仓库级共享清单 | 6 | 上游按仓库组织、安装单个技能时拿不到的引用目标 |
 | 上游许可全文 | 2 | 两个上游均为 MIT |
 
@@ -38,6 +39,7 @@ LangChain4j 规则集、Postgres 专属调优、某个前端框架的写法这�
 | 能力域 | 技能 | 解决什么 | 来源 |
 |---|---|---|---|
 | 入口路由 | `using-harness-engineering-skills` | 拿到一句话任务，判断该调用哪个技能、执行方式要不要先与用户商定 | 本包自写 |
+| 代码掌控与学习 | [`old-code`](skills/old-code/README.md) | 跟进 AI 改动，独立预测关键行为，用证据检验并练习维护；可按用户节奏跳过测验 | 本包独立编写；理念来自 zjw-swun/old-code |
 | 需求与契约 | `interview-me`、`api-and-interface-design` | 把模糊需求问成可执行规格；设计端点、模块边界与类型契约 | addyosmani |
 | 质量基线 | `constraint-driven-development` | 把质量标准写成带数字的 `CONSTRAINTS.md`，盯住 diff 里被悄悄降标的地方 | addyosmani |
 | 实现与排障 | `incremental-implementation`、`debugging-and-error-recovery` | 切成可验证的薄片交付；系统化定位根因而不是猜着改 | addyosmani |
@@ -59,12 +61,13 @@ LangChain4j 规则集、Postgres 专属调优、某个前端框架的写法这�
 仓库根目录**就是包本体**。安装到各生态的那份由脚本镜像生成，不单独维护。
 
 ```
-skills/                     21 个技能目录（20 vendored + 1 自写入口）
+skills/                     22 个技能目录（20 vendored + 1 自写入口 + 1 独立维护 old-code）
 references/                 6 份仓库级共享清单（vendored）
 licenses/                   两个上游的许可全文（vendored）
 scripts/
   update-upstream.mjs       双上游同步 / 安装目录镜像
   check-ref-table.mjs       共享清单引用表对账（门禁）
+  check-package.mjs         清单、版本、vendored 字节与本地技能归属校验（门禁）
 upstream.lock.json          两个上游的 commit + 30 个受管文件的逐文件 sha256
 .minimax-plugin/plugin.json  MiniMax Code 插件清单
 .claude-plugin/plugin.json   Claude Code 插件清单
@@ -80,18 +83,19 @@ artifacts/                  评审与调优过程的留档结果
 
 ### 四份清单各管一个生态
 
-同一份 21 个技能要同时被三个生态认领，所以根目录有四个互不重叠的清单文件：
+同一份 22 个技能要同时被三个生态认领，所以根目录有四个互不重叠的清单文件：
 
 | 文件 | 生态 | 作用 |
 |---|---|---|
-| `.minimax-plugin/plugin.json` | MiniMax Code | 插件列表、图标与示例查询；显式列出 21 条 `skills/.../SKILL.md` |
+| `.minimax-plugin/plugin.json` | MiniMax Code | 插件列表、图标与示例查询；显式列出 22 条 `skills/.../SKILL.md` |
 | `.claude-plugin/plugin.json` | Claude Code | 同样的技能清单，供其按 `skills` 字段发现 |
 | `plugin.json` | omp | 声明 Agent Plugins 1.0.0 标准，omp 的 agent-plugins provider 据此接管 `skills/` |
 | `package.json` | omp / npm | omp 本地安装的硬前置；`omp` 字段是 omp 原生插件标记 |
 
 **不要在本地改写 `skills/` 下那 20 个 vendored 目录、`references/`、`licenses/`。**
 它们是上游副本，改了就失去一键更新；同步脚本会在覆盖前做漂移检测并要求你显式 `--force`。
-要改行为就改自写的部分（入口技能、脚本、清单、文档）。
+要改行为就改本地维护的部分（入口技能、`old-code`、脚本、清单、文档）。
+`old-code` 不纳入上游同步，规则与评估由本包独立维护；理念来源与许可处理见 `PROVENANCE.md` 的 1d 节。
 
 ## 安装
 
@@ -135,9 +139,9 @@ omp 按 Agent Plugins 1.0.0 从 `skills/` 的**直接子目录**收集技能—�
 
 装好后技能目录名必须与 frontmatter 的 `name` 完全一致，且 frontmatter 的键只允许
 `name` / `description` / `license` / `allowed-tools` / `metadata` / `compatibility` 这六个，
-多一个键该技能就被跳过。这些键另有长度与格式约束；本包当前 21 个技能只用 `name` 与
-`description`、目录名与 `name` 逐个一致，新增或改写技能后要确认它仍被加载——
-这层约束不在本仓库门禁的覆盖范围内。
+多一个键该技能就被跳过。这些键另有长度与格式约束；`old-code` 使用 `name`、
+`description`、`license`、`compatibility`，其余技能使用 `name` 与 `description`。
+门禁核对目录名与 `name`，但不代替宿主真实加载检查；新增或改写后仍需确认目标宿主能发现它。
 
 ### Claude Code
 
@@ -185,21 +189,21 @@ node scripts/update-upstream.mjs --install   # 不联网，只重装到安装目
 node --check scripts/update-upstream.mjs  # 脚本语法
 node --check scripts/check-ref-table.mjs
 node scripts/check-ref-table.mjs          # 引用表对账（init.sh 已含）
-node scripts/update-upstream.mjs --check  # 漂移 + 上游差异，应为「0 处变化，漂移 0 处」
+node scripts/check-package.mjs            # 清单、归属与 vendored 字节（init.sh 已含）
+node scripts/update-upstream.mjs --check  # 联网报告上游变化与漂移，不作为完成门禁
 ```
 
-- `./init.sh` 是本仓库的验证门禁，**当前覆盖**共享清单引用表对账：索引里"哪份清单被哪些技能引用"
-  那张表一旦写成对照形式就成了断言，漏列会让下一个人裁掉仍在用的清单。改 `references/`
-  或动那张表之后必须重跑。它不联网，PATH 上没有 `node` 时会按常见安装位置回退，
-  也可用 `NODE=/path/to/node ./init.sh` 指定解释器。
-- `--check` 会联网。它是**报告**，不是门禁：结论行应为 `2 个上游 / 30 个受管文件，0 处变化，漂移 0 处`。
-- 已知边界：门禁**不覆盖**技能目录与清单的一致性。加删技能目录或改 manifest 后，
-  需人工核对两份技能清单（`.minimax-plugin/plugin.json` 与 `.claude-plugin/plugin.json`，
-  各 21 条）与磁盘上的 21 个目录一致；`plugin.json` 与 `package.json` 不含 `skills` 列表。
+- `./init.sh` 离线运行两道门禁：共享清单引用表对账，以及包一致性检查。后者核对四份清单的
+  包名与版本、两份显式技能清单与磁盘目录、frontmatter 名称、锁定文件的字节数和 SHA-256，
+  并检查 `old-code` 完整登记为本地内容及其 Markdown 本地链接可达。
+- PATH 上没有 `node` 时会按常见安装位置回退，也可用 `NODE=/path/to/node ./init.sh` 指定解释器。
+- `--check` 会联网。它是**报告**，不是门禁；上游有新提交属于待同步信息，不应阻断本地交付。
+- 门禁不证明技能的教学效果、触发准确率或宿主真实加载行为。`old-code` 的行为用例在
+  `skills/old-code/evals/evals.json`，效果对照还需独立执行与用户反馈。
 
 ## 许可
 
-- **本包自写部分**（manifest、图标、脚本、入口技能、文档）：MIT，见根目录 `LICENSE` 第一节。
+- **本包自写部分**（manifest、图标、脚本、入口技能、`old-code`、文档）：MIT，见根目录 `LICENSE` 第一节。
 - **vendored 内容**：两个上游均为 MIT——Copyright (c) 2025 Addy Osmani、
   Copyright (c) 2025 Jesse Vincent。许可全文逐字节保留在 `licenses/agent-skills-LICENSE` 与
   `licenses/superpowers-LICENSE`，逐文件归属见 `upstream.lock.json` 的 `sources.<id>.managed`。

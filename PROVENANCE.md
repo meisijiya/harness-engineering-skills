@@ -57,6 +57,18 @@
   vendored 进来会与承接方正面争夺触发时机。因此只借鉴结构，逐条改写为作用域版本。
   **代价**：它不随 `--apply` 自动更新，上游改了 `using-superpowers` 不会传导到本包，需人工比对。
 
+## 1d. old-code：理念来源与独立实现
+
+`skills/old-code/` 的理念来源是 https://github.com/zjw-swun/old-code ，查阅提交为
+`2009cdf83bd00ae125f28bd8313660520e24adea`（2026-09-29）。该提交仅含 README、忽略规则、
+原技能与命令文件：README 有 MIT 徽章及 LICENSE 链接，但树中没有许可全文。
+本包依据用户的代码掌控与学习目标独立编写流程、参考与评估用例，未复制这些来源文件的正文，
+不将来源的许可状态推定为已核验的 MIT，也不把它纳入 `sources` 或同步配方。
+
+本地 `old-code` 将用户独立预测、证据核验和迁移练习嵌入真实代码工作，
+分别说明工程结果与理解证据，支持跳过测验；不接管实现流程、不绑定技术栈。
+本目录采用本包 MIT 许可，随目录携带 LICENSE；不需要来源仓库才能运行或维护。
+
 ## 2. 本包自写（不在上游，同步脚本不接管）
 
 登记在 `upstream.lock.json` 的 `unmanaged`：
@@ -69,6 +81,8 @@
 | `upstream.lock.json` | 两个上游的 commit + 逐文件 sha256 锁 |
 | `scripts/update-upstream.mjs` | 双上游同步 / 安装镜像脚本 |
 | `scripts/check-ref-table.mjs` | 对账索引附录 C 的「共享清单被谁引用」表与各技能正文实际引用是否一致 |
+| `scripts/check-package.mjs` | 离线核验技能发现清单、版本、vendored 字节与 old-code 本地维护归属 |
+| `skills/old-code/` | 独立编写的代码掌控与学习技能，含参考、使用说明、许可及行为评估用例（见 1d） |
 | `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含能力触发的强制姿态与「闸门高于强令」、任务维度路由、执行方式闸门、反例黑名单、三列两段失败兜底、宿主适配、悬空引用映射（衍生说明见 1c）。**正文不引用任何其他插件的技能名** |
 | `README.md` / `PROVENANCE.md` | 本文件与使用说明 |
 
@@ -268,5 +282,5 @@ superpowers 这条线**没有这个缺口**：它的技能不引用仓库级 `re
   改名或上游删技能都会在安装目录留下同名空壳——文件列表对得上、目录树却不同构。
   （v1.5.0 已补：清理文件后按深度倒序 `rmdir` 变空的目录，非空的一律保留。）
 - 入口技能名是 `using-harness-engineering-skills`，对齐 `obra/superpowers` 的 `using-superpowers`
-  这条上游约定。**它是本包唯一有约束性的自写技能**（能力触发、委派范围、动作切换后的路由与执行方式闸门），
-  改动它等于改动插件的行为，改完至少重跑 `check-ref-table.mjs` 与 `--check`。
+  这条上游约定，负责能力触发、委派范围、动作切换后的路由与执行方式闸门；`old-code` 负责代码掌控与学习。
+  两者独立维护，修改后运行 `./init.sh`，行为变化另做针对性评估；联网 `--check` 仅报告上游变化与漂移。
