@@ -135,7 +135,12 @@ const UNMANAGED = [
 ];
 
 // 复制到安装目录时跳过的开发期文件
-const SKIP_NAMES = new Set(['.git', '.gitignore', '.gitattributes', 'node_modules', '.scratch', '.DS_Store', 'Thumbs.db']);
+const SKIP_NAMES = new Set(['.git', '.gitignore', '.gitattributes', 'node_modules', '.scratch', '.DS_Store', 'Thumbs.db', 'artifacts']);
+
+// 清理旧安装内容时仍要遍历的目录名。SKIP_NAMES 里的 'artifacts' / '.scratch' 只是「不复制」，
+// 不是「不清理」：两者共用一个集合时，某个目录一旦被复制进去就再也遍历不到，
+// 跳过一次后会永久残留在安装目录里。只有版本控制与 node_modules 这类绝不能删的才列在这里。
+const CLEANUP_IGNORE = new Set(['.git', '.gitignore', '.gitattributes', 'node_modules']);
 
 // ---------------------------------------------------------------- CLI helpers
 
@@ -466,6 +471,22 @@ async function collectPackageFiles(dir, base = dir) {
   return out;
 }
 
+// 清理侧遍历。与拷贝侧的 SKIP_NAMES 分开：SKIP_NAMES 里 'artifacts' / '.scratch' 只是
+// 「不复制」，不是「不清理」。两者共用一个集合时，某个目录一旦被复制进去就再也遍历不到，
+// 跳过一次后会永久残留；反过来漏改拷贝侧，则会把 .scratch 整个复制进安装目录。
+async function collectInstalledFiles(dir, base = dir) {
+  const out = [];
+  let entries;
+  try { entries = await fs.readdir(dir, { withFileTypes: true }); } catch { return out; }
+  for (const e of entries) {
+    if (CLEANUP_IGNORE.has(e.name)) continue;
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...(await collectInstalledFiles(full, base)));
+    else if (e.isFile()) out.push(relativePosix(full, base));
+  }
+  return out;
+}
+
 /** child 是否位于 parent 之内（不含相等）。 */
 function isInside(parent, child) {
   const rel = path.relative(path.resolve(parent), path.resolve(child));
@@ -513,7 +534,7 @@ async function mirrorToInstall(installDir) {
     if (m.name !== PLUGIN_NAME) {
       throw new Error(`拒绝写入：${installDir} 的 manifest name 是 ${m.name}，不是 ${PLUGIN_NAME}`);
     }
-    const current = await collectPackageFiles(installDir);
+    const current = await collectInstalledFiles(installDir);
     say(`  清理旧安装内容 ${current.length} 个文件…`);
     for (const rel of current) await fs.rm(path.join(installDir, ...rel.split('/')), { force: true });
     // 上游删技能、或本地给技能改过名时，旧目录会留下一个空壳。rmdir 只能删空目录，
