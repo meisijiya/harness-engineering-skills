@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "name": "harness-engineering-skills",
   "displayName": "Harness 工程技能集",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "通用工程能力补强包：20 个来自 addyosmani/agent-skills 与 obra/superpowers 的逐字节技能副本，加本地维护的能力路由入口与 old-code，共 22 个技能。覆盖接口、安全、性能、测试、交付与协作；old-code 通过源码推演、证据核验和用户迁移练习帮助开发者跟进 AI 代码，保持独立维护能力。只补强，不接管主流程。工作树隔离与并行委派沿用已确认方式，未确认时先商定。只有 vendored 内容参与双上游同步，old-code 独立维护。",
   "author": "meisijiya",
   "icon": "icon.jpg",

@@ -71,7 +71,7 @@ scripts/
 upstream.lock.json          两个上游的 commit + 30 个受管文件的逐文件 sha256
 .minimax-plugin/plugin.json  MiniMax Code 插件清单
 .claude-plugin/plugin.json   Claude Code 插件清单
-plugin.json                 Agent Plugins 1.0.0 声明（omp）
+plugin.agent-plugins.json  Agent Plugins 1.0.0 声明（omp 用，已改名，见下）
 package.json                npm 包描述 + omp 原生插件标记
 icon.jpg / icon-dark.jpg    插件图标（浅色 / 深色）
 init.sh                     验证门禁入口
@@ -89,8 +89,19 @@ artifacts/                  评审与调优过程的留档结果
 |---|---|---|
 | `.minimax-plugin/plugin.json` | MiniMax Code | 插件列表、图标与示例查询；显式列出 22 条 `skills/.../SKILL.md` |
 | `.claude-plugin/plugin.json` | Claude Code | 同样的技能清单，供其按 `skills` 字段发现 |
-| `plugin.json` | omp | 声明 Agent Plugins 1.0.0 标准，omp 的 agent-plugins provider 据此接管 `skills/` |
+| `plugin.agent-plugins.json` | omp | 声明 Agent Plugins 1.0.0 标准，**已从根 `plugin.json` 改名**，原因见下 |
 | `package.json` | omp / npm | omp 本地安装的硬前置；`omp` 字段是 omp 原生插件标记 |
+
+> **为什么 omp 的清单不叫 `plugin.json`。**
+> MiniMax Code 的清单优先级是「有效的 Agent Plugins 1.0.0 **根 `plugin.json`** 优先，其次才轮到
+> `.minimax-plugin/`」。而 Agent Plugins 1.0.0 的 schema（`https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`）
+> **没有 `icon` / `darkIcon` 字段，且 `additionalProperties: false`**——也就是说，一个合规的根 manifest
+> 在标准内**无法提供图标**。两者共存时，MiniMax 会读根 manifest、拿不到图标、于是回退成仓库图标，
+> 而 `.minimax-plugin/plugin.json` 里配好的 `icon.jpg` 永远读不到。
+>
+> 本包以 MiniMax Code 适配为优先，故把该文件改名为 `plugin.agent-plugins.json`：改名后不再被识别为
+> 根 manifest，MiniMax 回落到 `.minimax-plugin/`，图标正常。文件内容一字未改，**omp 仍可用**——
+> 把它改回 `plugin.json` 即可恢复 omp 的自动发现，代价是 MiniMax 图标再次失效。二者只能取其一。
 
 **不要在本地改写 `skills/` 下那 20 个 vendored 目录、`references/`、`licenses/`。**
 它们是上游副本，改了就失去一键更新；同步脚本会在覆盖前做漂移检测并要求你显式 `--force`。

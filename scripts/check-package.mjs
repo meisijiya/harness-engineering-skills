@@ -27,7 +27,7 @@ async function filesBelow(rel) {
 
 async function main() {
   const manifests = await Promise.all([
-    '.minimax-plugin/plugin.json', '.claude-plugin/plugin.json', 'plugin.json', 'package.json',
+    '.minimax-plugin/plugin.json', '.claude-plugin/plugin.json', 'plugin.agent-plugins.json', 'package.json',
   ].map(json));
   assert.equal(new Set(manifests.map((m) => m.version)).size, 1, 'Manifest version mismatch');
   assert.equal(new Set(manifests.map((m) => m.name)).size, 1, 'Manifest name mismatch');
