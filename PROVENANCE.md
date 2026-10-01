@@ -83,7 +83,7 @@
 | `scripts/check-ref-table.mjs` | 对账索引附录 C 的「共享清单被谁引用」表与各技能正文实际引用是否一致 |
 | `scripts/check-package.mjs` | 离线核验技能发现清单、版本、vendored 字节与 old-code 本地维护归属 |
 | `skills/old-code/` | 独立编写的代码掌控与学习技能，含参考、使用说明、许可及行为评估用例（见 1d） |
-| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含能力触发的强制姿态与「闸门高于强令」、任务维度路由、执行方式闸门、反例黑名单、三列两段失败兜底、宿主适配、悬空引用映射（衍生说明见 1c）。**正文不引用任何其他插件的技能名** |
+| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含能力触发的强制姿态与「闸门高于强令」、**工单实现期 12 行阶段必查表**（1.1，按实现阶段排，是主路径）+ 按能力域的任务维度路由表（1.2，查漏用）、执行方式闸门、反例黑名单、三列两段失败兜底、宿主适配、悬空引用映射（衍生说明见 1c）。**正文不引用任何其他插件的技能名** |
 | `README.md` / `PROVENANCE.md` | 本文件与使用说明 |
 
 ## 3. 收录分三组，依据各不相同

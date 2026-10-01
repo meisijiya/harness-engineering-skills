@@ -7,7 +7,7 @@ MiniMax Code、omp、Claude Code 三个生态使用。
 | 构成 | 数量 | 说明 |
 |---|---|---|
 | vendored 技能 | 20 | 上游正文逐字节副本，本地零改写，可一条命令同步回上游最新版 |
-| 自写入口技能 | 1 | `using-harness-engineering-skills`，只做路由与闸门，不代替任何技能执行 |
+| 自写入口技能 | 1 | `using-harness-engineering-skills`，只做路由与闸门，不代替任何技能执行；工单实现期另有 12 行阶段必查表 |
 | 独立维护技能 | 1 | `old-code`，围绕真实代码做推演、核验与学习，帮助用户保持独立维护能力 |
 | 仓库级共享清单 | 6 | 上游按仓库组织、安装单个技能时拿不到的引用目标 |
 | 上游许可全文 | 2 | 两个上游均为 MIT |
@@ -38,7 +38,7 @@ LangChain4j 规则集、Postgres 专属调优、某个前端框架的写法这�
 
 | 能力域 | 技能 | 解决什么 | 来源 |
 |---|---|---|---|
-| 入口路由 | `using-harness-engineering-skills` | 拿到一句话任务，判断该调用哪个技能、执行方式要不要先与用户商定 | 本包自写 |
+| 入口路由 | `using-harness-engineering-skills` | 工单实现期按 12 个阶段逐行必查；单点工程动作按能力域找行；判断执行方式要不要先与用户商定 | 本包自写 |
 | 代码掌控与学习 | [`old-code`](skills/old-code/README.md) | 跟进 AI 改动，独立预测关键行为，用证据检验并练习维护；可按用户节奏跳过测验 | 本包独立编写；理念来自 zjw-swun/old-code |
 | 需求与契约 | `interview-me`、`api-and-interface-design` | 把模糊需求问成可执行规格；设计端点、模块边界与类型契约 | addyosmani |
 | 质量基线 | `constraint-driven-development` | 把质量标准写成带数字的 `CONSTRAINTS.md`，盯住 diff 里被悄悄降标的地方 | addyosmani |
@@ -157,6 +157,8 @@ omp 按 Agent Plugins 1.0.0 从 `skills/` 的**直接子目录**收集技能—�
    `ci-cd-and-automation` 把同类检查接进 `init.sh` / CI → 其余按项目实际面启用。
 3. **要推进一个工单**：需求对齐 / 拆单交给流程类技能（`grilling`、`to-tickets` 之类），
    本包负责实现阶段的能力补强；**隔离与委派方式先问用户**。
+   本入口与实现主流程是两条独立指令，主流程不会自动把它拉进来——**进工单时要把
+   `using-harness-engineering-skills` 一并带上**，否则入口里那 12 行阶段必查表在整条主路径上都不会被看见。
 
 一句话边界：**验证入口始终是本仓库的 `init.sh`**，`CONSTRAINTS.md` 只回答"标准是什么"。
 

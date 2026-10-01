@@ -1,6 +1,6 @@
 ---
 name: using-harness-engineering-skills
-description: Route to this package's engineering skills during ticket implementation (including /implement) and standalone engineering tasks, including read-only security audits, performance diagnosis, browser evidence, and completion verification. Consult before the relevant action or clarification; recheck when the action changes, then return to the owning workflow. 按工程能力触发，不以 ticket 或代码写入为前提；每次只加载当前动作所需技能，动作切换时重新路由；不覆盖的能力交回主流程继续；隔离与并行委派沿用已确认的执行方式，未确认时先商定。Route only; procedures live in the target skills.
+description: 动手实现工单、编写或修改代码、处理接口与安全性能问题、准备开口说「做完了」之前，先查这张能力路由表再动手。它把本包 20 个通用工程技能接到「当前这一步在干什么」上，覆盖实现全流程的阶段检查点：动手前的契约与质量基线、写到不可信输入或慢查询或界面时的专项技能、测试红了要定位、完成前的证据核验、合并与提交收尾。工单实现（含 /implement）、独立工程任务、只读安全审计、性能测量、浏览器取证同样适用。按当前动作只点名最贴近的一个，动作切换时重新查表；表里没有的行说明本包不覆盖，交回主流程继续。工作树隔离与并行委派先与用户商定，闸门优先于一切。Route only; procedures live in the target skills.
 ---
 
 <SUBAGENT-SCOPE>
@@ -14,6 +14,9 @@ description: Route to this package's engineering skills during ticket implementa
 **执行本包覆盖的工程动作前，先过一遍第 1 节的路由表。** 执行工单（含 `/implement`）与非工单任务都适用，
 包括只读安全审计、性能测量、浏览器取证和完成前验证；不以即将改代码为前提。
 
+**在走一条工单时，先过 1.1 的逐句对照表**——左列是主流程正在执行的那句原话，
+中列是此刻盯的场景，右列是命中就点名的技能；左列整列对不上才用 1.1.1。1.2 按能力域排，是查漏用的。
+
 命中哪一行，就点名**最贴近当前动作**的那一个——「1% 可能相关」就得调，
 包括在回答澄清提问之前。表里没有的行，**说明本包不覆盖并返回主流程继续任务**，不要拿包里的近似技能顶上。
 
@@ -26,7 +29,9 @@ description: Route to this package's engineering skills during ticket implementa
 
 ## 怎么用这份入口（30 秒）
 
-1. 翻到**第 1 节**「我正在做什么」，找到对得上的那一行，只点名那一行的技能；
+1. **在走一条工单** → 翻到 **1.1**，**找到主流程正在执行的那句原话，再读中列看盯的是哪个场景，命中就点右列**；左列整列对不上再用 1.1.1。
+   **做单点工程动作**（一次审计、一次测量、一次发布前检查）→ 翻到 **1.2 能力路由表**，找对得上的那一行。
+   两种都只点名对得上的那一行；
 2. 命中 **🔴 闸门** → **停下来把选项摆给用户**，拿到答复再往下走；
 3. 点完名就加载那个技能的 `SKILL.md`，在用户授权范围内执行当前动作；只读任务不因此变成实现任务。
 4. 当前动作完成后返回原主流程；动作切换时重新查表。一次选一个，不是整个任务只选一个。
@@ -43,8 +48,10 @@ description: Route to this package's engineering skills during ticket implementa
 **什么时候用本入口**：当前动作需要本包覆盖的工程能力时，不要求有 ticket，也不要求写代码。
 普通问答、纯文案和与这些能力无关的读取不触发。本入口只管**这一步该调哪个技能**。
 
-**加载入口不等于自动集成**：本入口不会使 `/implement` 自动调用自己。消费项目若要求每次必经，
-须在自己的工作约定中明确加载本入口；不要为此改写上游技能。入口未被加载时，仍可按各技能描述直接调用。
+**加载入口不等于自动集成**：本入口不会使任何实现主流程自动调用自己——主流程被显式执行时，
+它和本入口是两条独立指令，谁也不会把谁拉进来。所以**进入工单实现时要一并带上本入口**，
+否则 1.1 那张逐句对照表在整条主路径上都不会被看见。消费项目若要求每次必经，可在自己的工作约定里写明这一句；
+不要为此改写上游技能。入口未被加载时，仍可按各技能描述直接调用各技能。
 
 **本包只覆盖通用工程能力**：接口契约、质量基线、可信输入、性能、界面、浏览器取证、CI、遥测、
 发布、迁移、根因排查、完成前验证、分支收尾、隔离与并行委派，以及开发者对 AI 代码的理解与维护判断。
@@ -70,6 +77,11 @@ description: Route to this package's engineering skills during ticket implementa
 | 「这个技能我知道，直接做一样」 | 知道 ≠ 调用。技能正文随上游更新，你的记忆是旧版。 |
 | 「调技能绕远」 | 绕远的是硬编。没调技能的做法，出错时回溯不到依据。 |
 | 「这技能小题大做」 | 简单的事变复杂，正是它拦下来的。 |
+| 「工单都开了，说明该查的都查过了」 | 1.1 的行分布在**动手前、写到一半、测试红、开口说完成前、收尾**——没有一行是「开了工单」这个动作本身。开工不是查过表的证明。 |
+| 「主流程已经点名了测试和审查，本包用不上」 | 那是主流程点名的那两个。写实现时碰到的输入面与性能面、动旧结构时的迁移、开口说「做完了」前的证据——它一个都没管。 |
+
+> **工单执行期补充**：注意力在代码上时，上面 8 条里最容易冒出来的是最后两条。
+> 「先看一眼代码」在写实现的高峰期尤其有说服力——那正是 1.1 表里「Implement …」那五行该生效的位置。
 
 > 开头的强制姿态与本节的红旗表，结构对齐 `obra/superpowers` 的 `using-superpowers`（MIT）。
 > 那个技能**没有**被 vendored——它是无条件强令（任何场合都要先查技能），与本包「只在相关工程动作前、
@@ -82,6 +94,53 @@ description: Route to this package's engineering skills during ticket implementa
 
 > 工单执行与独立工程任务都按当前动作查表；动作切换时再查，不预先加载整张表。
 > **只点名与当前这一件事真实相关的那一行，不要把表念一遍。**
+
+### 1.1 工单实现期 · 对着主流程逐句查
+
+> **不要判断「我到了哪个阶段」——找到主流程正在执行的那一句原话，查它对应哪一行。**
+> 左列**每行都完整写出那句原话**，逐行独立匹配，不要顺着上一行推。
+> **左列同一句出现多行时，把这组的中列关键词逐个读一遍**，命中哪条点哪条——不要只点第一条。
+> 左列整列都对不上时，用 1.1.1 兜底。
+
+| 主流程正在执行这一句 | 盯的场景 | 命中就点名 |
+|---|---|---|
+| 「Implement the work described by the user in the spec or tickets」 | 对外接口、跨模块类型 | `api-and-interface-design` |
+| 「Implement the work described by the user in the spec or tickets」 | 认证 / 授权 / 上传 / 外部输入 / 个人数据 | `security-and-hardening` |
+| 「Implement the work described by the user in the spec or tickets」 | 查询、循环取数、列表渲染、大文件 | `performance-optimization` |
+| 「Implement the work described by the user in the spec or tickets」 | 产出用户能看见或操作的东西 | `frontend-ui-engineering` |
+| 「Implement the work described by the user in the spec or tickets」 | 删旧接口、改表列、清僵尸代码 | `deprecation-and-migration` |
+| 「Use /tdd where possible, at pre-agreed seams」 | 主流程已点名 TDD | 🛑 本包不抢 |
+| 「Run typechecking regularly, single test files regularly, and the full test suite once at the end」 | 测试红了**且根因不明** | `debugging-and-error-recovery` |
+| 「Run typechecking regularly, single test files regularly, and the full test suite once at the end」 | 多个测试文件同时挂 | 当**一个根因**查一次完整堆栈，别一次派多个代理 |
+| 「Once done, use /code-review to review the work」 | 主流程已点名审查 | 🛑 本包不抢 |
+| 「Commit your work to the current branch」 | 要合并 / 提 PR / 保留分支 | `finishing-a-development-branch` |
+| 主流程此刻没说，但我**要开口说「做完了 / 通过了 / 能合了」** | 本次的验证命令、完整输出、退出码 | `verification-before-completion` |
+| 主流程此刻没说，但我**收到 review 意见、准备动手改之前** | 怎么核实与处置 | `receiving-code-review` |
+| 主流程此刻没说，但我**要开第一个文件**、工作区有未提交改动 | 在哪儿干 | 🔴 `using-git-worktrees` |
+| 主流程此刻没说，但我**要开第一个文件**、打算同时推几件活 | 这几件事真互不依赖吗 | 🔴 `dispatching-parallel-agents` |
+| 主流程此刻没说，但我**要开第一个文件**、项目没写质量基线 | 质量标准写下来了吗 | `constraint-driven-development` |
+
+**🛑 本包不抢主流程点名的技能。** 主流程自己写了 TDD 或 code review 的，就用它；
+本包管的是它**没点名的那一侧**——写实现时碰到的输入面与性能面、动旧结构时的迁移、开口说完成前的证据。
+
+#### 1.1.1 左列整列都对不上时（主流程措辞不同）：按段过
+
+按下面五段逐段过。**技能名直接写在表里，不要跳去 1.2 找**——跨节跳转是弱模型最贵的动作。
+**一格里列了多个技能时，仍然只点最贴近当前动作的那一个**，不整格照搬。
+
+| 段 | 盯什么 | 点名 |
+|---|---|---|
+| 动手前 | 在哪儿干 / 要不要并行 / **动不动对外接口或跨模块类型** / 有没有质量基线 | 🔴 `using-git-worktrees`、🔴 `dispatching-parallel-agents`、`api-and-interface-design`、`constraint-driven-development` |
+| 写实现 | 输入面 / 性能面 / 界面 / 改旧结构 | `security-and-hardening`、`performance-optimization`、`frontend-ui-engineering`、`deprecation-and-migration` |
+| 测试红了 | 根因不明 | `debugging-and-error-recovery` |
+| 开口说「做完了」 | 验证命令、完整输出、退出码 | `verification-before-completion` |
+| 收尾 | 评审意见 / 并回分支 | `receiving-code-review`、`finishing-a-development-branch` |
+
+贯穿全程，出现才查：接 CI 或门禁自动化 → `ci-cd-and-automation`；日志指标告警 → `observability-and-instrumentation`；准备发布 → `shipping-and-launch`；真实浏览器证据 → `browser-testing-with-devtools`；跟进 AI 写的代码 → `old-code`。
+
+> 本入口与主流程同时加载时读到这张表就够了；上下文被压缩、这张表已不在眼前时，回到 1.1 重新查。
+
+### 1.2 完整能力路由表
 
 | 我正在做什么 | 点名 | 症状词与要点 |
 |---|---|---|
@@ -139,9 +198,12 @@ description: Route to this package's engineering skills during ticket implementa
 
 ## 3. 🛑 反例黑名单：这么用会出错
 
-1. **把整包技能当清单倒给用户。** 命中多行时**只点最窄的那一行**——判据是「哪一行最贴近当前这个动作」，
-   同一任务后续动作涉及的能力，到那一步再选；不要把尚未触发说成不归本包，也不要逐行解释。
-   **这条就是开头强令里「1% 就点」的操作化**：「1%」管**别漏**，本条管**别全点**——
+1. **把整包技能当清单倒给用户。** 在 **1.2 能力表**里命中多行时**只点最窄的那一行**——
+   判据是「哪一行最贴近当前这个动作」，同一任务后续动作涉及的能力，到那一步再选；
+   不要把尚未触发说成不归本包，也不要逐行解释。
+   **本条讲的是 1.2；1.1 是另一回事**——1.1 的行本来就按主流程原话逐句对照着走，
+   它管的是「有没有漏看这一句对应的行」，不是「同时点名一整张表的技能」；命中任一行时仍然只加载那一个技能。
+   **「1% 就点」的操作化**：「1%」管**别漏**，本条管**别全点**——
    漏了是掉能力，全点了是掉判断力，两个都算错，但漏更贵。
 2. **拿本包当万能钥匙，什么活都用它顶上。** 本包只覆盖工程环节：契约、质量基线、安全、性能、界面、
    浏览器取证、CI、遥测、发布、迁移、根因排查、完成前验证、分支收尾。**拆单、需求对齐、实现主流程、

@@ -1,0 +1,7 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-10-01T14:52	7ea94c2	using-harness-engineering-skills	-	53.5	baseline	-	结构分（dim1-7,9）；dim8 权重23 但无小模型实测，100% dry_run → 按 darwin 规则本次评估失效，仅供 triage	dry_run
+2026-10-01T15:35	c48b27c	using-harness-engineering-skills	(绝对分不作棘轮)	3-0 better	keep	dim2/dim5/dim7	1.1 改为对主流程原话的字面映射，去掉「停下问自己」判断题；judge A 独立核实五句引文逐字存在于 implement SKILL.md 且 disable-model-invocation=true，字面匹配前提成立	paired
+2026-10-01T16:10	(working tree)	using-harness-engineering-skills	(绝对分不作棘轮)	3-0 better	keep	dim5/小模型可执行性	judge 三方一致指出「↑ 同上」折叠匹配锚点、1.1.1 兜底压成散文需跨节取技能名；round2 修：每行写全原话 + 就地消歧规则、1.1.1 恢复技能名表格、末三合一拆五行	paired
+2026-10-01T16:25	(working tree)	using-harness-engineering-skills	(绝对分不作棘轮)	3-0 better	keep	内容完整性/口径	judge C 实测 1.1.1 漏契约行（api-and-interface-design 从兜底消失）；round3 补回并修前言双列→三列口径；judge 三方确认技能覆盖为超集无丢失，A/B/C 均 clear	paired
+2026-10-01T16:30	(working tree)	using-harness-engineering-skills	-	-	keep	回归修复	MAX_ROUNDS=3 达上限后仅修 round3 自引入回归：1.1.1「动手前」补契约后成四合一，补「一格多技能仍只点最贴近的一个」；未开新一轮评估——恢复的是 round1 已验证原则	dry_run
+2026-10-01T17:45	1e8fd0f	using-harness-engineering-skills	-	两组不可比	keep	dim8/实测	6 探针（3 场景 × with_skill / baseline，M3.1 子代理行为推演）。场景2 两组完全一致：均判 1 个根因、不并行，且 baseline 推理更深（指出「同一行号跨三测试类只可能来自共同基类」）。场景3 两组完全一致：均劝 0 次、记风险 1 次、不中止。场景1 出现真实分歧：baseline 判 security-and-hardening「过重」而主动跳过，with_skill 命中字面表强制执行。结论：同代模型测不出能力增量，测出的是「阻止模型过度合理化」的价值	full_test
