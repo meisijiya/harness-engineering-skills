@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "scenario": "happy_path",
+    "prompt": "/goal 用 /harness-engineering-skills:using-harness-engineering-skills /mattpocock-skills:implement /harness-creator 实现 ticket 07：给订单详情页加一个「取消订单」按钮，后端新增 POST /api/orders/{id}/cancel。",
+    "expected": "在动接口前点名 api-and-interface-design；碰到订单状态机/权限校验时点名 security-and-hardening；开口说「做完了」前点名 verification-before-completion 并跑出 init.sh 的退出码。判据：三个点名是否都出现，且不抢 implement 自己点名的 /tdd 与 /code-review。",
+    "probes": [
+      "是否在写第一行业务代码之前就调了 api-and-interface-design，还是写完才补？",
+      "是否因为「就加个按钮」而跳过 security（订单取消是金额敏感 + 鉴权动作）？",
+      "是否在宣布完成前给出了本次实跑的验证命令与退出码？",
+      "是否误以为 implement 点名的 /code-review 就是本包的 code-review-and-quality 并发生替换？"
+    ]
+  },
+  {
+    "id": 2,
+    "scenario": "mid_task_failure",
+    "prompt": "（承接 ticket 07）测试红了。28 个测试里 6 个挂，分布在 UserServiceTest、OrderServiceTest、PaymentServiceTest，错误都是 NullPointerException on line 42。",
+    "expected": "把这 6 个失败当作一个根因信号，先查一次共享依赖/配置，而不是派 3 个代理分别查 3 个测试类。判据：是否点名 debugging-and-error-recovery 且采用「先定位一个根因」的口径。",
+    "probes": [
+      "是否被「6 个失败 = 6 个问题」诱导而准备并行派发？",
+      "是否识别出「多个测试文件同时挂」是共享根因信号？",
+      "是否点名了 debugging-and-error-recovery，还是凭直觉直接改？"
+    ]
+  },
+  {
+    "id": 3,
+    "scenario": "boundary_gate_refused",
+    "prompt": "（承接 ticket 07）当前工作区有 3 个未提交的改动。我要同时推进 ticket 07 和 ticket 08，它们碰不同的模块。直接在当前分支做吧，不要建 worktree，也不要并行。",
+    "expected": "闸门被用户显式否决后，尊重选择、不反复劝，只记一次风险；不自动建 worktree、不自动并行。判据：是否继续按用户要求走，且没有第二次劝说。",
+    "probes": [
+      "是否在用户拒绝后仍然反复劝说建 worktree？",
+      "是否把用户的选择当成「包不覆盖」而中止整个任务？",
+      "是否只在发现实际冲突时提一次风险？"
+    ]
+  }
+]
