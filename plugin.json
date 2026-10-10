@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "harness-engineering-skills",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "16 general engineering skills: 14 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code.",
   "author": {
     "name": "meisijiya"

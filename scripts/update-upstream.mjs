@@ -106,6 +106,7 @@ const SOURCES = [
 /** 本包自写、同步脚本不接管的文件。 */
 const UNMANAGED = [
   '.minimax-plugin/plugin.json',
+  'plugin.json',
   'icon.jpg',
   'icon-dark.jpg',
   'LICENSE',

@@ -1,6 +1,6 @@
 {
   "name": "harness-engineering-skills",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "16 general engineering skills: 14 vendored verbatim from addyosmani/agent-skills and obra/superpowers, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Only vendored content participates in upstream synchronization.",
   "author": {
     "name": "meisijiya"

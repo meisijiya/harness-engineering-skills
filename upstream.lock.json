@@ -173,21 +173,22 @@
   },
   "unmanaged": [
     ".minimax-plugin/plugin.json",
-    "icon.jpg",
-    "icon-dark.jpg",
     "LICENSE",
-    "upstream.lock.json",
-    "README.md",
     "PROVENANCE.md",
-    "scripts/update-upstream.mjs",
-    "scripts/check-ref-table.mjs",
-    "skills/using-harness-engineering-skills/SKILL.md",
+    "README.md",
+    "icon-dark.jpg",
+    "icon.jpg",
+    "plugin.json",
     "scripts/check-package.mjs",
-    "skills/old-code/SKILL.md",
-    "skills/old-code/README.md",
+    "scripts/check-ref-table.mjs",
+    "scripts/update-upstream.mjs",
     "skills/old-code/LICENSE",
+    "skills/old-code/README.md",
+    "skills/old-code/SKILL.md",
+    "skills/old-code/evals/evals.json",
     "skills/old-code/references/evidence-and-risk.md",
     "skills/old-code/references/learning-loop.md",
-    "skills/old-code/evals/evals.json"
+    "skills/using-harness-engineering-skills/SKILL.md",
+    "upstream.lock.json"
   ]
 }

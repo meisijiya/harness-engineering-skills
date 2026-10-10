@@ -67,11 +67,11 @@ licenses/                   两个上游的许可全文（vendored）
 scripts/
   update-upstream.mjs       双上游同步 / 安装目录镜像
   check-ref-table.mjs       共享清单引用表对账（门禁）
-  check-package.mjs         清单、版本、vendored 字节与本地技能归属校验（门禁）
+  check-package.mjs         规范符合性、清单、版本、vendored 字节与本地技能归属校验（门禁）
 upstream.lock.json          两个上游的 commit + 23 个受管文件的逐文件 sha256
-.minimax-plugin/plugin.json  MiniMax Code 插件清单
+plugin.json                 **Agent Plugins 1.0.0 根 manifest**（规范 §5.1 强制要求，见下）
+.minimax-plugin/plugin.json  MiniMax Code 插件清单（含图标）
 .claude-plugin/plugin.json   Claude Code 插件清单
-plugin.agent-plugins.json  Agent Plugins 1.0.0 声明（omp 用，已改名，见下）
 package.json                npm 包描述 + omp 原生插件标记
 icon.jpg / icon-dark.jpg    插件图标（浅色 / 深色）
 init.sh                     验证门禁入口
@@ -81,36 +81,34 @@ AGENTS.md                   本仓库的开发约定与工作规则
 artifacts/                  评审与调优过程的留档结果
 ```
 
-### 四份清单各管一个生态
+### 清单文件与各自生态
 
-同一份 16 个技能要同时被三个生态认领，所以根目录有四个互不重叠的清单文件：
-
-| 文件 | 生态 | 作用 |
+| 文件 | 谁读它 | 作用 |
 |---|---|---|
+| `plugin.json` | 所有实现 Agent Plugins 1.0.0 的客户端，含 omp | **根 manifest**。规范 §4.1.2 与 §5.1 把「插件根目录必须有 `plugin.json`」定为符合性底线，§5.2 规定其顶层字段集封闭 |
 | `.minimax-plugin/plugin.json` | MiniMax Code | 插件列表、图标与示例查询；显式列出 16 条 `skills/.../SKILL.md` |
 | `.claude-plugin/plugin.json` | Claude Code | 同样的技能清单，供其按 `skills` 字段发现 |
-| `plugin.agent-plugins.json` | 无（保留供分发方按标准识别） | 声明 Agent Plugins 1.0.0 标准，**已从根 `plugin.json` 改名**，原因见下 |
-| `package.json` | omp / npm | omp 认领本插件的全部依据：`omp` 字段 + `skills/` 目录 |
+| `package.json` | omp | `omp` 字段是 omp 的原生插件标记；`omp install` 也要求它存在 |
 
-> **为什么 omp 的清单不叫 `plugin.json`，以及改名对 omp 到底有没有影响。**
+**符合性不是一次性检查，是门禁。** `scripts/check-package.mjs` 每次运行都按规范原文校验：
+
+- `plugin.json` 的 `$schema` 必须是规范规定的 1.0.0 规范标识（§5.3）；顶层字段不得越出封闭集（§5.2）；
+  `author` 只允许 `name`/`email`/`url`（§5.4）；`name` 必须满足 §5.5 的长度、字符集、首尾与重复约束。
+- 每个 `skills/*/SKILL.md` 的 frontmatter 字段集必须落在 Agent Skills 规范
+  （<https://agentskills.io/specification>）允许的六个键内；`name` 必须与目录名一致且合命名规则；
+  `description` 长度 1–1024；`compatibility` 不超过 500 字符。Agent Plugins §7.1 把技能格式的判定权交给
+  Agent Skills 规范，所以校验按那份规范走。
+
+> **关于 MiniMax Code 的图标取舍。**
 > MiniMax Code 的清单优先级是「有效的 Agent Plugins 1.0.0 **根 `plugin.json`** 优先，其次才轮到
-> `.minimax-plugin/`」。而 Agent Plugins 1.0.0 的 schema（`https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`）
-> **没有 `icon` / `darkIcon` 字段，且 `additionalProperties: false`**——也就是说，一个合规的根 manifest
-> 在标准内**无法提供图标**。两者共存时，MiniMax 会读根 manifest、拿不到图标、于是回退成仓库图标，
-> 而 `.minimax-plugin/plugin.json` 里配好的 `icon.jpg` 永远读不到。
+> `.minimax-plugin/`」。而 Agent Plugins 1.0.0 的 schema **没有 `icon` / `darkIcon` 字段，且
+> `additionalProperties: false`**——合规的根 manifest 在标准内**无法**携带图标。按已记录的行为，
+> 两者共存时 MiniMax 会读根 manifest、拿不到图标、于是回退成仓库图标。
 >
-> 本包以 MiniMax Code 适配为优先，故把该文件改名为 `plugin.agent-plugins.json`：改名后不再被识别为
-> 根 manifest，MiniMax 回落到 `.minimax-plugin/`，图标正常。文件内容一字未改。
->
-> **对 omp 而言这次改名反而是必要的，不是妥协。** omp 不读这个文件——它认领插件走的是
-> `package.json` 的 `omp` 字段加 `skills/` 目录扫描。根目录**有**合规 `plugin.json` 时，omp 会把技能
-> 转交给更严格的 Agent Plugins 校验器（要求 frontmatter 字段集封闭，且不认 omp 自有的 `hide` / `enabled`）；
-> **没有**根 `plugin.json` 时，omp 走常规扫描器扫 `skills/*/SKILL.md`，对本包 14 个 vendored +
-> 2 个本地技能全部正常。装完实测：16 个技能全部被枚举，且无一条被加 `<namespace>/` 后缀
-> （复现命令见下面「安装 → omp」一节）。
->
-> 所以**不要**为了「让 omp 发现」把文件改回 `plugin.json`——那既换不来发现（本来就没丢），
-> 又会把 MiniMax 图标弄失效。
+> 本包选择**保留根 `plugin.json`**：规范符合性是分发到任意 Agent Plugins 客户端的前提，
+> 而图标只是展示。`.minimax-plugin/plugin.json` 仍然保留并配好图标，一旦 MiniMax 调整优先级即可生效。
+> 若日后确认 MiniMax 图标确实因此失效，把 `plugin.json` 改名即可回退——但那样本包就**不再**声称
+> 符合 Agent Plugins 1.0.0，两者是取舍关系，不能同时满足。
 
 **不要在本地改写 `skills/` 下那 14 个 vendored 目录、`references/`、`licenses/`。**
 它们是上游副本，改了就失去一键更新；同步脚本会在覆盖前做漂移检测并要求你显式 `--force`。
@@ -119,20 +117,44 @@ artifacts/                  评审与调优过程的留档结果
 
 ## 安装
 
-### MiniMax Code
+**先看你要装进什么。** 四条路径互不冲突，同一个仓库可以同时装进多个生态——它们读的是不同的清单文件。
 
-包本体放在仓库里，运行用的副本由脚本镜像到 `~/.minimax/plugins/harness-engineering-skills`：
+| 目标客户端 | 读哪个清单 | 安装动作 |
+|---|---|---|
+| 任意 Agent Plugins 1.0.0 客户端 | `plugin.json` | 把仓库目录（或其拷贝）放进该客户端的插件目录 |
+| omp | `package.json` 的 `omp` 字段 + `plugin.json` | `omp install .` |
+| Claude Code | `.claude-plugin/plugin.json` | 放置本包目录即可 |
+| MiniMax Code | `.minimax-plugin/plugin.json` | `node scripts/update-upstream.mjs --install` 镜像 |
 
-```bash
-node scripts/update-upstream.mjs --install
+装完统一用一条命令验收（见下面「装完怎么验」）。
+
+### 任意 Agent Plugins 1.0.0 客户端
+
+本包的插件根目录**就是仓库根目录**，无需构建、无需编译、没有生成步骤。规范 §4.2 的标准布局：
+
+```text
+harness-engineering-skills/          ← 插件根目录
+├── plugin.json                      ← 规范 §5.1 强制的根 manifest
+├── skills/                          ← 规范 §6.1 固定的技能位置
+│   └── <技能名>/SKILL.md              ← 16 个，只扫一层，不递归
+├── references/                      ← 技能正文按 ../../references/ 引用的共享清单
+├── LICENSE
+└── ...
 ```
 
-不联网，只做镜像。改完包本体后重跑同一条命令即可；`--apply` 同步完上游也会自动镜像一次。
+客户端**只需要** `plugin.json` 与 `skills/`；其余目录对本规范而言是包内容（§4.1.3 要求路径解析不得
+逃出插件根，本包所有引用都在根内）。
+
+本包不捆绑 `mcp.json`，即不提供任何 MCP server。规范 §6.2 明确规定固定位置缺失**不是错误**，
+客户端应继续加载其它组件类型——所以没有 MCP 不影响符合性。
+（`browser-testing-with-devtools` 这个技能会用到 chrome-devtools MCP，但那是**使用者自己**要配的依赖，
+不是本插件捆绑的组件。）
+
+要装进别的 Agent Plugins 客户端，把这个目录拷到该客户端约定的插件目录即可；无需改任何文件。
+若客户端拒绝加载，按规范 §5.2 与 §7.1 依次自查：先看根 `plugin.json` 的字段与 `name`，
+再看每个 `skills/*/SKILL.md` 的 frontmatter。
 
 ### omp
-
-> **本插件不会自动装进 omp，`omp install` 需要你手动执行一次。** 仓库里没有任何脚本会替你跑它——
-> 它写的是你机器的全局状态，属于必须由你决定的动作。
 
 ```powershell
 cd <包目录>
@@ -142,39 +164,62 @@ omp plugin list
 omp skill list           # 这一条才是「omp 真的发现了技能」的证据
 ```
 
-> `omp plugin doctor` 只证明**插件被认领**，不证明**技能被枚举**。装完请用
-> `omp skill list` 核一遍——它列出 omp 实际加载的全部技能，逐个比对名字。
->
-> 实测（omp 18.8.7，本机同时装有承接方与 superpowers）：`omp skill list --json` 共 **98** 条，
-> 本包 16 个**全部在列、各出现一次**，整张表**没有任何一条带 `<namespace>/` 后缀、没有重复名**。
-> 其中 C 组那 5 个与已启用的 superpowers 副本逐字节相同，被 omp 的「同名同体」规则静默去重，
-> 所以各只出现一次——这是预期结果，不是丢技能。
-
-omp 把本地路径插件装成**目录联接（junction）而非拷贝**（可在 `~/.omp/plugins/node_modules/` 下确认），
-所以改完包本体 omp 下次启动即可见，不必重装；重跑一次 `omp install .` 只是幂等的保险动作。回退：
+`omp install .` 对本地路径走 link：它在 `~/.omp/plugins/node_modules/harness-engineering-skills`
+建一个指向本包的目录联接（Windows 上是 junction），并写入一条 enabled 的运行时记录。
+**因此改动包本体后无需重装**，下次启动即生效；重跑 `omp install .` 只是幂等保险。回退：
 
 ```powershell
 omp plugin uninstall harness-engineering-skills
 ```
 
-omp 从 `skills/` 的**直接子目录**收集技能——枚举时只扫目录，不读任何清单文件里的技能列表。
-所以安装环节有两个容易踩的点：
+omp 的发现路径有两条，都在本包上成立：
 
-1. **必须有 `package.json`。** `omp install .` 走 npm 语义，缺它直接报 `package.json not found`，
-   装不上。
-2. **`package.json` 应该带 `omp` 字段。** 这是 omp 认领插件的依据，缺了 `omp plugin doctor` 会把插件
-   降级为 warning 并报 `No omp/pi manifest (not an omp plugin)`——**只给警告不给错误**，
-   很容易一路滑过去。
-
-装好后技能目录名应与 frontmatter 的 `name` 完全一致。**本包在 omp 侧走常规扫描器**（因为根目录没有
-`plugin.json`），它对 frontmatter 额外键是宽容的；但若哪天把根 `plugin.json` 放回来，omp 会切换到
-封闭字段集的严格校验器，`old-code` 的 `license` / `compatibility` 与其它技能的额外键就可能被拒。
-门禁核对目录名与 `name`，但不代替宿主真实加载检查——改完仍要用 `omp skill list` 确认。
+1. **认领插件**靠 `package.json` 的 `omp` 字段。缺了它 `omp install` 直接报
+   `package.json not found` 装不上；缺了它但装了，`omp plugin doctor` 会降级成 warning 并报
+   `No omp/pi manifest (not an omp plugin)`——**只警告不报错**，极易滑过去。
+2. **枚举技能**时，因为根目录有合规 `plugin.json`，omp 把 `skills/` 交给更严格的 Agent Plugins
+   校验器，而不是常规扫描器。严格校验器要求 frontmatter 字段集封闭（正是 Agent Skills 规范那六个键）
+   且不认 omp 自有的 `hide` / `enabled`——本包 16 个技能全部通过，由 `scripts/check-package.mjs` 门禁保证。
 
 ### Claude Code
 
-`.claude-plugin/plugin.json` 已在仓库里声明完整技能清单，按 Claude Code 的插件目录机制
-放置本包即可被它发现。它只依赖 `skills/` 目录本身，不需要任何构建步骤。
+`.claude-plugin/plugin.json` 已声明完整技能清单。按 Claude Code 的插件目录机制放置本包即可被发现，
+只依赖 `skills/` 目录本身，不需要构建步骤。
+
+### MiniMax Code
+
+运行用的副本由脚本镜像到 `~/.minimax/plugins/harness-engineering-skills`：
+
+```bash
+node scripts/update-upstream.mjs --install
+```
+
+不联网，只做镜像。改完包本体后重跑同一条命令即可；`--apply` 同步完上游也会自动镜像一次。
+注意 MiniMax Code 会优先读根 `plugin.json`，`.minimax-plugin/` 里的图标配置因此可能不生效——
+取舍说明见上面「关于 MiniMax Code 的图标取舍」。
+
+### 装完怎么验
+
+三条命令按可信度递增，**逐级验证，别跳过**：
+
+```bash
+# 1. 包自身是否完整、规范是否仍成立（离线，任何时候都可跑）
+bash ./init.sh                     # Windows 上若 bash 不是 WSL 的，用 git-bash 跑；必须 exit 0
+
+# 2. 客户端是否认领了插件
+omp plugin doctor                  # 本包应为 4 ok / 0 warnings / 0 errors
+
+# 3. 客户端是否真的枚举到了技能 ← 只有这条能证明「装上了」
+omp skill list
+```
+
+第 3 条最重要：**`omp plugin doctor` 只证明插件被认领，不证明技能被枚举**。
+`omp skill list` 列出客户端实际加载的全部技能，逐个比对名字才算数。
+
+实测（omp 18.8.7，本机同时装有承接方与 superpowers）：`omp skill list --json` 共 **98** 条，
+本包 16 个**全部在列、各出现一次**，整张表**没有任何一条带 `<namespace>/` 后缀、没有重复名**，
+且 `warnings` 为空数组。其中 C 组那 5 个与已启用的 superpowers 副本逐字节相同，
+被 omp 的「同名同体」静默去重规则合并，所以各只出现一次——**这是预期结果，不是丢技能**。
 
 ## 怎么用
 
@@ -219,16 +264,20 @@ node scripts/update-upstream.mjs --install   # 不联网，只重装到安装目
 node --check scripts/update-upstream.mjs  # 脚本语法
 node --check scripts/check-ref-table.mjs
 node scripts/check-ref-table.mjs          # 引用表对账（init.sh 已含）
-node scripts/check-package.mjs            # 清单、归属与 vendored 字节（init.sh 已含）
+node scripts/check-package.mjs            # 规范符合性、清单、归属与 vendored 字节（init.sh 已含）
 node scripts/update-upstream.mjs --check  # 联网报告上游变化与漂移，不作为完成门禁
 ```
 
-- `./init.sh` 离线运行两道门禁：共享清单引用表对账，以及包一致性检查。后者核对四份清单的
-  包名与版本、两份显式技能清单与磁盘目录、frontmatter 名称、锁定文件的字节数和 SHA-256，
-  并检查 `old-code` 完整登记为本地内容及其 Markdown 本地链接可达。
+- `./init.sh` 离线运行两道门禁：共享清单引用表对账，以及包一致性检查。后者核对
+  **根 `plugin.json` 对 Agent Plugins 1.0.0 §5 的符合性**（`$schema` 规范标识、封闭顶层字段集、
+  `author` 子字段、`name` 的长度与字符集约束）、**每个 `skills/*/SKILL.md` 对 Agent Skills 规范的符合性**
+  （frontmatter 封闭字段集、`name` 与目录名一致且合命名规则、`description` 1–1024 字符、
+  `compatibility` ≤500 字符）、四份清单的包名与版本、两份显式技能清单与磁盘目录、
+  锁定文件的字节数和 SHA-256，以及 `old-code` 完整登记为本地内容且其 Markdown 本地链接可达。
 - PATH 上没有 `node` 时会按常见安装位置回退，也可用 `NODE=/path/to/node ./init.sh` 指定解释器。
 - `--check` 会联网。它是**报告**，不是门禁；上游有新提交属于待同步信息，不应阻断本地交付。
-- 门禁不证明技能的教学效果、触发准确率或宿主真实加载行为。`old-code` 的行为用例在
+- 门禁证明**包自身**符合规范，不证明**宿主真的加载了**它。后者要靠 `omp skill list` 之类的
+  客户端侧枚举（见「装完怎么验」）。`old-code` 的行为用例在
   `skills/old-code/evals/evals.json`，效果对照还需独立执行与用户反馈。
 
 ## 许可

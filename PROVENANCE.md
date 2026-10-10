@@ -102,16 +102,34 @@
 
 | 路径 | 作用 |
 |---|---|
-| `.minimax-plugin/plugin.json` | 插件清单 |
+| `plugin.json` | **Agent Plugins 1.0.0 根 manifest**。规范 §4.1.2 与 §5.1 把「插件根目录必须有 `plugin.json`」定为符合性底线；§5.2 规定其顶层字段集封闭，故本文件不带图标字段（见 2a） |
+| `.minimax-plugin/plugin.json` | MiniMax Code 插件清单，含图标配置 |
 | `icon.jpg` / `icon-dark.jpg` | 本包专用图标（浅色/深色两版分别生成，非内置资源池）：顶梁 + 三柱 + 基座构成的「门禁闸门」几何标记，避开 `</>` 类代码字形 |
 | `LICENSE` | 双源许可说明（见 1c） |
 | `upstream.lock.json` | 两个上游的 commit + 逐文件 sha256 锁 |
 | `scripts/update-upstream.mjs` | 双上游同步 / 安装镜像脚本 |
 | `scripts/check-ref-table.mjs` | 对账索引附录 C 的「共享清单被谁引用」表与各技能正文实际引用是否一致 |
-| `scripts/check-package.mjs` | 离线核验技能发现清单、版本、vendored 字节与 old-code 本地维护归属 |
+| `scripts/check-package.mjs` | 离线核验：**Agent Plugins §5 / Agent Skills 规范符合性**、技能发现清单、版本、vendored 字节与 old-code 本地维护归属 |
 | `skills/old-code/` | 独立编写的代码掌控与学习技能，含参考、使用说明、许可及行为评估用例（见 1d） |
-| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含能力触发的强制姿态与「闸门高于强令」、**工单实现期 12 行阶段必查表**（1.1，按实现阶段排，是主路径）+ 按能力域的任务维度路由表（1.2，查漏用）、执行方式闸门、反例黑名单、三列两段失败兜底、宿主适配、悬空引用映射（衍生说明见 1c）。**正文不引用承接方插件的技能名** |
+| `skills/using-harness-engineering-skills/SKILL.md` | 入口技能：命名对齐上游 `using-superpowers`，内含能力触发的强制姿态与「闸门高于强令」、**工单实现期的阶段必查表**（1.1，按实现阶段排，是主路径）+ 按能力域的任务维度路由表（1.2，查漏用）、执行方式闸门、反例黑名单、三列两段失败兜底、宿主适配、悬空引用映射（衍生说明见 1c）。**正文不引用承接方插件的技能名** |
 | `README.md` / `PROVENANCE.md` | 本文件与使用说明 |
+
+### 2a. 为什么根 `plugin.json` 不带图标
+
+Agent Plugins 1.0.0 的 manifest schema **封闭顶层字段集**（§5.2，`additionalProperties: false`），
+允许的字段只有 `$schema`、`name`、`version`、`description`、`author`、`homepage`、`repository`、
+`license`、`keywords`、`extensions`——**没有 `icon` / `darkIcon`**。也就是说，一份合规的根 manifest
+在标准内无法携带图标。
+
+MiniMax Code 的清单优先级是「有效的 Agent Plugins 1.0.0 根 `plugin.json` 优先，其次 `.minimax-plugin/`」，
+两者共存时它会读根 manifest 并因取不到图标而回退到仓库图标。本包选择**保住规范符合性**：
+图标是展示层，规范符合性是「能否被任意 Agent Plugins 客户端加载」的前提。
+`.minimax-plugin/plugin.json` 保留并配好图标，一旦 MiniMax 调整优先级即可生效。
+
+两者不能同时满足——这是取舍不是缺陷。回退方式是改名根 manifest，但那样本包就不再声称符合
+Agent Plugins 1.0.0。**符合性本身是被门禁守住的**：`scripts/check-package.mjs` 按 §5.2 / §5.3 /
+§5.4 / §5.5 逐条校验根 manifest，按 <https://agentskills.io/specification> 校验每个技能的 frontmatter
+（Agent Plugins §7.1 把技能格式的判定权交给那份规范）。
 
 ## 3. 收录两组，依据各不相同
 
