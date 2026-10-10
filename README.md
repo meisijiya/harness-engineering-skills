@@ -89,10 +89,10 @@ artifacts/                  评审与调优过程的留档结果
 |---|---|---|
 | `.minimax-plugin/plugin.json` | MiniMax Code | 插件列表、图标与示例查询；显式列出 16 条 `skills/.../SKILL.md` |
 | `.claude-plugin/plugin.json` | Claude Code | 同样的技能清单，供其按 `skills` 字段发现 |
-| `plugin.agent-plugins.json` | omp | 声明 Agent Plugins 1.0.0 标准，**已从根 `plugin.json` 改名**，原因见下 |
-| `package.json` | omp / npm | omp 本地安装的硬前置；`omp` 字段是 omp 原生插件标记 |
+| `plugin.agent-plugins.json` | 无（保留供分发方按标准识别） | 声明 Agent Plugins 1.0.0 标准，**已从根 `plugin.json` 改名**，原因见下 |
+| `package.json` | omp / npm | omp 认领本插件的全部依据：`omp` 字段 + `skills/` 目录 |
 
-> **为什么 omp 的清单不叫 `plugin.json`。**
+> **为什么 omp 的清单不叫 `plugin.json`，以及改名对 omp 到底有没有影响。**
 > MiniMax Code 的清单优先级是「有效的 Agent Plugins 1.0.0 **根 `plugin.json`** 优先，其次才轮到
 > `.minimax-plugin/`」。而 Agent Plugins 1.0.0 的 schema（`https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`）
 > **没有 `icon` / `darkIcon` 字段，且 `additionalProperties: false`**——也就是说，一个合规的根 manifest
@@ -100,8 +100,16 @@ artifacts/                  评审与调优过程的留档结果
 > 而 `.minimax-plugin/plugin.json` 里配好的 `icon.jpg` 永远读不到。
 >
 > 本包以 MiniMax Code 适配为优先，故把该文件改名为 `plugin.agent-plugins.json`：改名后不再被识别为
-> 根 manifest，MiniMax 回落到 `.minimax-plugin/`，图标正常。文件内容一字未改，**omp 仍可用**——
-> 把它改回 `plugin.json` 即可恢复 omp 的自动发现，代价是 MiniMax 图标再次失效。二者只能取其一。
+> 根 manifest，MiniMax 回落到 `.minimax-plugin/`，图标正常。文件内容一字未改。
+>
+> **对 omp 而言这次改名反而是必要的，不是妥协。** omp 不读这个文件——它认领插件走的是
+> `package.json` 的 `omp` 字段加 `skills/` 目录扫描。根目录**有**合规 `plugin.json` 时，omp 会把技能
+> 转交给更严格的 Agent Plugins 校验器（要求 frontmatter 字段集封闭，且不认 omp 自有的 `hide` / `enabled`）；
+> **没有**根 `plugin.json` 时，omp 走常规扫描器扫 `skills/*/SKILL.md`，对本包 14 个 vendored +
+> 2 个本地技能全部正常。装完实测：16 个技能全部被发现，且无一条被加 `<namespace>/` 后缀。
+>
+> 所以**不要**为了「让 omp 发现」把文件改回 `plugin.json`——那既换不来发现（本来就没丢），
+> 又会把 MiniMax 图标弄失效。
 
 **不要在本地改写 `skills/` 下那 14 个 vendored 目录、`references/`、`licenses/`。**
 它们是上游副本，改了就失去一键更新；同步脚本会在覆盖前做漂移检测并要求你显式 `--force`。
@@ -127,10 +135,15 @@ node scripts/update-upstream.mjs --install
 
 ```powershell
 cd <包目录>
-omp install .
-omp plugin doctor        # plugin:harness-engineering-skills 应为 ✔ 而非 ⚠
+omp install .            # 走 link 路径，不是 npm 拷贝
+omp plugin doctor        # plugin:harness-engineering-skills 应为 ✔；本包实测 4 ok / 0 warnings / 0 errors
 omp plugin list
+omp skill list           # 这一条才是「omp 真的发现了技能」的证据
 ```
+
+> `omp plugin doctor` 只证明**插件被认领**，不证明**技能被枚举**。装完请用
+> `omp skill list` 核一遍——它列出 omp 实际加载的全部技能，逐个比对名字。
+> 本包 16 个技能装完后全部出现在该列表里，且没有任何一条被加 `<namespace>/` 后缀。
 
 omp 把本地路径插件装成**目录联接（junction）而非拷贝**（可在 `~/.omp/plugins/node_modules/` 下确认），
 所以改完包本体 omp 下次启动即可见，不必重装；重跑一次 `omp install .` 只是幂等的保险动作。回退：
@@ -139,20 +152,19 @@ omp 把本地路径插件装成**目录联接（junction）而非拷贝**（可�
 omp plugin uninstall harness-engineering-skills
 ```
 
-omp 按 Agent Plugins 1.0.0 从 `skills/` 的**直接子目录**收集技能——枚举时只扫目录，
-不读任何清单文件里的技能列表。所以安装环节有两个容易踩的点：
+omp 从 `skills/` 的**直接子目录**收集技能——枚举时只扫目录，不读任何清单文件里的技能列表。
+所以安装环节有两个容易踩的点：
 
 1. **必须有 `package.json`。** `omp install .` 走 npm 语义，缺它直接报 `package.json not found`，
    装不上。
-2. **`package.json` 应该带 `omp` 字段。** 这条不阻断安装，但缺了 `omp plugin doctor` 会把插件
+2. **`package.json` 应该带 `omp` 字段。** 这是 omp 认领插件的依据，缺了 `omp plugin doctor` 会把插件
    降级为 warning 并报 `No omp/pi manifest (not an omp plugin)`——**只给警告不给错误**，
    很容易一路滑过去。
 
-装好后技能目录名必须与 frontmatter 的 `name` 完全一致，且 frontmatter 的键只允许
-`name` / `description` / `license` / `allowed-tools` / `metadata` / `compatibility` 这六个，
-多一个键该技能就被跳过。这些键另有长度与格式约束；`old-code` 使用 `name`、
-`description`、`license`、`compatibility`，其余技能使用 `name` 与 `description`。
-门禁核对目录名与 `name`，但不代替宿主真实加载检查；新增或改写后仍需确认目标宿主能发现它。
+装好后技能目录名应与 frontmatter 的 `name` 完全一致。**本包在 omp 侧走常规扫描器**（因为根目录没有
+`plugin.json`），它对 frontmatter 额外键是宽容的；但若哪天把根 `plugin.json` 放回来，omp 会切换到
+封闭字段集的严格校验器，`old-code` 的 `license` / `compatibility` 与其它技能的额外键就可能被拒。
+门禁核对目录名与 `name`，但不代替宿主真实加载检查——改完仍要用 `omp skill list` 确认。
 
 ### Claude Code
 
