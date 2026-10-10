@@ -106,7 +106,8 @@ artifacts/                  评审与调优过程的留档结果
 > `package.json` 的 `omp` 字段加 `skills/` 目录扫描。根目录**有**合规 `plugin.json` 时，omp 会把技能
 > 转交给更严格的 Agent Plugins 校验器（要求 frontmatter 字段集封闭，且不认 omp 自有的 `hide` / `enabled`）；
 > **没有**根 `plugin.json` 时，omp 走常规扫描器扫 `skills/*/SKILL.md`，对本包 14 个 vendored +
-> 2 个本地技能全部正常。装完实测：16 个技能全部被发现，且无一条被加 `<namespace>/` 后缀。
+> 2 个本地技能全部正常。装完实测：16 个技能全部被枚举，且无一条被加 `<namespace>/` 后缀
+> （复现命令见下面「安装 → omp」一节）。
 >
 > 所以**不要**为了「让 omp 发现」把文件改回 `plugin.json`——那既换不来发现（本来就没丢），
 > 又会把 MiniMax 图标弄失效。
@@ -143,7 +144,11 @@ omp skill list           # 这一条才是「omp 真的发现了技能」的证�
 
 > `omp plugin doctor` 只证明**插件被认领**，不证明**技能被枚举**。装完请用
 > `omp skill list` 核一遍——它列出 omp 实际加载的全部技能，逐个比对名字。
-> 本包 16 个技能装完后全部出现在该列表里，且没有任何一条被加 `<namespace>/` 后缀。
+>
+> 实测（omp 18.8.7，本机同时装有承接方与 superpowers）：`omp skill list --json` 共 **98** 条，
+> 本包 16 个**全部在列、各出现一次**，整张表**没有任何一条带 `<namespace>/` 后缀、没有重复名**。
+> 其中 C 组那 5 个与已启用的 superpowers 副本逐字节相同，被 omp 的「同名同体」规则静默去重，
+> 所以各只出现一次——这是预期结果，不是丢技能。
 
 omp 把本地路径插件装成**目录联接（junction）而非拷贝**（可在 `~/.omp/plugins/node_modules/` 下确认），
 所以改完包本体 omp 下次启动即可见，不必重装；重跑一次 `omp install .` 只是幂等的保险动作。回退：
