@@ -1,8 +1,8 @@
 {
   "name": "harness-engineering-skills",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "private": true,
-  "description": "22 general engineering skills: 20 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Distributes as a MiniMax Code plugin and as an omp / Claude Code plugin.",
+  "description": "16 general engineering skills: 14 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Distributes as a MiniMax Code plugin and as an omp / Claude Code plugin.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   ],
   "omp": {
     "name": "harness-engineering-skills",
-    "description": "22 general engineering skills: 20 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code."
+    "description": "16 general engineering skills: 14 vendored skills, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code."
   },
   "scripts": {
     "check": "node scripts/check-ref-table.mjs && node scripts/check-package.mjs"

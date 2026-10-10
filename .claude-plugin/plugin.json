@@ -1,7 +1,7 @@
 {
   "name": "harness-engineering-skills",
-  "version": "1.6.1",
-  "description": "22 general engineering skills: 20 vendored verbatim from addyosmani/agent-skills and obra/superpowers, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Only vendored content participates in upstream synchronization.",
+  "version": "1.7.0",
+  "description": "16 general engineering skills: 14 vendored verbatim from addyosmani/agent-skills and obra/superpowers, a local capability router, and independently maintained old-code for developer understanding and ownership of AI-written code. Only vendored content participates in upstream synchronization.",
   "author": {
     "name": "meisijiya"
   },
@@ -19,27 +19,21 @@
     "workflow"
   ],
   "skills": [
-    "./skills/using-harness-engineering-skills",
-    "./skills/old-code",
-    "./skills/constraint-driven-development",
     "./skills/api-and-interface-design",
-    "./skills/security-and-hardening",
-    "./skills/performance-optimization",
-    "./skills/frontend-ui-engineering",
     "./skills/browser-testing-with-devtools",
     "./skills/ci-cd-and-automation",
-    "./skills/observability-and-instrumentation",
-    "./skills/shipping-and-launch",
     "./skills/deprecation-and-migration",
-    "./skills/debugging-and-error-recovery",
-    "./skills/code-review-and-quality",
-    "./skills/test-driven-development",
-    "./skills/interview-me",
-    "./skills/incremental-implementation",
     "./skills/dispatching-parallel-agents",
-    "./skills/using-git-worktrees",
     "./skills/finishing-a-development-branch",
-    "./skills/verification-before-completion",
-    "./skills/receiving-code-review"
+    "./skills/frontend-ui-engineering",
+    "./skills/observability-and-instrumentation",
+    "./skills/old-code",
+    "./skills/performance-optimization",
+    "./skills/receiving-code-review",
+    "./skills/security-and-hardening",
+    "./skills/shipping-and-launch",
+    "./skills/using-git-worktrees",
+    "./skills/using-harness-engineering-skills",
+    "./skills/verification-before-completion"
   ]
 }

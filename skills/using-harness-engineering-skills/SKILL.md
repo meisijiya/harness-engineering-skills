@@ -1,6 +1,6 @@
 ---
 name: using-harness-engineering-skills
-description: 动手实现工单、编写或修改代码、处理接口与安全性能问题、准备开口说「做完了」之前，先查这张能力路由表再动手。它把本包 20 个通用工程技能接到「当前这一步在干什么」上，覆盖实现全流程的阶段检查点：动手前的契约与质量基线、写到不可信输入或慢查询或界面时的专项技能、测试红了要定位、完成前的证据核验、合并与提交收尾。工单实现（含 /implement）、独立工程任务、只读安全审计、性能测量、浏览器取证同样适用。按当前动作只点名最贴近的一个，动作切换时重新查表；表里没有的行说明本包不覆盖，交回主流程继续。工作树隔离与并行委派先与用户商定，闸门优先于一切。Route only; procedures live in the target skills.
+description: 动手实现工单、编写或修改代码、处理接口与安全性能问题、准备开口说「做完了」之前，先查这张能力路由表再动手。它把本包覆盖的通用工程能力接到「当前这一步在干什么」上，覆盖实现全流程的阶段检查点：动手前的契约与隔离方式、写到不可信输入或慢查询或界面时的专项技能、完成前的证据核验、合并与提交收尾。工单实现（含 /implement）、独立工程任务、只读安全审计、性能测量、浏览器取证同样适用。按当前动作只点名最贴近的一个，动作切换时重新查表；表里没有的行说明本包不覆盖，交回主流程继续。工作树隔离与并行委派先与用户商定，闸门优先于一切。Route only; procedures live in the target skills.
 ---
 
 <SUBAGENT-SCOPE>
@@ -53,9 +53,10 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 否则 1.1 那张逐句对照表在整条主路径上都不会被看见。消费项目若要求每次必经，可在自己的工作约定里写明这一句；
 不要为此改写上游技能。入口未被加载时，仍可按各技能描述直接调用各技能。
 
-**本包只覆盖通用工程能力**：接口契约、质量基线、可信输入、性能、界面、浏览器取证、CI、遥测、
-发布、迁移、根因排查、完成前验证、分支收尾、隔离与并行委派，以及开发者对 AI 代码的理解与维护判断。
-**拆单、需求对齐、实现主流程、发起独立审查不在这里。**
+**本包只覆盖通用工程能力**：接口契约、可信输入、性能、界面、浏览器取证、CI、遥测、
+发布、迁移、完成前验证、分支收尾、隔离与并行委派，以及开发者对 AI 代码的理解与维护判断。
+**拆单、需求对齐、实现主流程、根因排查、发起独立审查不在这里**；质量基线、指令文件与验证入口
+由 harness 那套产物管（附录 C），本包不写、不改、不追加。
 
 **表里没有匹配行怎么办**：说明本包不覆盖，返回主流程使用其他适用能力继续；别拿近似技能顶替。
 各组被谁引用、何时才真的需要用，见附录 A。
@@ -81,7 +82,7 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 | 「主流程已经点名了测试和审查，本包用不上」 | 那是主流程点名的那两个。写实现时碰到的输入面与性能面、动旧结构时的迁移、开口说「做完了」前的证据——它一个都没管。 |
 
 > **工单执行期补充**：注意力在代码上时，上面 8 条里最容易冒出来的是最后两条。
-> 「先看一眼代码」在写实现的高峰期尤其有说服力——那正是 1.1 表里「Implement …」那五行该生效的位置。
+> 「我先看一眼代码」在写实现的高峰期尤其有说服力——那正是 1.1 表里「Implement …」那组行该生效的位置。
 
 > 开头的强制姿态与本节的红旗表，结构对齐 `obra/superpowers` 的 `using-superpowers`（MIT）。
 > 那个技能**没有**被 vendored——它是无条件强令（任何场合都要先查技能），与本包「只在相关工程动作前、
@@ -109,19 +110,22 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 | 「Implement the work described by the user in the spec or tickets」 | 查询、循环取数、列表渲染、大文件 | `performance-optimization` |
 | 「Implement the work described by the user in the spec or tickets」 | 产出用户能看见或操作的东西 | `frontend-ui-engineering` |
 | 「Implement the work described by the user in the spec or tickets」 | 删旧接口、改表列、清僵尸代码 | `deprecation-and-migration` |
-| 「Use /tdd where possible, at pre-agreed seams」 | 主流程已点名 TDD | 🛑 本包不抢 |
-| 「Run typechecking regularly, single test files regularly, and the full test suite once at the end」 | 测试红了**且根因不明** | `debugging-and-error-recovery` |
+| 「Call the Skill tool with "…" where possible, at pre-agreed seams」 | 主流程已点名测试纪律 | 🛑 本包不抢 |
+| 「Run typechecking regularly, single test files regularly, and the full test suite once at the end」 | 测试红了**且根因不明** | 🛑 不归本包，交回主流程定位根因 |
 | 「Run typechecking regularly, single test files regularly, and the full test suite once at the end」 | 多个测试文件同时挂 | 当**一个根因**查一次完整堆栈，别一次派多个代理 |
-| 「Once done, use /code-review to review the work」 | 主流程已点名审查 | 🛑 本包不抢 |
+| 「Once done, call the Skill tool with "…" to review the work」 | 主流程已点名审查 | 🛑 本包不抢 |
 | 「Commit your work to the current branch」 | 要合并 / 提 PR / 保留分支 | `finishing-a-development-branch` |
+| 「Use implementer subagents to implement each ticket, each in its own worktree on its own branch」 | 这些票真互不依赖吗、能不能并发 | 🔴 `dispatching-parallel-agents` |
+| 「Use implementer subagents to implement each ticket, each in its own worktree on its own branch」 | 每个子代理在哪隔离 | 🔴 `using-git-worktrees` |
+| 「Once all tickets are complete, call the Skill tool with "…" on the integration branch」 | 主流程已点名审查 | 🛑 本包不抢 |
 | 主流程此刻没说，但我**要开口说「做完了 / 通过了 / 能合了」** | 本次的验证命令、完整输出、退出码 | `verification-before-completion` |
 | 主流程此刻没说，但我**收到 review 意见、准备动手改之前** | 怎么核实与处置 | `receiving-code-review` |
 | 主流程此刻没说，但我**要开第一个文件**、工作区有未提交改动 | 在哪儿干 | 🔴 `using-git-worktrees` |
 | 主流程此刻没说，但我**要开第一个文件**、打算同时推几件活 | 这几件事真互不依赖吗 | 🔴 `dispatching-parallel-agents` |
-| 主流程此刻没说，但我**要开第一个文件**、项目没写质量基线 | 质量标准写下来了吗 | `constraint-driven-development` |
 
-**🛑 本包不抢主流程点名的技能。** 主流程自己写了 TDD 或 code review 的，就用它；
-本包管的是它**没点名的那一侧**——写实现时碰到的输入面与性能面、动旧结构时的迁移、开口说完成前的证据。
+**🛑 本包不抢主流程点名的技能。** 主流程自己点名了测试纪律或评审的，就用它；本包不提供这两项，
+别拿包里的近似技能顶。本包管的是它**没点名的那一侧**——写实现时碰到的输入面与性能面、
+动旧结构时的迁移、开口说完成前的证据。
 
 #### 1.1.1 左列整列都对不上时（主流程措辞不同）：按段过
 
@@ -130,9 +134,9 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 
 | 段 | 盯什么 | 点名 |
 |---|---|---|
-| 动手前 | 在哪儿干 / 要不要并行 / **动不动对外接口或跨模块类型** / 有没有质量基线 | 🔴 `using-git-worktrees`、🔴 `dispatching-parallel-agents`、`api-and-interface-design`、`constraint-driven-development` |
+| 动手前 | 在哪儿干 / 要不要并行 / **动不动对外接口或跨模块类型** | 🔴 `using-git-worktrees`、🔴 `dispatching-parallel-agents`、`api-and-interface-design` |
 | 写实现 | 输入面 / 性能面 / 界面 / 改旧结构 | `security-and-hardening`、`performance-optimization`、`frontend-ui-engineering`、`deprecation-and-migration` |
-| 测试红了 | 根因不明 | `debugging-and-error-recovery` |
+| 测试红了 | 根因不明 | — 不归本包，交回主流程 |
 | 开口说「做完了」 | 验证命令、完整输出、退出码 | `verification-before-completion` |
 | 收尾 | 评审意见 / 并回分支 | `receiving-code-review`、`finishing-a-development-branch` |
 
@@ -146,10 +150,10 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 |---|---|---|
 | 开工前，决定**在哪儿干** | 🔴 `using-git-worktrees` | **先问用户**（第 2 节）。本机无原生 worktree 工具，落点见第 5 节 |
 | 同时推多个互不依赖的活 | 🔴 `dispatching-parallel-agents` | **先问用户**（第 2 节）。没确认前只派只读调查；角色见第 5 节 |
-| 把工单切小、定实现顺序 | — 不归本包 | 拆单不属本包，别拿 `incremental-implementation` 顶替 |
+| 把工单切小、定实现顺序 | — 不归本包 | 拆单不属本包，交回主流程 |
 | 用户要跟进 AI 代码、带着理解改动或练习独立维护 | `old-code` | 以该技能 description 为触发边界；补源码推演、证据核验与用户练习，工程动作仍回原流程；普通实现或仅找 bug 不自动加教学 |
 | 定接口契约、划模块边界 | `api-and-interface-design` | 症状：REST / GraphQL 端点、前后端接口约定、模块间类型契约。契约先于实现，订单/支付这类金额敏感的先定 |
-| 定质量基线，防中途静默降标 | `constraint-driven-development` | 症状：代理塞 `@ts-ignore`、删测试、降阈值来「变绿」。产出 `CONSTRAINTS.md`，并往指令文件追加一行（附录 C） |
+| 定质量基线、写标准文件、管验证入口 | — 不归本包 | 质量基线与指令文件、门禁入口由 harness 那套产物管，本包不写、不改、不追加（附录 C） |
 | 处理或审计不可信输入、认证、授权、个人数据 | `security-and-hardening` | 含只读安全审计、会话与资源归属检查、依赖审计、个人数据合规、客户端可伪造的 key/token/上传文件名 |
 | 有性能需求、慢行为或回归嫌疑 | `performance-optimization` | 含 Core Web Vitals、加载变慢、N+1 查询。没有数据时先测量并建立基线；证据不足不实施优化，只读请求止于测量与定位 |
 | 写界面、组件、状态 | `frontend-ui-engineering` | 含 WCAG 2.1 AA 无障碍 |
@@ -158,7 +162,7 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 | 加日志 / 指标 / 追踪 / 告警 | `observability-and-instrumentation` | 特性要带遥测一起上线，告警带 runbook |
 | 准备发布、回滚策略 | `shipping-and-launch` | 症状：要预发布清单、特性开关 / 分阶段 / 错误预算闸门 / 回滚。要可逆、可观察、增量 |
 | 删旧系统、改库表列、清僵尸代码 | `deprecation-and-migration` | 线上不停机改列走 expand/contract，旧接口走绞杀者模式 |
-| 测试还红着、根因不明 | `debugging-and-error-recovery` | 排查口径：先定位一个根因，别一次派多个代理 |
+| 测试还红着、根因不明 | — 不归本包 | 根因定位交回主流程；本包不做排障，也不用包里的近似技能顶 |
 | 要**发起**一次独立审查 | — 不归本包 | 发起审查不属本包——那要另找一个独立审查者 |
 | **收到**评审意见、准备动手改之前 | `receiving-code-review` | 上面管「发起」，这条管「收到之后怎么核实与处置」 |
 | 要说出「做完了 / 通过了 / 能合了」 | `verification-before-completion` | 没有本次跑出来的命令 + 完整输出 + 退出码，就不能说 |
@@ -205,12 +209,13 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
    它管的是「有没有漏看这一句对应的行」，不是「同时点名一整张表的技能」；命中任一行时仍然只加载那一个技能。
    **「1% 就点」的操作化**：「1%」管**别漏**，本条管**别全点**——
    漏了是掉能力，全点了是掉判断力，两个都算错，但漏更贵。
-2. **拿本包当万能钥匙，什么活都用它顶上。** 本包只覆盖工程环节：契约、质量基线、安全、性能、界面、
-   浏览器取证、CI、遥测、发布、迁移、根因排查、完成前验证、分支收尾。**拆单、需求对齐、实现主流程、
-   发起独立审查不在这里**——交回主流程继续，别拿 B 组顶上（各组被谁引用、
-   何时才真的需要用，见附录 A）。
+2. **拿本包当万能钥匙，什么活都用它顶上。** 本包只覆盖工程环节：契约、安全、性能、界面、
+   浏览器取证、CI、遥测、发布、迁移、完成前验证、分支收尾。**拆单、需求对齐、实现主流程、
+   根因排查、发起独立审查、质量基线都不在这里**——交回主流程继续，别拿包里的近似技能顶
+   （各组来源与收录依据见附录 A）。
 3. **闸门没过就派写入类子代理，或直接建 worktree。**
-4. **把 `CONSTRAINTS.md` 当验证入口。** 它只回答「标准是什么」，跑什么仍然是 `init.sh` / CI。
+4. **另立一套命令当验证入口。** 本包的技能不产出验证入口、也不认任何别的入口——跑什么由项目自己的
+   门禁脚本与 CI 决定，不要在本包技能之外新造一条跑法。
 5. **没跑验证就宣布完成**，或者采信子代理的「已修好」而不自己看 diff。
 6. **拿近似技能顶替包里没有的能力**（压测、分布式、框架调优）。这些有意不入本包——
    说明本包不覆盖，交回主流程选用其他适用能力，不据此断言整个任务做不了。
@@ -234,8 +239,8 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 | 子代理返回后发现根因互相重合 | 立即停掉剩余并发，改单点修复——那本来就不是三个独立问题 | 回到第 3 节第 1 条重新点名，别在错误分片上继续派 |
 | 隔离的代码范围与子代理正在读的范围重叠 | 要么把本 ticket 隔离出去，要么先做完只读调查再改 | 两边都动不了就**串行做**，不要一边写一边读 |
 | 多个测试文件同时挂 | 先当**一个根因信号**（共同依赖 / 配置漂移 / 时序竞态）查一次完整堆栈 | 确实多根因再拆，此时才谈并行；别一上来就派多个代理 |
-| 顺着某个技能的指示去找一个**不存在的技能** | 那是 B 组的二跳悬空引用，按**附录 B** 的映射表判断它缺的是哪一类能力 | 附录 B 也没写就说这个引用悬空，**不要硬找** |
-| 包里某技能与别处同名 | 以本包为准；C 组 5 项是刻意收敛过来的，superpowers 那边视为同源副本 | 不要两边各改一半——本包是逐字节副本，改了就失去覆盖式更新 |
+| 顺着某个技能的指示去找一个**不存在的技能** | 那是上游正文的二跳引用，按**附录 B** 的映射表判断它缺的是哪一类能力 | 附录 B 也没写就说这个引用悬空，**不要硬找** |
+| 包里某技能与别处同名 | 以本包为准；C 组 5 项与上游同源、逐字节相同，属同源副本 | 不要两边各改一半——本包是逐字节副本，改了就失去覆盖式更新 |
 | `--apply` 报本地漂移 | 先确认要丢弃什么，**不要为了「变干净」直接 `--force`** | 逐字节比对确认真有实质差异再决定；多半只是 CRLF 之类的换行符问题 |
 
 ---
@@ -252,23 +257,16 @@ description: 动手实现工单、编写或修改代码、处理接口与安全�
 
 ---
 
-## 附录 A · 三组来源与收录依据
+## 附录 A · 两组来源与收录依据
 
 | 组 | 数量 | 来源 | 收录依据 |
 |---|---|---|---|
-| **A 组 · 精选** | 10 | addyosmani/agent-skills | 不侵入 instructions/verification/scope 三子系统、在工程阶段是真实净增量、不与任何单一流程入口重复 |
-| **B 组 · 引用闭包** | 5 | addyosmani/agent-skills | **被 A 组正文直接引用**；不收进来，代理顺着 A 组的指示会去找不存在的技能 |
-| **C 组 · 收尾与协作** | 5 | obra/superpowers | 补上前两组没有的**收尾类与协作类**能力（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）；正文自洽，零悬空引用 |
+| **A 组 · 精选** | 9 | addyosmani/agent-skills | 承接方没有的能力；不侵入指令 / 验证 / 范围三个子系统，在工程阶段是真实净增量 |
+| **C 组 · 收尾与协作** | 5 | obra/superpowers | 补上 A 组没有的**收尾类与协作类**能力（评审意见处置、完成前验证、分支收尾、工作树隔离、并行委派）；正文自洽，零悬空引用 |
 
-B 组被谁引用、什么时候才真的需要用：
-
-| 技能 | 被谁引用 | 何时真的需要用它 |
-|---|---|---|
-| `debugging-and-error-recovery` | `ci-cd-and-automation`、`observability-and-instrumentation`、`security-and-hardening` 共 3 处路由 | 第 1 节「根因不明」那行直接指向它；也常被 A 组三处路由兜底调用 |
-| `code-review-and-quality` | `constraint-driven-development`（路由 + See Also） | 项目要求你**自查**改动时。注意与「发起独立审查」区分：那要另找一个独立审查者，不归本包 |
-| `test-driven-development` | `constraint-driven-development`（See Also） | 这次要动测试、而别处没有 TDD 纪律时 |
-| `incremental-implementation` | `deprecation-and-migration`（迁移每步的垂直切片指引） | 做分步迁移；或一个改动太大、不知道从哪一刀切下去时 |
-| `interview-me` | `constraint-driven-development`（直接借用其一次一问的提问纪律） | 探测项目现状、需求还很糊时 |
+**为什么只有两组。** 曾经还有一组「引用闭包」：几个技能只因被 A 组正文直接引用才收进来，
+可它们的功能承接方已经有了。同一件事在两处各有一份，触发时机就随上下文漂移——
+那组已全部让位移出本包。它们被移除后，包内残留的指向按**附录 B** 逐处登记，不留暗坑。
 
 C 组的 5 项（`using-git-worktrees`、`dispatching-parallel-agents`、`receiving-code-review`、
 `verification-before-completion`、`finishing-a-development-branch`）正文**不引用任何其它技能、
@@ -278,35 +276,27 @@ C 组的 5 项（`using-git-worktrees`、`dispatching-parallel-agents`、`receiv
 
 ## 附录 B · 悬空引用映射（仅在被指向时读）
 
-B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继续 vendored（再收一跳会一路吞到 22/25，
-基本等于整仓），按下表解析。性质一栏决定缺了它到底损失什么。
+包内技能会指向**本包没有收录**的流程能力。这类指向不继续 vendored（再收一跳会一路吞到整仓，
+基本等于把上游整个搬进来），按下表解析。性质一栏决定缺了它到底损失什么。
 
-| 悬空引用 | 出现位置 | 性质 | 它缺的是哪一类能力 |
+| 指向 | 出现位置 | 性质 | 处置 |
 |---|---|---|---|
-| `spec-driven-development` | `interview-me:129` | **真流程缺口**：让 agent 向用户 offer 用它起草规格 | 非本包：**规格起草** |
-| `git-workflow-and-versioning` | `incremental-implementation:41` | **真流程缺口**：按它的原子提交指引提交 | 本包 C 组 `finishing-a-development-branch` / `using-git-worktrees` 可覆盖；合并冲突需外部工具 |
-| `idea-refine` | `interview-me:14,190,235` | 交接落点：意图澄清后的下游交接 | 非本包：**需求对齐** |
-| `spec-driven-development` | `interview-me:14,191,235` | 交接落点同上 | 非本包：**规格起草** |
-| `planning-and-task-breakdown` | `interview-me:192` | 仅时间线说明：两跳下游 | 非本包：**拆单** |
-| `doubt-driven-development` | `interview-me:14,193` | 仅对照说明：决策**后**的产物复核 | 非本包：**审查/批判** |
-| `source-driven-development` | `interview-me:194` | 仅对照说明：验证框架事实 | 非本包：**外部事实核查** |
+| 系统化根因定位 | `ci-cd-and-automation` 的测试失败分支、`observability-and-instrumentation` 的「NOT for」首条、`security-and-hardening` 的事后复盘，共 3 处 | **真流程缺口**：这三处遇到失败时需要一个定位到根因再动手的纪律 | 非本包：**交回主流程**用主流程自己的排障纪律；本包没有近似技能，别拿安全或性能技能顶 |
+| 薄片交付 / 垂直切片 | `deprecation-and-migration` 每阶段的切片指引 | **真流程缺口**：迁移的每一步要切成可独立回滚的薄片 | 非本包：**交回主流程**按它自己的切片纪律做；本包只管迁移模式本身（expand/contract、绞杀者），不含切片方法 |
 
-**读法**：只有「真流程缺口」那两行会导致动作落空，必须照右列执行——右列写了「本包 C 组可覆盖」的照做，
-写了「非本包」的**说明不覆盖并返回主流程继续**，不要用包里的近似技能顶替。
-「仅对照说明」缺失只损失解释力；「交接落点」属于需求对齐阶段，同样不在本包。C 组没有这一层。
+**读法**：上表每一行都会导致动作落空，必须照右列执行——写「非本包」的**说明不覆盖并交回主流程继续**，
+不要用包里的近似技能顶替。除这两行外，A 组与 C 组的正文没有别的二跳指向。
 
 ---
 
-## 附录 C · 与 harness-creator 的交界、共享清单、更新
+## 附录 C · 与 harness 那套产物的交界、共享清单、更新
 
-**交界只有三处：**
+**本包不写指令文件，也不产出验证入口。** 指令文件、验证命令与范围边界由 harness 那套产物负责，
+本包既不往里追加、也不改写它们。剩下的交界只有两处，都只读不写：
 
-1. **`constraint-driven-development` 会往指令文件追加一行**
-   `Read CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
-   这一行落在指令子系统里，会占用 `AGENTS.md` 的字节/行数/工作规则预算——追加后要回查预算是否仍合规。
-2. **验证入口始终是 `init.sh`，不是 `CONSTRAINTS.md`。**
-   `verification-before-completion` 同理：它要求「证据先行」，但**跑哪条命令**仍由项目自己的 `init.sh` / CI 决定。
-3. **本入口不新增分流键。** 本包只覆盖工程阶段能力，不接管实现主流程。
+1. **跑哪条命令不由本包决定。** `verification-before-completion` 要求「证据先行」，
+   但**跑什么**由项目自己的门禁脚本与 CI 决定。本包不指定入口，也不新建入口。
+2. **本入口不新增分流键。** 本包只覆盖工程阶段能力，不接管实现主流程。
 
 **共享清单**：技能正文用 `../../references/x.md` 引用包根的仓库级共享清单，上游按单 skill 安装**不会**带上，
 所以本插件把它们放在 `references/`。路径与包结构一致，因此**技能正文一个字都没改**——
@@ -315,12 +305,11 @@ B 组自身还引用了 6 个**未收录**的上游技能。这些引用不继�
 
 | 文件 | 被谁引用 |
 |---|---|
-| `references/security-checklist.md` | `security-and-hardening`、`shipping-and-launch`、`code-review-and-quality` |
-| `references/performance-checklist.md` | `performance-optimization`、`shipping-and-launch`、`code-review-and-quality` |
+| `references/security-checklist.md` | `security-and-hardening`、`shipping-and-launch` |
+| `references/performance-checklist.md` | `performance-optimization`、`shipping-and-launch` |
 | `references/accessibility-checklist.md` | `frontend-ui-engineering`、`shipping-and-launch` |
 | `references/observability-checklist.md` | `observability-and-instrumentation` |
-| `references/definition-of-done.md` | `shipping-and-launch`、`incremental-implementation` |
-| `references/testing-patterns.md` | `test-driven-development` |
+| `references/definition-of-done.md` | `shipping-and-launch` |
 
 上表由 `scripts/check-ref-table.mjs` 逐行对账各技能正文的实际引用生成。**改这张表或动 `references/` 之后，
 先跑 `node scripts/check-ref-table.mjs`**，不一致就别提交。
@@ -333,7 +322,7 @@ node scripts/update-upstream.mjs --apply    # 同步两个上游并镜像到安�
 node scripts/update-upstream.mjs --apply --only superpowers   # 只同步一个上游
 ```
 
-`skills/` 下这 20 个目录、`references/`、`licenses/` 下两份许可全文，都是两个上游的**逐字节副本**。
+`skills/` 下这些 vendored 目录、`references/`、`licenses/` 下两份许可全文，都是两个上游的**逐字节副本**。
 各上游的锁定 commit 与逐文件 sha256 见 `upstream.lock.json` 的 `sources.<id>`。
 
 **本入口不做什么**：不代任何技能下结论；不引入第二套流程入口；不重复上游正文；

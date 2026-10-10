@@ -33,7 +33,6 @@ const REFS = [
   'accessibility-checklist.md',
   'observability-checklist.md',
   'definition-of-done.md',
-  'testing-patterns.md',
 ];
 
 const verbose = process.argv.includes('--verbose');
